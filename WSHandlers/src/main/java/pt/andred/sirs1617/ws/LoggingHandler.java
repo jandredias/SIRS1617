@@ -24,12 +24,12 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
 
 	public boolean handleFault(SOAPMessageContext arg0) {
 		logToSystemOut(arg0);
-		return false;
+		return true;
 	}
 
 	public boolean handleMessage(SOAPMessageContext arg0) {
 		logToSystemOut(arg0);
-		return false;
+		return true;
 	}
 
 	public Set<QName> getHeaders() {
@@ -55,7 +55,8 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
     		Dialog.IO().debug("Inbound SOAP message:");
     		Dialog.IO().white();
     	}
-    	
+	return;
+    	/*	
     	SOAPMessage message = smc.getMessage();
     	try {
     		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -65,7 +66,7 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
     		Dialog.IO().SOAP(strMsg);
     	} catch (Exception e) {
     		System.out.printf("Exception in handler: %s%n\n", e);
-    	}
+    	}*/
     }
 
     public static void logToSystemERR(SOAPMessageContext smc) {
@@ -80,7 +81,8 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
         	Dialog.IO().println("Inbound SOAP message:");
         	Dialog.IO().white();
         }
-
+	return;
+/*
         SOAPMessage message = smc.getMessage();
         try {
         	ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -90,7 +92,7 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
         	Dialog.IO().print(strMsg);
         } catch (Exception e) {
             System.out.printf("Exception in handler: %s%n\n", e);
-        }
+        }*/
     }
     
     
