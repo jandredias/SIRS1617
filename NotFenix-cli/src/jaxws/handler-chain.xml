@@ -1,0 +1,7 @@
+<handler-chains xmlns="http://java.sun.com/xml/ns/javaee">
+	<handler-chain>
+		<handler>
+			<handler-class>pt.andred.sirs1617.ws.LoggingHandler</handler-class>
+		</handler>
+	</handler-chain>
+</handler-chains>
