@@ -23,12 +23,14 @@ public class NotFenixManager {
 	}
 	
 	public boolean login(String username, String password){
+		Dialog.IO().println("Login try:" + username + " " + password);
 		return true;
 	}
 
 	public String addPatient(String in) {
 		// TODO Auto-generated method stub
-		return null;
+		return "new Patient";
+		//return null;
 	}
 
 	public String resetPatientPrivateInfo(String in) {
