@@ -9,40 +9,298 @@
     name="NotFenixWebService">
     
     <types>
-    <xsd:schema
-	    	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	    	targetNamespace="http://ws.sirs1617.andred.pt/">
-			<xs:complexType name="login">
-		                <xs:sequence>
-		                    <xs:element name="username" type="xs:string" minOccurs="0" />
-		                    <xs:element name="password" type="xs:string" minOccurs="0" />
-		                </xs:sequence>
-		    </xs:complexType>
-		            <xs:element name="login" type="tns:login" />
-	        <xs:complexType name="loginResponse">
-                <xs:sequence>
-                    <xs:element name="return" type="xs:boolean" minOccurs="0" />
-                </xs:sequence>
-            </xs:complexType>
-            <xs:element name="loginResponse" type="tns:loginResponse" />
-	    </xsd:schema>
+    
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ws.sirs1617.andred.pt/">
+        	<xsd:element name="login">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="username" type="xsd:string"></xsd:element>
+        				<xsd:element name="password"
+        					type="xsd:string">
+        				</xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="loginResponse">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="success" type="xsd:boolean"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="addDoctor">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="name" type="xsd:string"></xsd:element>
+        				<xsd:element name="username"
+        					type="xsd:string">
+        				</xsd:element>
+        				<xsd:element name="password"
+        					type="xsd:string">
+        				</xsd:element>
+        				<xsd:element name="publicKey"
+        					type="xsd:string">
+        				</xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="addDoctorResponse">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="success" type="xsd:boolean"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="deleteDoctor">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="username" type="xsd:string"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="deleteDoctorResponse">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="success" type="xsd:boolean"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="revokeDoctorKey">
+        		<xsd:complexType>
+        			<xsd:sequence>
+                        <xsd:element name="username" type="xsd:string">
+        				</xsd:element>
+                        <xsd:element name="oldPublicKey"
+        					type="xsd:string">
+        				</xsd:element>
+        				<xsd:element name="newPublicKey"
+        					type="xsd:string">
+        				</xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="revokeDoctorKeyResponse">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="success" type="xsd:boolean"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="changePassword">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="username"
+        					type="xsd:string">
+        				</xsd:element>
+        				<xsd:element name="password"
+        					type="xsd:string">
+        				</xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="NewOperationResponse">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="out" type="xsd:string"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="changePasswordResponse">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="out" type="xsd:string"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="addPatient">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="name" type="xsd:string"></xsd:element>
+        				<xsd:element name="key"
+        					type="xsd:string">
+        				</xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="addPatientResponse">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="success" type="xsd:boolean"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="deletePatient">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="name" type="xsd:string"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="deletePatientResponse">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="success" type="xsd:boolean"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="getInfoPatient">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="name" type="xsd:string"></xsd:element>
+        				<xsd:element name="infoName"
+        					type="xsd:string">
+        				</xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="getInfoPatientResponse">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="out" type="xsd:string"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="setInfoPatient">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="name" type="xsd:string"></xsd:element>
+        				<xsd:element name="infoName"
+        					type="xsd:string">
+        				</xsd:element>
+        				<xsd:element name="infoValue"
+        					type="xsd:string">
+        				</xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="setInfoPatientResponse">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="out" type="xsd:string"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="getPatient">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="username" type="xsd:string"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="getPatientResponse1">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="success" type="xsd:boolean"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element></xsd:schema>
     </types>
     
-    
-    <message name="login">
-        <part name="parameters" element="tns:login" />
+       
+    <message name="loginRequest">
+    	<part name="parameters" element="tns:login"></part>
     </message>
     <message name="loginResponse">
-        <part name="parameters" element="tns:loginResponse" />
+    	<part name="parameters" element="tns:loginResponse"></part>
     </message>
-    
-    
+    <message name="addDoctorRequest">
+    	<part name="parameters" element="tns:addDoctor"></part>
+    </message>
+    <message name="addDoctorResponse">
+    	<part name="parameters" element="tns:addDoctorResponse"></part>
+    </message>
+    <message name="deleteDoctorRequest">
+    	<part name="parameters" element="tns:deleteDoctor"></part>
+    </message>
+    <message name="deleteDoctorResponse">
+    	<part name="parameters" element="tns:deleteDoctorResponse"></part>
+    </message>
+    <message name="revokeDoctorKeyRequest">
+    	<part name="parameters" element="tns:revokeDoctorKey"></part>
+    </message>
+    <message name="revokeDoctorKeyResponse">
+    	<part name="parameters" element="tns:revokeDoctorKeyResponse"></part>
+    </message>
+    <message name="changePasswordRequest">
+    	<part name="parameters" element="tns:changePassword"></part>
+    </message>
+    <message name="NewOperationResponse">
+    	<part name="parameters" element="tns:NewOperationResponse"></part>
+    </message>
+    <message name="changePasswordResponse">
+    	<part name="parameters" element="tns:changePasswordResponse"></part>
+    </message>
+    <message name="addPatientRequest">
+    	<part name="parameters" element="tns:addPatient"></part>
+    </message>
+    <message name="addPatientResponse">
+    	<part name="parameters" element="tns:addPatientResponse"></part>
+    </message>
+    <message name="deletePatientRequest">
+    	<part name="parameters" element="tns:deletePatient"></part>
+    </message>
+    <message name="deletePatientResponse">
+    	<part name="parameters" element="tns:deletePatientResponse"></part>
+    </message>
+    <message name="getInfoPatientRequest">
+    	<part name="parameters" element="tns:getInfoPatient"></part>
+    </message>
+    <message name="getInfoPatientResponse">
+    	<part name="parameters" element="tns:getInfoPatientResponse"></part>
+    </message>
+    <message name="setInfoPatientRequest">
+    	<part name="parameters" element="tns:setInfoPatient"></part>
+    </message>
+    <message name="setInfoPatientResponse">
+    	<part name="parameters" element="tns:setInfoPatientResponse"></part>
+    </message>
+    <message name="getPatientRequest">
+    	<part name="parameters" element="tns:getPatient"></part>
+    </message>
+    <message name="getPatientResponse1">
+    	<part name="parameters" element="tns:getPatientResponse1"></part>
+    </message>
     <portType name="NotFenixPortType">
-    	<operation name="login">
-            <input wsam:Action="http://ws.transporter.upa.pt/TransporterPort/loginRequest"
-                message="tns:login" />
-            <output wsam:Action="http://ws.transporter.upa.pt/TransporterPort/loginResponse"
-                message="tns:loginResponse" />
+    	
+        <operation name="login">
+        	<input message="tns:loginRequest"></input>
+        	<output message="tns:loginResponse"></output>
+        </operation>
+        <operation name="addDoctor">
+        	<input message="tns:addDoctorRequest"></input>
+        	<output message="tns:addDoctorResponse"></output>
+        </operation>
+        <operation name="deleteDoctor">
+        	<input message="tns:deleteDoctorRequest"></input>
+        	<output message="tns:deleteDoctorResponse"></output>
+        </operation>
+        <operation name="revokeDoctorKey">
+        	<input message="tns:revokeDoctorKeyRequest"></input>
+        	<output message="tns:revokeDoctorKeyResponse"></output>
+        </operation>
+        <operation name="changePassword">
+        	<input message="tns:changePasswordRequest"></input>
+        	<output message="tns:changePasswordResponse"></output>
+        </operation>
+        <operation name="addPatient">
+        	<input message="tns:addPatientRequest"></input>
+        	<output message="tns:addPatientResponse"></output>
+        </operation>
+        <operation name="deletePatient">
+        	<input message="tns:deletePatientRequest"></input>
+        	<output message="tns:deletePatientResponse"></output>
+        </operation>
+        <operation name="getInfoPatient">
+        	<input message="tns:getInfoPatientRequest"></input>
+        	<output message="tns:getInfoPatientResponse"></output>
+        </operation>
+        <operation name="setInfoPatient">
+        	<input message="tns:setInfoPatientRequest"></input>
+        	<output message="tns:setInfoPatientResponse"></output>
+        </operation>
+        <operation name="getPatient">
+        	<input message="tns:getPatientRequest"></input>
+        	<output message="tns:getPatientResponse1"></output>
         </operation>
     </portType>
  
@@ -50,6 +308,87 @@
     	<soap:binding style="document"
     		transport="http://schemas.xmlsoap.org/soap/http" />	
     	<operation name="login">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="addDoctor">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="deleteDoctor">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="revokeDoctorKey">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="changePassword">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="addPatient">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="deletePatient">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="getInfoPatient">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="setInfoPatient">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="getPatient">
             <soap:operation soapAction="" />
             <input>
                 <soap:body use="literal" />

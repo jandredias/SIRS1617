@@ -26,4 +26,9 @@ public class NotFenixClient {
 	public boolean login(String username, String password){
 		return _port.login(username, password);
 	}
+
+	public Boolean getPatient(String username) {
+		// TODO Auto-generated method stub
+		return _port.getPatient(username);
+	}
 }

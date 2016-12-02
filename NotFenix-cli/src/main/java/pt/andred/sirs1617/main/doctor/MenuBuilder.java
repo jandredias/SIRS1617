@@ -11,7 +11,12 @@ public abstract class MenuBuilder {
 	 */
 	public static void menuFor(NotFenixClient client) {
 		Menu menu = new Menu("Doctors Personal Area", new Command<?>[] {
-				});
+			new AddPatient(client),
+			new SeePatient(client),
+			new DeletePatient(client),
+			new SharePatient(client),
+			new ChangePassword(client),
+			new ChangeKey(client) });
 		menu.open();
 	}
 

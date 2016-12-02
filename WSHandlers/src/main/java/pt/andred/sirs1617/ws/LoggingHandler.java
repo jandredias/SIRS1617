@@ -8,10 +8,12 @@ import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
+import javax.jws.HandlerChain;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
@@ -28,6 +30,7 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
 	}
 
 	public boolean handleMessage(SOAPMessageContext arg0) {
+		System.out.println("WSHANLDERS");
 		logToSystemOut(arg0);
 		return true;
 	}
@@ -55,8 +58,6 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
     		Dialog.IO().debug("Inbound SOAP message:");
     		Dialog.IO().white();
     	}
-	return;
-    	/*	
     	SOAPMessage message = smc.getMessage();
     	try {
     		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -66,7 +67,7 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
     		Dialog.IO().SOAP(strMsg);
     	} catch (Exception e) {
     		System.out.printf("Exception in handler: %s%n\n", e);
-    	}*/
+    	}
     }
 
     public static void logToSystemERR(SOAPMessageContext smc) {
@@ -81,8 +82,7 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
         	Dialog.IO().println("Inbound SOAP message:");
         	Dialog.IO().white();
         }
-	return;
-/*
+
         SOAPMessage message = smc.getMessage();
         try {
         	ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -92,7 +92,7 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
         	Dialog.IO().print(strMsg);
         } catch (Exception e) {
             System.out.printf("Exception in handler: %s%n\n", e);
-        }*/
+        }
     }
     
     

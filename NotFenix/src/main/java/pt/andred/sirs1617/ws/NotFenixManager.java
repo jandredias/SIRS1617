@@ -1,5 +1,8 @@
 package pt.andred.sirs1617.ws;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.ws.Endpoint;
 
 import pt.andred.sirs1617.ui.Dialog;
@@ -9,8 +12,13 @@ public class NotFenixManager {
 	private static NotFenixManager _instance;
 	private NotFenixPort _port;
 	private Endpoint _endpoint;
+	private Map<String, String> _doctors;
 	
 	private NotFenixManager() {
+		_doctors  = new HashMap<>();
+		_doctors.put("andre.dias", "andre");
+		_doctors.put("jorge.veiga", "andre");
+		_doctors.put("miguel.amaral", "andre");
 		_port = new NotFenixPort();
 		_endpoint = Endpoint.create(_port);
 		// TODO Auto-generated constructor stub
@@ -24,73 +32,8 @@ public class NotFenixManager {
 	
 	public boolean login(String username, String password){
 		Dialog.IO().println("Login try:" + username + " " + password);
-		return true;
-	}
-
-	public String addPatient(String in) {
-		// TODO Auto-generated method stub
-		return "new Patient";
-		//return null;
-	}
-
-	public String resetPatientPrivateInfo(String in) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String resetPatientPublicInfo(String in) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String changeDoctorPublicKey(String in) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String changePassword(String in) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String deleteDoctor(String in) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String addDoctor(String in) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String sharePatient(String in) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String deletePatient(String in) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String addPatientPrivateInfo(String in) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String addPatientPublicInfo(String in) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getPatientPrivateInfo(String in) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getPatientPublicInfo(String in) {
-		// TODO Auto-generated method stub
-		return null;
+		if(!_doctors.containsKey(username)) return false;
+		return _doctors.get(username).equals(password);
 	}
 	public void start(String address){
 		_endpoint.publish(address);
@@ -101,5 +44,50 @@ public class NotFenixManager {
 		_endpoint.stop();
 		// TODO Auto-generated method stub
 		
+	}
+
+	public String setInfoPatient(String name, String infoName, String infoValue) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getInfoPatient(String name, String infoName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean deletePatient(String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean addPatient(String name, String key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public String changePassword(String username, String password) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean revokeDoctorKey(String username, String oldPublicKey, String newPublicKey) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteDoctor(String username) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean addDoctor(String username, String publicKey) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean getPatient(String username) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
