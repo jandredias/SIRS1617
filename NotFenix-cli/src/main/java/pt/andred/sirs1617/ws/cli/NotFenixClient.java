@@ -23,7 +23,7 @@ public class NotFenixClient {
 		requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
 	}
 	
-	public boolean ping(){
-		return _port.login("andre.dias", "andre");
+	public boolean login(String username, String password){
+		return _port.login(username, password);
 	}
 }

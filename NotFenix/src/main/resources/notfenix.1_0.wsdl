@@ -10,491 +10,54 @@
     
     <types>
     <xsd:schema
-    	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    	targetNamespace="http://ws.sirs1617.andred.pt/">
-	<xsd:element name="login">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="username" type="xsd:string"></xsd:element>
-				<xsd:element name="password" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="loginResponse">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="success" type="xsd:boolean"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="addPatient">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="in" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="addPatientResponse">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="out" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="getPatientPublicInfo">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="in" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="getPatientPublicInfoResponse">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="out" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="getPatientPrivateInfo">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="in" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="getPatientPrivateInfoResponse">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="out" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="addPatientPublicInfo">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="in" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="addPatientPublicInfoResponse">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="out" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="addPatientPrivateInfo">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="in" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="addPatientPrivateInfoResponse">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="out" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="deletePatient">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="in" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="deletePatientResponse">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="out" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="sharePatient">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="in" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="sharePatientResponse">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="out" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="addDoctor">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="in" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="addDoctorResponse">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="out" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="deleteDoctor">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="in" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="deleteDoctorResponse">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="out" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="changePassword">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="in" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="changePasswordResponse">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="out" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="changeDoctorPublicKey">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="in" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="changeDoctorPublicKeyResponse">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="out" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="resetPatientPublicInfo">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="in" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="resetPatientPublicInfoResponse">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="out" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="resetPatientPrivateInfo">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="in" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-	<xsd:element name="resetPatientPrivateInfoResponse">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="out" type="xsd:string"></xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element></xsd:schema></types>
+	    	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	    	targetNamespace="http://ws.sirs1617.andred.pt/">
+			<xs:complexType name="login">
+		                <xs:sequence>
+		                    <xs:element name="username" type="xs:string" minOccurs="0" />
+		                    <xs:element name="password" type="xs:string" minOccurs="0" />
+		                </xs:sequence>
+		    </xs:complexType>
+		            <xs:element name="login" type="tns:login" />
+	        <xs:complexType name="loginResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="xs:boolean" minOccurs="0" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="loginResponse" type="tns:loginResponse" />
+	    </xsd:schema>
+    </types>
     
-    <message name="loginRequest">
-    	<part name="parameters" element="tns:login"></part>
+    
+    <message name="login">
+        <part name="parameters" element="tns:login" />
     </message>
     <message name="loginResponse">
-    	<part name="parameters" element="tns:loginResponse"></part>
+        <part name="parameters" element="tns:loginResponse" />
     </message>
-    <message name="addPatientRequest">
-    	<part name="parameters" element="tns:addPatient"></part>
-    </message>
-    <message name="addPatientResponse">
-    	<part name="parameters" element="tns:addPatientResponse"></part>
-    </message>
-    <message name="getPatientPublicInfoRequest">
-    	<part name="parameters" element="tns:getPatientPublicInfo"></part>
-    </message>
-    <message name="getPatientPublicInfoResponse">
-    	<part name="parameters" element="tns:getPatientPublicInfoResponse"></part>
-    </message>
-    <message name="getPatientPrivateInfoRequest">
-    	<part name="parameters" element="tns:getPatientPrivateInfo"></part>
-    </message>
-    <message name="getPatientPrivateInfoResponse">
-    	<part name="parameters" element="tns:getPatientPrivateInfoResponse"></part>
-    </message>
-    <message name="addPatientPublicInfoRequest">
-    	<part name="parameters" element="tns:addPatientPublicInfo"></part>
-    </message>
-    <message name="addPatientPublicInfoResponse">
-    	<part name="parameters" element="tns:addPatientPublicInfoResponse"></part>
-    </message>
-    <message name="addPatientPrivateInfoRequest">
-    	<part name="parameters" element="tns:addPatientPrivateInfo"></part>
-    </message>
-    <message name="addPatientPrivateInfoResponse">
-    	<part name="parameters" element="tns:addPatientPrivateInfoResponse"></part>
-    </message>
-    <message name="deletePatientRequest">
-    	<part name="parameters" element="tns:deletePatient"></part>
-    </message>
-    <message name="deletePatientResponse">
-    	<part name="parameters" element="tns:deletePatientResponse"></part>
-    </message>
-    <message name="sharePatientRequest">
-    	<part name="parameters" element="tns:sharePatient"></part>
-    </message>
-    <message name="sharePatientResponse">
-    	<part name="parameters" element="tns:sharePatientResponse"></part>
-    </message>
-    <message name="addDoctorRequest">
-    	<part name="parameters" element="tns:addDoctor"></part>
-    </message>
-    <message name="addDoctorResponse">
-    	<part name="parameters" element="tns:addDoctorResponse"></part>
-    </message>
-    <message name="deleteDoctorRequest">
-    	<part name="parameters" element="tns:deleteDoctor"></part>
-    </message>
-    <message name="deleteDoctorResponse">
-    	<part name="parameters" element="tns:deleteDoctorResponse"></part>
-    </message>
-    <message name="changePasswordRequest">
-    	<part name="parameters" element="tns:changePassword"></part>
-    </message>
-    <message name="changePasswordResponse">
-    	<part name="parameters" element="tns:changePasswordResponse"></part>
-    </message>
-    <message name="changeDoctorPublicKeyRequest">
-    	<part name="parameters" element="tns:changeDoctorPublicKey"></part>
-    </message>
-    <message name="changeDoctorPublicKeyResponse">
-    	<part name="parameters" element="tns:changeDoctorPublicKeyResponse"></part>
-    </message>
-    <message name="resetPatientPublicInfoRequest">
-    	<part name="parameters" element="tns:resetPatientPublicInfo"></part>
-    </message>
-    <message name="resetPatientPublicInfoResponse">
-    	<part name="parameters" element="tns:resetPatientPublicInfoResponse"></part>
-    </message>
-    <message name="resetPatientPrivateInfoRequest">
-    	<part name="parameters" element="tns:resetPatientPrivateInfo"></part>
-    </message>
-    <message name="resetPatientPrivateInfoResponse">
-    	<part name="parameters" element="tns:resetPatientPrivateInfoResponse"></part>
-    </message>
+    
+    
     <portType name="NotFenixPortType">
     	<operation name="login">
-    		<input message="tns:loginRequest"></input>
-    		<output message="tns:loginResponse"></output>
-    	</operation>
-    	<operation name="addPatient">
-    		<input message="tns:addPatientRequest"></input>
-    		<output message="tns:addPatientResponse"></output>
-    	</operation>
-    	<operation name="getPatientPublicInfo">
-    		<input message="tns:getPatientPublicInfoRequest"></input>
-    		<output message="tns:getPatientPublicInfoResponse"></output>
-    	</operation>
-    	<operation name="getPatientPrivateInfo">
-    		<input message="tns:getPatientPrivateInfoRequest"></input>
-    		<output message="tns:getPatientPrivateInfoResponse"></output>
-    	</operation>
-    	<operation name="addPatientPublicInfo">
-    		<input message="tns:addPatientPublicInfoRequest"></input>
-    		<output message="tns:addPatientPublicInfoResponse"></output>
-    	</operation>
-    	<operation name="addPatientPrivateInfo">
-    		<input message="tns:addPatientPrivateInfoRequest"></input>
-    		<output message="tns:addPatientPrivateInfoResponse"></output>
-    	</operation>
-    	<operation name="deletePatient">
-    		<input message="tns:deletePatientRequest"></input>
-    		<output message="tns:deletePatientResponse"></output>
-    	</operation>
-    	<operation name="sharePatient">
-    		<input message="tns:sharePatientRequest"></input>
-    		<output message="tns:sharePatientResponse"></output>
-    	</operation>
-    	<operation name="addDoctor">
-    		<input message="tns:addDoctorRequest"></input>
-    		<output message="tns:addDoctorResponse"></output>
-    	</operation>
-    	<operation name="deleteDoctor">
-    		<input message="tns:deleteDoctorRequest"></input>
-    		<output message="tns:deleteDoctorResponse"></output>
-    	</operation>
-    	<operation name="changePassword">
-    		<input message="tns:changePasswordRequest"></input>
-    		<output message="tns:changePasswordResponse"></output>
-    	</operation>
-    	<operation name="changeDoctorPublicKey">
-    		<input message="tns:changeDoctorPublicKeyRequest"></input>
-    		<output message="tns:changeDoctorPublicKeyResponse"></output>
-    	</operation>
-    	<operation name="resetPatientPublicInfo">
-    		<input message="tns:resetPatientPublicInfoRequest"></input>
-    		<output message="tns:resetPatientPublicInfoResponse"></output>
-    	</operation>
-    	<operation name="resetPatientPrivateInfo">
-    		<input message="tns:resetPatientPrivateInfoRequest"></input>
-    		<output message="tns:resetPatientPrivateInfoResponse"></output>
-    	</operation></portType>
+            <input wsam:Action="http://ws.transporter.upa.pt/TransporterPort/loginRequest"
+                message="tns:login" />
+            <output wsam:Action="http://ws.transporter.upa.pt/TransporterPort/loginResponse"
+                message="tns:loginResponse" />
+        </operation>
+    </portType>
  
     <binding name="NotFenixPortType" type="tns:NotFenixPortType">
     	<soap:binding style="document"
-    		transport="http://schemas.xmlsoap.org/soap/http" />
+    		transport="http://schemas.xmlsoap.org/soap/http" />	
     	<operation name="login">
-    		<soap:operation
-    			soapAction="http://ws.sirs1617.andred.pt/login" />
-    		<input>
-    			<soap:body use="literal" />
-    		</input>
-    		<output>
-    			<soap:body use="literal" />
-    		</output>
-    	</operation>
-    	<operation name="addPatient">
-    		<soap:operation
-    			soapAction="http://ws.sirs1617.andred.pt/addPatient" />
-    		<input>
-    			<soap:body use="literal" />
-    		</input>
-    		<output>
-    			<soap:body use="literal" />
-    		</output>
-    	</operation>
-    	<operation name="getPatientPublicInfo">
-    		<soap:operation
-    			soapAction="http://ws.sirs1617.andred.pt/getPatientPublicInfo" />
-    		<input>
-    			<soap:body use="literal" />
-    		</input>
-    		<output>
-    			<soap:body use="literal" />
-    		</output>
-    	</operation>
-    	<operation name="getPatientPrivateInfo">
-    		<soap:operation
-    			soapAction="http://ws.sirs1617.andred.pt/getPatientPrivateInfo" />
-    		<input>
-    			<soap:body use="literal" />
-    		</input>
-    		<output>
-    			<soap:body use="literal" />
-    		</output>
-    	</operation>
-    	<operation name="addPatientPublicInfo">
-    		<soap:operation
-    			soapAction="http://ws.sirs1617.andred.pt/addPatientPublicInfo" />
-    		<input>
-    			<soap:body use="literal" />
-    		</input>
-    		<output>
-    			<soap:body use="literal" />
-    		</output>
-    	</operation>
-    	<operation name="addPatientPrivateInfo">
-    		<soap:operation
-    			soapAction="http://ws.sirs1617.andred.pt/addPatientPrivateInfo" />
-    		<input>
-    			<soap:body use="literal" />
-    		</input>
-    		<output>
-    			<soap:body use="literal" />
-    		</output>
-    	</operation>
-    	<operation name="deletePatient">
-    		<soap:operation
-    			soapAction="http://ws.sirs1617.andred.pt/deletePatient" />
-    		<input>
-    			<soap:body use="literal" />
-    		</input>
-    		<output>
-    			<soap:body use="literal" />
-    		</output>
-    	</operation>
-    	<operation name="sharePatient">
-    		<soap:operation
-    			soapAction="http://ws.sirs1617.andred.pt/sharePatient" />
-    		<input>
-    			<soap:body use="literal" />
-    		</input>
-    		<output>
-    			<soap:body use="literal" />
-    		</output>
-    	</operation>
-    	<operation name="addDoctor">
-    		<soap:operation
-    			soapAction="http://ws.sirs1617.andred.pt/addDoctor" />
-    		<input>
-    			<soap:body use="literal" />
-    		</input>
-    		<output>
-    			<soap:body use="literal" />
-    		</output>
-    	</operation>
-    	<operation name="deleteDoctor">
-    		<soap:operation
-    			soapAction="http://ws.sirs1617.andred.pt/deleteDoctor" />
-    		<input>
-    			<soap:body use="literal" />
-    		</input>
-    		<output>
-    			<soap:body use="literal" />
-    		</output>
-    	</operation>
-    	<operation name="changePassword">
-    		<soap:operation
-    			soapAction="http://ws.sirs1617.andred.pt/changePassword" />
-    		<input>
-    			<soap:body use="literal" />
-    		</input>
-    		<output>
-    			<soap:body use="literal" />
-    		</output>
-    	</operation>
-    	<operation name="changeDoctorPublicKey">
-    		<soap:operation
-    			soapAction="http://ws.sirs1617.andred.pt/changeDoctorPublicKey" />
-    		<input>
-    			<soap:body use="literal" />
-    		</input>
-    		<output>
-    			<soap:body use="literal" />
-    		</output>
-    	</operation>
-    	<operation name="resetPatientPublicInfo">
-    		<soap:operation
-    			soapAction="http://ws.sirs1617.andred.pt/resetPatientPublicInfo" />
-    		<input>
-    			<soap:body use="literal" />
-    		</input>
-    		<output>
-    			<soap:body use="literal" />
-    		</output>
-    	</operation>
-    	<operation name="resetPatientPrivateInfo">
-    		<soap:operation
-    			soapAction="http://ws.sirs1617.andred.pt/resetPatientPrivateInfo" />
-    		<input>
-    			<soap:body use="literal" />
-    		</input>
-    		<output>
-    			<soap:body use="literal" />
-    		</output>
-    	</operation>
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
     </binding>
 
     <service name="NotFenixService">
