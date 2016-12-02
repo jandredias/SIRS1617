@@ -51,11 +51,11 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
     	
     	if (outbound) {
     		Dialog.IO().yellow();
-    		Dialog.IO().debug("Outbound SOAP message:");
+    		Dialog.IO().debug("LogginHandler","Outbound SOAP message:");
     		Dialog.IO().white();
     	} else {
     		Dialog.IO().cyan();
-    		Dialog.IO().debug("Inbound SOAP message:");
+    		Dialog.IO().debug("LogginHandler","Inbound SOAP message:");
     		Dialog.IO().white();
     	}
     	SOAPMessage message = smc.getMessage();

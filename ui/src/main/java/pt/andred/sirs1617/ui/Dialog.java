@@ -83,6 +83,7 @@ public class Dialog {
 	public int readInteger(){ return Dialog._input.nextInt(); }
 	public double readDouble(){ return Dialog._input.nextDouble(); }
 	public String readString(){ return Dialog._input.next(); }
+	public String readPassword(){ return new String(System.console().readPassword()); }
 	public Float readFloat(){ return Dialog._input.nextFloat(); }
 	public Long readLong(){ return Dialog._input.nextLong(); }
 	public Short readShort(){ return Dialog._input.nextShort(); }
@@ -92,6 +93,7 @@ public class Dialog {
 	public BigInteger readBigInteger(){ return Dialog._input.nextBigInteger(); }
 	
 
+	public String readPassword(String s){ print(s); return readPassword(); }
 	public int readInteger(String s){ print(s); return readInteger(); }
 	public double readDouble(String s){ print(s); return readDouble(); }
 	public String readString(String s){ print(s); return readString(); }

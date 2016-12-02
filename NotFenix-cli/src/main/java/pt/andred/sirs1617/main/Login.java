@@ -15,8 +15,8 @@ public class Login extends Command<NotFenixClient> {
 	@Override
 	public void execute() throws DialogException, IOException {
 		// TODO Auto-generated method stub
-		String username = Dialog.IO().readString("Username?");
-		String password = Dialog.IO().readString("Password?");
+		String username = Dialog.IO().readString("Username? ");
+		String password = Dialog.IO().readPassword("Password? ");
 		Boolean success = _receiver.login(username, password);
 		if(success){
 			pt.andred.sirs1617.main.doctor.MenuBuilder.menuFor(_receiver);
