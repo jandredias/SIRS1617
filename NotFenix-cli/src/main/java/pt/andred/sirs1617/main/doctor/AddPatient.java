@@ -14,6 +14,10 @@ public class AddPatient extends Command<NotFenixClient> {
 
 	@Override
 	public void execute() throws DialogException, IOException {
-		// TODO Auto-generated method stub
+			Dialog.IO().println("");
+			String name = Dialog.IO().readString("Name? ");
+			String details = Dialog.IO().readString("Details? ");
+			Boolean success = _receiver.addPatient(name, details);
+
 	}
 }

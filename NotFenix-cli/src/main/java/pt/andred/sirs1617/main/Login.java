@@ -21,7 +21,9 @@ public class Login extends Command<NotFenixClient> {
 		if(success){
 			pt.andred.sirs1617.main.doctor.MenuBuilder.menuFor(_receiver);
 		}else{
+			Dialog.IO().println("");
 			Dialog.IO().println("Incorrect data");
+			Dialog.IO().println("");
 		}
 	}
 }
