@@ -24,14 +24,13 @@
         	<xsd:element name="loginResponse">
         		<xsd:complexType>
         			<xsd:sequence>
-        				<xsd:element name="success" type="xsd:boolean"></xsd:element>
+        				<xsd:element name="token" type="xsd:string"></xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
         	</xsd:element>
         	<xsd:element name="addDoctor">
         		<xsd:complexType>
         			<xsd:sequence>
-        				<xsd:element name="name" type="xsd:string"></xsd:element>
         				<xsd:element name="username"
         					type="xsd:string">
         				</xsd:element>
@@ -95,6 +94,9 @@
         				<xsd:element name="password"
         					type="xsd:string">
         				</xsd:element>
+        				<xsd:element name="oldPassword"
+        					type="xsd:string">
+        				</xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
         	</xsd:element>
@@ -108,7 +110,7 @@
         	<xsd:element name="changePasswordResponse">
         		<xsd:complexType>
         			<xsd:sequence>
-        				<xsd:element name="out" type="xsd:string"></xsd:element>
+        				<xsd:element name="success" type="xsd:boolean"></xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
         	</xsd:element>
@@ -116,7 +118,13 @@
         		<xsd:complexType>
         			<xsd:sequence>
         				<xsd:element name="name" type="xsd:string"></xsd:element>
-        				<xsd:element name="key"
+        				<xsd:element name="keyMaster"
+        					type="xsd:string">
+        				</xsd:element>
+        				<xsd:element name="keyDoctor"
+        					type="xsd:string">
+        				</xsd:element>
+        				<xsd:element name="details"
         					type="xsd:string">
         				</xsd:element>
         			</xsd:sequence>
@@ -156,7 +164,7 @@
         	<xsd:element name="getInfoPatientResponse">
         		<xsd:complexType>
         			<xsd:sequence>
-        				<xsd:element name="out" type="xsd:string"></xsd:element>
+        				<xsd:element name="infoValue" type="xsd:string"></xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
         	</xsd:element>
@@ -176,7 +184,7 @@
         	<xsd:element name="setInfoPatientResponse">
         		<xsd:complexType>
         			<xsd:sequence>
-        				<xsd:element name="out" type="xsd:string"></xsd:element>
+        				<xsd:element name="success" type="xsd:boolean"></xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
         	</xsd:element>
@@ -191,6 +199,43 @@
         		<xsd:complexType>
         			<xsd:sequence>
         				<xsd:element name="success" type="xsd:boolean"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="getPublicInfoPatient">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="name" type="xsd:string"></xsd:element>
+        				<xsd:element name="infoName"
+        					type="xsd:string">
+        				</xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="getPublicInfoPatientResponse1">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="infoValue" type="xsd:string"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="setPublicInfoPatient">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="name" type="xsd:string"></xsd:element>
+        				<xsd:element name="infoName"
+        					type="xsd:string">
+        				</xsd:element>
+        				<xsd:element name="infoValue"
+        					type="xsd:string">
+        				</xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="setPublicInfoPatientResponse1">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="out" type="xsd:string"></xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
         	</xsd:element></xsd:schema>
@@ -260,6 +305,18 @@
     <message name="getPatientResponse1">
     	<part name="parameters" element="tns:getPatientResponse1"></part>
     </message>
+    <message name="getPublicInfoPatientRequest">
+    	<part name="parameters" element="tns:getPublicInfoPatient"></part>
+    </message>
+    <message name="getPublicInfoPatientResponse1">
+    	<part name="parameters" element="tns:getPublicInfoPatientResponse1"></part>
+    </message>
+    <message name="setPublicInfoPatientRequest">
+    	<part name="parameters" element="tns:setPublicInfoPatient"></part>
+    </message>
+    <message name="setPublicInfoPatientResponse1">
+    	<part name="parameters" element="tns:setPublicInfoPatientResponse1"></part>
+    </message>
     <portType name="NotFenixPortType">
     	
         <operation name="login">
@@ -301,6 +358,14 @@
         <operation name="getPatient">
         	<input message="tns:getPatientRequest"></input>
         	<output message="tns:getPatientResponse1"></output>
+        </operation>
+        <operation name="getPublicInfoPatient">
+        	<input message="tns:getPublicInfoPatientRequest"></input>
+        	<output message="tns:getPublicInfoPatientResponse1"></output>
+        </operation>
+        <operation name="setPublicInfoPatient">
+        	<input message="tns:setPublicInfoPatientRequest"></input>
+        	<output message="tns:setPublicInfoPatientResponse1"></output>
         </operation>
     </portType>
  
@@ -380,6 +445,24 @@
             </output>
         </operation>
         <operation name="setInfoPatient">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="getPublicInfoPatient">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="setPublicInfoPatient">
             <soap:operation soapAction="" />
             <input>
                 <soap:body use="literal" />
