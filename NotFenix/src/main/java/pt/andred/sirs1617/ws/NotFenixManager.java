@@ -2,6 +2,7 @@ package pt.andred.sirs1617.ws;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.xml.ws.Endpoint;
 
@@ -14,8 +15,11 @@ public class NotFenixManager {
 	private Endpoint _endpoint;
 	private Map<String, String> _doctors;
 	
+	private Map<String, UUID> _logins;
+	
 	private NotFenixManager() {
 		_doctors  = new HashMap<>();
+		_logins = new HashMap<>();
 		_doctors.put("andre.dias", "andre");
 		_doctors.put("jorge.veiga", "andre");
 		_doctors.put("miguel.amaral", "andre");
@@ -30,11 +34,18 @@ public class NotFenixManager {
 		return _instance;
 	}
 	
-	public boolean login(String username, String password){
-		Dialog.IO().println("Login try:" + username + " " + password);
-		if(!_doctors.containsKey(username)) return false;
-		return _doctors.get(username).equals(password);
+	public String login(String username, String password){
+		Dialog.IO().debug("Login try:" + username + " " + password);
+		if(_doctors.containsKey(username) && _doctors.get(username).equals(password))
+			return generateNewToken(username);
+		return null;
 	}
+	private String generateNewToken(String username) {
+		UUID token = UUID.randomUUID();
+		_logins.put(username, token);
+		return token.toString();
+	}
+
 	public void start(String address){
 		_endpoint.publish(address);
 		Dialog.IO().println("NotFenixManager started");
@@ -46,48 +57,58 @@ public class NotFenixManager {
 		
 	}
 
-	public String setInfoPatient(String name, String infoName, String infoValue) {
+	public boolean setInfoPatient(String token, String name, String infoName, String infoValue) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public String getInfoPatient(String token, String name, String infoName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public String getInfoPatient(String name, String infoName) {
+	public boolean deletePatient(String token, String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean addPatient(String token, String name, String key, String keyDoctor, String details) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean changePassword(String token, String username, String password, String oldPassword) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean revokeDoctorKey(String token, String username, String oldPublicKey, String newPublicKey) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteDoctor(String token, String username) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean addDoctor(String token, String username, String password, String publicKey) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean getPatient(String token, String username) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public String setPublicInfoPatient(String token, String name, String infoName, String infoValue) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public boolean deletePatient(String name) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean addPatient(String name, String key) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public String changePassword(String username, String password) {
+	public String getPublicInfoPatient(String token, String name, String infoName) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	public boolean revokeDoctorKey(String username, String oldPublicKey, String newPublicKey) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean deleteDoctor(String username) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean addDoctor(String username, String publicKey) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean getPatient(String username) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

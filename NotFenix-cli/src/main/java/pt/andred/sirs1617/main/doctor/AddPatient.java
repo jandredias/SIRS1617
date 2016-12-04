@@ -17,7 +17,7 @@ public class AddPatient extends Command<NotFenixClient> {
 			Dialog.IO().println("");
 			String name = Dialog.IO().readString("Name? ");
 			String details = Dialog.IO().readString("Details? ");
-			Boolean success = _receiver.addPatient(name, details);
-
+			//Boolean success = _receiver.addPatient(name, details);
+			//TODO
 	}
 }

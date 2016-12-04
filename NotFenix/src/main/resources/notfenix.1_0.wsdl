@@ -31,6 +31,9 @@
         	<xsd:element name="addDoctor">
         		<xsd:complexType>
         			<xsd:sequence>
+        				<xsd:element name="token"
+        					type="xsd:string">
+        				</xsd:element>
         				<xsd:element name="username"
         					type="xsd:string">
         				</xsd:element>
@@ -53,7 +56,11 @@
         	<xsd:element name="deleteDoctor">
         		<xsd:complexType>
         			<xsd:sequence>
-        				<xsd:element name="username" type="xsd:string"></xsd:element>
+                        <xsd:element name="token" type="xsd:string">
+        				</xsd:element>
+                        <xsd:element name="username"
+        					type="xsd:string">
+        				</xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
         	</xsd:element>
@@ -67,9 +74,12 @@
         	<xsd:element name="revokeDoctorKey">
         		<xsd:complexType>
         			<xsd:sequence>
-                        <xsd:element name="username" type="xsd:string">
+                        <xsd:element name="token" type="xsd:string">
         				</xsd:element>
-                        <xsd:element name="oldPublicKey"
+                        <xsd:element name="username"
+        					type="xsd:string">
+        				</xsd:element>
+        				<xsd:element name="oldPublicKey"
         					type="xsd:string">
         				</xsd:element>
         				<xsd:element name="newPublicKey"
@@ -88,7 +98,9 @@
         	<xsd:element name="changePassword">
         		<xsd:complexType>
         			<xsd:sequence>
-        				<xsd:element name="username"
+                        <xsd:element name="token" type="xsd:string">
+        				</xsd:element>
+                        <xsd:element name="username"
         					type="xsd:string">
         				</xsd:element>
         				<xsd:element name="password"
@@ -117,15 +129,16 @@
         	<xsd:element name="addPatient">
         		<xsd:complexType>
         			<xsd:sequence>
-        				<xsd:element name="name" type="xsd:string"></xsd:element>
+                        <xsd:element name="token" type="xsd:string">
+        				</xsd:element>
+                        <xsd:element name="name" type="xsd:string"></xsd:element>
         				<xsd:element name="keyMaster"
         					type="xsd:string">
         				</xsd:element>
         				<xsd:element name="keyDoctor"
         					type="xsd:string">
         				</xsd:element>
-        				<xsd:element name="details"
-        					type="xsd:string">
+        				<xsd:element name="details" type="xsd:string">
         				</xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
@@ -140,7 +153,9 @@
         	<xsd:element name="deletePatient">
         		<xsd:complexType>
         			<xsd:sequence>
-        				<xsd:element name="name" type="xsd:string"></xsd:element>
+                        <xsd:element name="token" type="xsd:string">
+        				</xsd:element>
+                        <xsd:element name="name" type="xsd:string"></xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
         	</xsd:element>
@@ -154,6 +169,9 @@
         	<xsd:element name="getInfoPatient">
         		<xsd:complexType>
         			<xsd:sequence>
+        				<xsd:element name="token"
+        					type="xsd:string">
+        				</xsd:element>
         				<xsd:element name="name" type="xsd:string"></xsd:element>
         				<xsd:element name="infoName"
         					type="xsd:string">
@@ -171,6 +189,9 @@
         	<xsd:element name="setInfoPatient">
         		<xsd:complexType>
         			<xsd:sequence>
+        				<xsd:element name="token"
+        					type="xsd:string">
+        				</xsd:element>
         				<xsd:element name="name" type="xsd:string"></xsd:element>
         				<xsd:element name="infoName"
         					type="xsd:string">
@@ -191,11 +212,16 @@
         	<xsd:element name="getPatient">
         		<xsd:complexType>
         			<xsd:sequence>
-        				<xsd:element name="username" type="xsd:string"></xsd:element>
+        				<xsd:element name="token"
+        					type="xsd:string">
+        				</xsd:element>
+        				<xsd:element name="username"
+        					type="xsd:string">
+        				</xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
         	</xsd:element>
-        	<xsd:element name="getPatientResponse1">
+        	<xsd:element name="getPatientResponse">
         		<xsd:complexType>
         			<xsd:sequence>
         				<xsd:element name="success" type="xsd:boolean"></xsd:element>
@@ -205,14 +231,16 @@
         	<xsd:element name="getPublicInfoPatient">
         		<xsd:complexType>
         			<xsd:sequence>
-        				<xsd:element name="name" type="xsd:string"></xsd:element>
+                        <xsd:element name="token" type="xsd:string">
+        				</xsd:element>
+                        <xsd:element name="name" type="xsd:string"></xsd:element>
         				<xsd:element name="infoName"
         					type="xsd:string">
         				</xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
         	</xsd:element>
-        	<xsd:element name="getPublicInfoPatientResponse1">
+        	<xsd:element name="getPublicInfoPatientResponse">
         		<xsd:complexType>
         			<xsd:sequence>
         				<xsd:element name="infoValue" type="xsd:string"></xsd:element>
@@ -222,7 +250,9 @@
         	<xsd:element name="setPublicInfoPatient">
         		<xsd:complexType>
         			<xsd:sequence>
-        				<xsd:element name="name" type="xsd:string"></xsd:element>
+                        <xsd:element name="token" type="xsd:string">
+        				</xsd:element>
+                        <xsd:element name="name" type="xsd:string"></xsd:element>
         				<xsd:element name="infoName"
         					type="xsd:string">
         				</xsd:element>
@@ -232,7 +262,7 @@
         			</xsd:sequence>
         		</xsd:complexType>
         	</xsd:element>
-        	<xsd:element name="setPublicInfoPatientResponse1">
+        	<xsd:element name="setPublicInfoPatientResponse">
         		<xsd:complexType>
         			<xsd:sequence>
         				<xsd:element name="out" type="xsd:string"></xsd:element>
@@ -302,20 +332,20 @@
     <message name="getPatientRequest">
     	<part name="parameters" element="tns:getPatient"></part>
     </message>
-    <message name="getPatientResponse1">
-    	<part name="parameters" element="tns:getPatientResponse1"></part>
+    <message name="getPatientResponse">
+    	<part name="parameters" element="tns:getPatientResponse"></part>
     </message>
     <message name="getPublicInfoPatientRequest">
     	<part name="parameters" element="tns:getPublicInfoPatient"></part>
     </message>
-    <message name="getPublicInfoPatientResponse1">
-    	<part name="parameters" element="tns:getPublicInfoPatientResponse1"></part>
+    <message name="getPublicInfoPatientResponse">
+    	<part name="parameters" element="tns:getPublicInfoPatientResponse"></part>
     </message>
     <message name="setPublicInfoPatientRequest">
     	<part name="parameters" element="tns:setPublicInfoPatient"></part>
     </message>
-    <message name="setPublicInfoPatientResponse1">
-    	<part name="parameters" element="tns:setPublicInfoPatientResponse1"></part>
+    <message name="setPublicInfoPatientResponse">
+    	<part name="parameters" element="tns:setPublicInfoPatientResponse"></part>
     </message>
     <portType name="NotFenixPortType">
     	
@@ -357,15 +387,15 @@
         </operation>
         <operation name="getPatient">
         	<input message="tns:getPatientRequest"></input>
-        	<output message="tns:getPatientResponse1"></output>
+        	<output message="tns:getPatientResponse"></output>
         </operation>
         <operation name="getPublicInfoPatient">
         	<input message="tns:getPublicInfoPatientRequest"></input>
-        	<output message="tns:getPublicInfoPatientResponse1"></output>
+        	<output message="tns:getPublicInfoPatientResponse"></output>
         </operation>
         <operation name="setPublicInfoPatient">
         	<input message="tns:setPublicInfoPatientRequest"></input>
-        	<output message="tns:setPublicInfoPatientResponse1"></output>
+        	<output message="tns:setPublicInfoPatientResponse"></output>
         </operation>
     </portType>
  
