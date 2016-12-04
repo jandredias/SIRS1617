@@ -13,13 +13,15 @@ public class NotFenixManager {
 	private static NotFenixManager _instance;
 	private NotFenixPort _port;
 	private Endpoint _endpoint;
-	private Map<String, String> _doctors;
-	
-	private Map<String, UUID> _logins;
-	
+	private Map<String, String, String> _doctors;
+	private Map<String, String, Map<String, String>, String> _patientsPrivate;
+	private Map<String, String, String> __patientsPublic;
+	private Map<UUID, String> _logins;
+
 	private NotFenixManager() {
 		_doctors  = new HashMap<>();
 		_logins = new HashMap<>();
+
 		_doctors.put("andre.dias", "andre");
 		_doctors.put("jorge.veiga", "andre");
 		_doctors.put("miguel.amaral", "andre");
@@ -28,12 +30,12 @@ public class NotFenixManager {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static NotFenixManager instance(){ 
-		if(_instance==null) 
+	public static NotFenixManager instance(){
+		if(_instance==null)
 			_instance = new NotFenixManager();
 		return _instance;
 	}
-	
+
 	public String login(String username, String password){
 		Dialog.IO().debug("Login try:" + username + " " + password);
 		if(_doctors.containsKey(username) && _doctors.get(username).equals(password))
@@ -42,7 +44,7 @@ public class NotFenixManager {
 	}
 	private String generateNewToken(String username) {
 		UUID token = UUID.randomUUID();
-		_logins.put(username, token);
+		_logins.put(token, username);
 		return token.toString();
 	}
 
@@ -50,15 +52,29 @@ public class NotFenixManager {
 		_endpoint.publish(address);
 		Dialog.IO().println("NotFenixManager started");
 	}
-	
+
 	public void stop() {
 		_endpoint.stop();
 		// TODO Auto-generated method stub
-		
+
+	}
+	public String checkToken(UUID token){
+		String username _logins.get(token);
+		if(username == null){
+			//TODO, return problem
+			Dialog.IO().print("Invalid Token");
+		}
+		return username;
+
 	}
 
 	public boolean setInfoPatient(String token, String name, String infoName, String infoValue) {
-		// TODO Auto-generated method stub
+		String username = checkToken(token);
+		if (username == null)
+			return false;
+
+
+
 		return false;
 	}
 
