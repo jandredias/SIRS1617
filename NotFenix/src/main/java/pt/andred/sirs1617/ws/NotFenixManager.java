@@ -14,17 +14,31 @@ public class NotFenixManager {
 	private NotFenixPort _port;
 	private Endpoint _endpoint;
 	private Map<String, String> _doctors;
-//	private Map<String, String, Map<String, String>, String> _patientsPrivate;
-//	private Map<String, String, String> __patientsPublic;
+	private Map<String, String> _doctorKeys;
+	private Map<String, PatientPrivateInfo> _patientsPrivate;
 	private Map<String, String> _logins;
+
+	private String P_NAME_TAG = "P_NAME";
+	private String P_KEY_MASTER_TAG = "P_KEY_M";
+	private String P_KEY_DOCTOR_TAG = "P_KEY_DOCTOR";
+	private String P_DETAILS_TAG = "P_DETAILS";
+	private String P_PUBLIC_KEY = "P_PUBLIC_KEY";
+	private String P_PUBLIC_DETAILS = "P_PUBLIC_DETAILS";
+
+	private String RH_MASTER = "RH";
+
+
 
 	private NotFenixManager() {
 		_doctors  = new HashMap<>();
 		_logins = new HashMap<>();
+		_patientsPrivate = new HashMap<>();
+		_doctorKeys = new HashMap<>();
 
 		_doctors.put("andre.dias", "andre");
 		_doctors.put("jorge.veiga", "andre");
 		_doctors.put("miguel.amaral", "andre");
+		_doctors.put("RH_MASTER", "MASTER");
 		_port = new NotFenixPort();
 		_endpoint = Endpoint.create(_port);
 		// TODO Auto-generated constructor stub
@@ -68,53 +82,144 @@ public class NotFenixManager {
 
 	}
 
-	public boolean setInfoPatient(String token, String name, String infoName, String infoValue) {
-		String username = checkToken(token);
-		if (username == null)
+	public boolean setInfoPatient(String token, String pname, String infoName, String infoValue) {
+		String name = checkToken(token);
+		if (name == null)
+			return false; //TODO: must retunr a problem
+		PatientPrivateInfo patient = _patientsPrivate.get(pname);
+		if (patient == null)
 			return false;
 
-
-
-		return false;
+		if(infoName.matches(P_NAME_TAG)){
+			patient.setName(infoValue);
+			_patientsPrivate.remove(name);
+			_patientsPrivate.put(name, patient);
+			return true;
+		}
+		else if(infoName.matches(P_KEY_MASTER_TAG)){
+			patient.setKeyMaster(infoValue);
+			return true;
+		}
+		else if(infoName.matches(P_KEY_DOCTOR_TAG)){
+			patient.setKeyDoctor(name, infoValue);
+			return true;
+		}
+		else if (infoName.matches(P_DETAILS_TAG)){
+			patient.setDetails(infoValue);
+			return true;
+		}
+		else if (infoName.matches(P_PUBLIC_KEY)){
+			patient.setPublicKey(infoValue);
+			return true;
+		}
+		else if (infoName.matches(P_PUBLIC_DETAILS)){
+			patient.setPublicDetails(infoValue);
+			return true;
+		}
+		else
+			return false;
 	}
 
-	public String getInfoPatient(String token, String name, String infoName) {
-		// TODO Auto-generated method stub
-		return null;
+	public String getInfoPatient(String token, String pname, String infoName) {
+		String name = checkToken(token);
+		if (name == null)
+			return null; //TODO: must retunr a problem
+		PatientPrivateInfo patient = _patientsPrivate.get(pname);
+		if (patient == null)
+			return null;
+
+		if(infoName.matches(P_NAME_TAG))
+			return patient.getName();
+		else if(infoName.matches(P_KEY_MASTER_TAG))
+			return patient.getKeyMaster();
+		else if(infoName.matches(P_KEY_DOCTOR_TAG))
+			return patient.getKeyDoctor(name);
+		else if (infoName.matches(P_DETAILS_TAG))
+			return patient.getDetails();
+		else if (infoName.matches(P_PUBLIC_KEY))
+				return patient.getPublicKey();
+		else if (infoName.matches(P_PUBLIC_DETAILS))
+				return patient.getPublicDetails();
+		else
+			return null;
 	}
 
-	public boolean deletePatient(String token, String name) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean deletePatient(String token, String pname) {
+		String name = checkToken(token);
+		if (name != RH_MASTER)
+			return false; //TODO: must retunr a problem
+
+		_patientsPrivate.remove(pname);
+		return true;
 	}
 
-	public boolean addPatient(String token, String name, String key, String keyDoctor, String details) {
-		// TODO Auto-generated method stub
+	public boolean addPatient(String token, String pname, String key, String keyDoctor, String details) {
+		String name = checkToken(token);
+		if (name == null)
+			return false; //TODO: must retunr a problem
+
+		//FIXME: encryp master key
+		PatientPrivateInfo patient = new PatientPrivateInfo(pname, key, name, keyDoctor, details);
+		if(_patientsPrivate.put(pname, patient)!= null)
+			return true;
 		return false;
 	}
 
 	public boolean changePassword(String token, String username, String password, String oldPassword) {
-		// TODO Auto-generated method stub
+		String name = checkToken(token);
+		if (name == null)
+			return false; //TODO: must retunr a problem
+		if(name != RH_MASTER)
+			if(name != username)
+				return false;
+		String _old = _doctors.get(username);
+		if(_old.equals(oldPassword)){
+			_doctors.put(username, password);
+			return true;
+		}
 		return false;
 	}
-
+	//
 	public boolean revokeDoctorKey(String token, String username, String oldPublicKey, String newPublicKey) {
-		// TODO Auto-generated method stub
+		String name = checkToken(token);
+		if (name == null)
+			return false; //TODO: must retunr a problem
+		if(name != RH_MASTER)
+			if(name != username)
+				return false;
+		if(_doctorKeys.containsKey(username)){
+			_doctorKeys.put(username, newPublicKey);
+			return true;
+		}
 		return false;
 	}
 
 	public boolean deleteDoctor(String token, String username) {
-		// TODO Auto-generated method stub
-		return false;
+		String name = checkToken(token);
+		if (name == null)
+			return false; //TODO: must retunr a problem
+		if(name != RH_MASTER)
+			if(name != username)
+				return false;
+		if(_doctors.containsKey(username))
+			return false;
+		_doctors.remove(username);
+		return true;
 	}
 
 	public boolean addDoctor(String token, String username, String password, String publicKey) {
-		// TODO Auto-generated method stub
-		return false;
+		String name = checkToken(token);
+		if(name != RH_MASTER)
+			return false; //TODO: must retunr a problem
+		if(_doctors.containsKey(username))
+			return false;
+		_doctors.put(username, password);
+		_doctorKeys.put(username, publicKey);
+		return true;
 	}
 
 	public boolean getPatient(String token, String username) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub DAFUQ?
 		return false;
 	}
 

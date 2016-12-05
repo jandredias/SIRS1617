@@ -5,7 +5,7 @@ import java.io.IOException;
 
 /**
  * Class Menu manages a set of commands.
- * 
+ *
  * @see ist.po.ui.Command
  * @see ist.po.ui.Dialog
  */
@@ -30,7 +30,7 @@ public class Menu {
 	/**
 	 * @param title
 	 *            menu title.
-	 * 
+	 *
 	 * @param commands
 	 *            list of commands managed by the menu.
 	 */
@@ -75,6 +75,9 @@ public class Menu {
 				Dialog.IO().println(ErrorMessages.errorIO(ioe));
 			} catch (NumberFormatException nbf) {
 				Dialog.IO().println(ErrorMessages.errorInvalidNumber(nbf));
+			} catch (Exception e){
+				Dialog.IO().println("An error occured"); //FIXME
+				Dialog.IO().println("Try again");
 			}
 		}
 	}
