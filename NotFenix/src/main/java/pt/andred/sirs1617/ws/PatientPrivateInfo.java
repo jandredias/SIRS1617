@@ -17,7 +17,7 @@ class PatientPrivateInfo{
     _keyEncryptedMaster = key_master;
     _keysDoctor = new HashMap<>();
     _keysDoctor.put(doctorName, doctorKey);
-    _details = details;
+    _details = detailsEnc;
   }
 
 
