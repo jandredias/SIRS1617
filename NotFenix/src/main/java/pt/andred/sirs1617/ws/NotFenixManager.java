@@ -14,8 +14,8 @@ public class NotFenixManager {
 	private NotFenixPort _port;
 	private Endpoint _endpoint;
 	private Map<String, String, String> _doctors;
-	private Map<String, String, Map<String, String>, String> _patientsPrivate;
-	private Map<String, String, String> __patientsPublic;
+//	private Map<String, String, Map<String, String>, String> _patientsPrivate;
+//	private Map<String, String, String> __patientsPublic;
 	private Map<UUID, String> _logins;
 
 	private NotFenixManager() {
@@ -59,7 +59,7 @@ public class NotFenixManager {
 
 	}
 	public String checkToken(UUID token){
-		String username _logins.get(token);
+		String username = _logins.get(token);
 		if(username == null){
 			//TODO, return problem
 			Dialog.IO().print("Invalid Token");
@@ -68,7 +68,7 @@ public class NotFenixManager {
 
 	}
 
-	public boolean setInfoPatient(String token, String name, String infoName, String infoValue) {
+	public boolean setInfoPatient(UUID token, String name, String infoName, String infoValue) {
 		String username = checkToken(token);
 		if (username == null)
 			return false;
