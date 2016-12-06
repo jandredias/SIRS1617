@@ -13,6 +13,7 @@ public abstract class MenuBuilder {
 		Menu menu = new Menu("Doctors Personal Area", new Command<?>[] {
 			new AddPatient(client),
 			new SeePatient(client),
+			new SetPatient(client),
 			new DeletePatient(client),
 			new SharePatient(client),
 			new ChangePassword(client),
