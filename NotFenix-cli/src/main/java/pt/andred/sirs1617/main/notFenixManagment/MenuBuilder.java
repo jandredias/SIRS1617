@@ -11,7 +11,8 @@ public abstract class MenuBuilder {
 	 */
 	public static void menuFor(NotFenixClient client) {
 		Menu menu = new Menu("NotFenix Managment Area", new Command<?>[] {
-			new AddDoctor(client)
+			new AddDoctor(client),
+			new DeleteDoctor(client)
 				 });
 		menu.open();
 	}

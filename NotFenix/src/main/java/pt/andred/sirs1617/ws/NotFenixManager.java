@@ -3,6 +3,7 @@ package pt.andred.sirs1617.ws;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Set;
 
 import javax.xml.ws.Endpoint;
 
@@ -35,10 +36,10 @@ public class NotFenixManager {
 		_patientsPrivate = new HashMap<>();
 		_doctorKeys = new HashMap<>();
 
-		_doctors.put("andre.dias", "andre");
+	/*	_doctors.put("andre.dias", "andre");
 		_doctors.put("jorge.veiga", "andre");
-		_doctors.put("miguel.amaral", "andre");
-		_doctors.put("RH_MASTER", "MASTER");
+		_doctors.put("miguel.amaral", "andre");*/
+		_doctors.put(RH_MASTER, "MASTER");
 		_port = new NotFenixPort();
 		_endpoint = Endpoint.create(_port);
 		// TODO Auto-generated constructor stub
@@ -96,22 +97,22 @@ public class NotFenixManager {
 			_patientsPrivate.put(name, patient);
 			return true;
 		}
-		else if(infoName.matches(P_KEY_MASTER_TAG)){
+		/*else if(infoName.matches(P_KEY_MASTER_TAG)){
 			patient.setKeyMaster(infoValue);
 			return true;
-		}
-		else if(infoName.matches(P_KEY_DOCTOR_TAG)){
+		}*/
+	/*	else if(infoName.matches(P_KEY_DOCTOR_TAG)){
 			patient.setKeyDoctor(name, infoValue);
 			return true;
-		}
+		}*/
 		else if (infoName.matches(P_DETAILS_TAG)){
 			patient.setDetails(infoValue);
 			return true;
 		}
-		else if (infoName.matches(P_PUBLIC_KEY)){
-			patient.setPublicKey(infoValue);
+	/*	else if (infoName.matches(P_PUBLIC_KEY)){
+			patient.setPublicKey(name, infoValue);
 			return true;
-		}
+		}*/
 		else if (infoName.matches(P_PUBLIC_DETAILS)){
 			patient.setPublicDetails(infoValue);
 			return true;
@@ -137,7 +138,7 @@ public class NotFenixManager {
 		else if (infoName.matches(P_DETAILS_TAG))
 			return patient.getDetails();
 		else if (infoName.matches(P_PUBLIC_KEY))
-				return patient.getPublicKey();
+				return patient.getPublicKey(name);
 		else if (infoName.matches(P_PUBLIC_DETAILS))
 				return patient.getPublicDetails();
 		else
@@ -154,14 +155,16 @@ public class NotFenixManager {
 	}
 
 	public boolean addPatient(String token, String pname, String key, String keyDoctor, String details) {
+	//public boolean addPatient(String token, String pname, String key_master, String keyDoctor, String privateIV, String detailsEnc, String allKeysEnc, String publicIV, publicDetailsEnc)
+	//FIXME descomenter isto^. falta por um {} no fim
 		String name = checkToken(token);
 		if (name == null)
 			return false; //TODO: must retunr a problem
 
-		//FIXME: encryp master key
-		PatientPrivateInfo patient = new PatientPrivateInfo(pname, key, name, keyDoctor, details);
+		//FIXME descomentar isto
+		/*PatientPrivateInfo patient = new PatientPrivateInfo(pname, key_master, name, keyDoctor, privateIV, detailsEnc, _doctorKeys.keySet()), allKeysEnc, publicIV, publicDetailsEnc;
 		if(_patientsPrivate.put(pname, patient)!= null)
-			return true;
+			return true;*/
 		return false;
 	}
 
@@ -219,7 +222,12 @@ public class NotFenixManager {
 	}
 
 	public boolean getPatient(String token, String username) {
-		// TODO Auto-generated method stub DAFUQ?
+		String name = checkToken(token);
+		if (name == null)
+			return false; //TODO: must retunr a problem
+
+		if(_patientsPrivate.containsKey(username))
+			return true;
 		return false;
 	}
 

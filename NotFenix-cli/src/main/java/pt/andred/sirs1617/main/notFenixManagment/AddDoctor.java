@@ -9,11 +9,22 @@ import pt.andred.sirs1617.ws.cli.NotFenixClient;
 
 public class AddDoctor extends Command<NotFenixClient> {
 	public AddDoctor(NotFenixClient client){
-		super("Login", client);
+		super("Add Doctor", client);
 	}
 
 	@Override
 	public void execute() throws DialogException, IOException {
-		// TODO Auto-generated method stub
+		String username = Dialog.IO().readString("Username? ");
+		String password = Dialog.IO().readPassword("Password? ");
+		String rep_pass = Dialog.IO().readPassword("Repeat Password? ");
+		if(password.equals(rep_pass)){
+			if(!_receiver.addDoctor(username, password))
+				Dialog.IO().println("Server error");
+		}
+		else{
+			Dialog.IO().println("");
+			Dialog.IO().println("Incorrect data");
+			Dialog.IO().println("");
+		}
 	}
 }

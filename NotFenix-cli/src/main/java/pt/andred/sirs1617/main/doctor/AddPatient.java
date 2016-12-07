@@ -15,9 +15,16 @@ public class AddPatient extends Command<NotFenixClient> {
 	@Override
 	public void execute() throws DialogException, IOException {
 			Dialog.IO().println("");
-			String name = Dialog.IO().readString("Name? ");
-			String details = Dialog.IO().readString("Details? ");
-			//Boolean success = _receiver.addPatient(name, details);
-			//TODO
+			String pname = Dialog.IO().readString("Name? ");
+			String private_details = Dialog.IO().readString("Private Details? ");
+			String public_details = Dialog.IO().readString("Public Details? ");
+			Boolean exists = _receiver.getPatient(pname);
+			if(exists){
+				Dialog.IO().println("Patient already exists");
+				return;
+			}
+			_receiver.addPatient(pname, private_details, public_details);
+
+
 	}
 }
