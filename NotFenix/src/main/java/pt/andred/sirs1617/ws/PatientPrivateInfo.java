@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Iterator;
+import java.util.Arrays;
 
 class PatientPrivateInfo{
 
@@ -18,10 +19,12 @@ class PatientPrivateInfo{
   private String _publicIV;
   private String _publicDetails;
 
+  private int _keySize;
+
   public PatientPrivateInfo(String name, String key_master, String doctorName,
                       String doctorKey, String privateIV,  String detailsEnc,
-                      Set<String> allDoctors, String[] keyPublicDoctors,
-                      String publicIV, String publicDetailsEnc){
+                      Set<String> allDoctors, String keyPublicDoctors,
+                      String publicIV, String publicDetailsEnc, int keysize) throws Exception{
 
     _name = name;
     _keyEncryptedMaster = key_master;
@@ -30,15 +33,23 @@ class PatientPrivateInfo{
     _details = detailsEnc;
     _publicIV = publicIV;
     _publicDetails = publicDetailsEnc;
+    _keySize = keysize;
 
     Iterator itr= allDoctors.iterator();
     int i = 0;
+    byte[] keySet_bytes = keyPublicDoctors.getBytes("UTF-8");
+    int max = keySet_bytes.length;
     while(itr.hasNext()) {
+      if(i>=max)
+        throw new Exception("Failed");
       String doc = (String) itr.next();
-      _publicKeys.put(doc, keyPublicDoctors[i]);
-      i++;
+      _publicKeys.put(doc, new String(Arrays.copyOfRange(keySet_bytes, i, i+_keySize), "UTF-8"));
+      i+=_keySize;
+
     }
+
   }
+
 
 
   public boolean checkDoctor(String doctor){

@@ -30,9 +30,11 @@ public class NotFenixManager {
 	private String P_DETAILS_TAG = "P_DETAILS";
 	private String P_PUBLIC_KEY = "P_PUBLIC_KEY";
 	private String P_PUBLIC_DETAILS = "P_PUBLIC_DETAILS";
-  public static final String PUBLIC_KEY_FILE = "_public.key";
+  private String PUBLIC_KEY_FILE = "_public.key";
 
 	private String HR_MASTER = "RH";
+
+	private static int _keySize;
 
 
 
@@ -62,7 +64,9 @@ public class NotFenixManager {
 			ObjectInputStream inputStream;
 		try{
 			inputStream = new ObjectInputStream(new FileInputStream(username + PUBLIC_KEY_FILE));
-			return(PublicKey) inputStream.readObject();
+			PublicKey pk = (PublicKey) inputStream.readObject();
+			_keySize = pk.getEncoded().length;
+			return pk;
 		} catch (Exception e) {
 			return null;
 		}
@@ -177,17 +181,25 @@ public class NotFenixManager {
 		return true;
 	}
 
-	public boolean addPatient(String token, String pname, String key, String keyDoctor, String details, String detailsEnc, String allKeysEncString, String iv2String, String detailsPublicEnc) {
-	//public boolean addPatient(String token, String pname, String key_master, String keyDoctor, String privateIV, String detailsEnc, String allKeysEnc, String publicIV, publicDetailsEnc)
-	//FIXME descomenter isto^. falta por um {} no fim
+
+	public boolean addPatient(String token, String pname, String key_master,
+	String keyDoctor, String privateIV, String detailsEnc, String allKeysEnc,
+	String publicIV, String publicDetailsEnc){
+
 		String name = checkToken(token);
 		if (name == null)
 			return false; //TODO: must retunr a problem
 
-		//FIXME descomentar isto
-		/*PatientPrivateInfo patient = new PatientPrivateInfo(pname, key_master, name, keyDoctor, privateIV, detailsEnc, _doctorKeys.keySet()), allKeysEnc, publicIV, publicDetailsEnc;
+		PatientPrivateInfo patient;
+		try{
+			patient = new PatientPrivateInfo(pname, key_master,
+			name, keyDoctor, privateIV, detailsEnc, _doctorKeys.keySet(),
+			allKeysEnc, publicIV, publicDetailsEnc, _keySize);
+		} catch (Exception e) {
+			return false;
+		}
 		if(_patientsPrivate.put(pname, patient)!= null)
-			return true;*/
+			return true;
 		return false;
 	}
 

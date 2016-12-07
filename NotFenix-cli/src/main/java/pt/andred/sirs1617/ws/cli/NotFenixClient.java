@@ -171,7 +171,9 @@ public class NotFenixClient {
 			}catch (Exception e) {
 				return false;
 			}
-    	return _port.addPatient(_token, name, keyMaster, keyDoctor, iv_string, detailsEnc, allKeysEnc_string, iv2_string, detailsPublicEnc);
+    	return _port.addPatient(_token, name, keyMaster, keyDoctor,
+			iv_string, detailsEnc, allKeysEnc_string, iv2_string,
+			detailsPublicEnc);
     }
 
 		public boolean setInfoPatient(String name, String infoMode, String info){
