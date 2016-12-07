@@ -173,7 +173,7 @@ public class NotFenixManager {
 		return true;
 	}
 
-	public boolean addPatient(String token, String pname, String key, String keyDoctor, String details) {
+	public boolean addPatient(String token, String pname, String key, String keyDoctor, String details, String detailsEnc, String allKeysEncString, String iv2String, String detailsPublicEnc) {
 	//public boolean addPatient(String token, String pname, String key_master, String keyDoctor, String privateIV, String detailsEnc, String allKeysEnc, String publicIV, publicDetailsEnc)
 	//FIXME descomenter isto^. falta por um {} no fim
 		String name = checkToken(token);
@@ -250,10 +250,15 @@ public class NotFenixManager {
 		return false;
 	}
 
-	public String getMasterKey(){
+	public String getMasterKey(String token){
 		return _doctorKeys.get(HR_MASTER);
 	}
-	public String getAllDoctorKeys(){
+	public String getMyKey(String token) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getAllDoctorsKeys(String token) {
 		String data= "";
 		Set<String> allDoctors = _doctorKeys.keySet();
 		Iterator itr = allDoctors.iterator();
@@ -263,6 +268,7 @@ public class NotFenixManager {
 			data += _doctorKeys.get(doc);
 		}
 	}
+
 
 
 }

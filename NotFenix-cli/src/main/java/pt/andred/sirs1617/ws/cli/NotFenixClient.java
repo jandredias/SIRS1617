@@ -171,8 +171,7 @@ public class NotFenixClient {
 			}catch (Exception e) {
 				return false;
 			}
-    	return _port.addPatient(_token, name, keyMaster, keyDoctor, detailsEnc);
-			//return _port.addPatient(_token, name, keyMaster, keyDoctor, iv_string, detailsEnc, allKeysEnc_string, iv2_string, detailsPublicEnc);
+    	return _port.addPatient(_token, name, keyMaster, keyDoctor, iv_string, detailsEnc, allKeysEnc_string, iv2_string, detailsPublicEnc);
     }
 
 		public boolean setInfoPatient(String name, String infoMode, String info){
@@ -180,18 +179,15 @@ public class NotFenixClient {
 		}
 
 		public String  getMasterKey(){
-			return null;
-			//return _port.getMasterKey(token);
+			return _port.getMasterKey(_token);
 		}
 
 		public String getMyKey(){
-			return null;
-			//return _port.getMyKey(token)
+			return _port.getMyKey(_token)
 		}
 
 		public String getAllDoctorKeys(){
-			return null;
-			//return _port.getAllDoctorKeys(token);
+			eturn _port.getAllDoctorKeys(_token);
 		}
 
 
