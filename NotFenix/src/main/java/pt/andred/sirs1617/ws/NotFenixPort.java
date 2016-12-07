@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package pt.andred.sirs1617.ws;
 
@@ -20,14 +20,14 @@ import javax.xml.ws.ResponseWrapper;
 public class NotFenixPort implements NotFenixPortType {
 
 	/**
-	 * 
+	 *
 	 */
 	public NotFenixPort() {
 		// TODO Auto-generated constructor stub
 	}
 
     /**
-     * 
+     *
      * @param password
      * @param username
      * @return
@@ -46,7 +46,7 @@ public class NotFenixPort implements NotFenixPortType {
     }
 
     /**
-     * 
+     *
      * @param password
      * @param publicKey
      * @param token
@@ -71,7 +71,7 @@ public class NotFenixPort implements NotFenixPortType {
     }
 
     /**
-     * 
+     *
      * @param token
      * @param username
      * @return
@@ -90,7 +90,7 @@ public class NotFenixPort implements NotFenixPortType {
     }
 
     /**
-     * 
+     *
      * @param newPublicKey
      * @param oldPublicKey
      * @param token
@@ -115,7 +115,7 @@ public class NotFenixPort implements NotFenixPortType {
     }
 
     /**
-     * 
+     *
      * @param password
      * @param oldPassword
      * @param token
@@ -139,36 +139,9 @@ public class NotFenixPort implements NotFenixPortType {
     	return NotFenixManager.instance().changePassword(token, username, password, oldPassword);
     }
 
-    /**
-     * 
-     * @param keyMaster
-     * @param name
-     * @param keyDoctor
-     * @param details
-     * @param token
-     * @return
-     *     returns boolean
-     */
-    @WebMethod
-    @WebResult(name = "success", targetNamespace = "")
-    @RequestWrapper(localName = "addPatient", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.AddPatient")
-    @ResponseWrapper(localName = "addPatientResponse", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.AddPatientResponse")
-    public boolean addPatient(
-        @WebParam(name = "token", targetNamespace = "")
-        String token,
-        @WebParam(name = "name", targetNamespace = "")
-        String name,
-        @WebParam(name = "keyMaster", targetNamespace = "")
-        String keyMaster,
-        @WebParam(name = "keyDoctor", targetNamespace = "")
-        String keyDoctor,
-        @WebParam(name = "details", targetNamespace = "")
-        String details){
-    	return NotFenixManager.instance().addPatient(token, name, keyMaster, keyDoctor, details);
-    }
 
     /**
-     * 
+     *
      * @param name
      * @param token
      * @return
@@ -187,7 +160,7 @@ public class NotFenixPort implements NotFenixPortType {
     }
 
     /**
-     * 
+     *
      * @param infoName
      * @param name
      * @param token
@@ -209,7 +182,7 @@ public class NotFenixPort implements NotFenixPortType {
     }
 
     /**
-     * 
+     *
      * @param infoName
      * @param infoValue
      * @param name
@@ -234,7 +207,7 @@ public class NotFenixPort implements NotFenixPortType {
     }
 
     /**
-     * 
+     *
      * @param token
      * @param username
      * @return
@@ -253,7 +226,7 @@ public class NotFenixPort implements NotFenixPortType {
     }
 
     /**
-     * 
+     *
      * @param detailsEnc
      * @param keyMaster
      * @param name
@@ -293,7 +266,7 @@ public class NotFenixPort implements NotFenixPortType {
 	}
 
 	/**
-     * 
+     *
      * @param token
      * @return
      *     returns java.lang.String
@@ -309,7 +282,7 @@ public class NotFenixPort implements NotFenixPortType {
 	}
 
 	/**
-     * 
+     *
      * @param token
      * @return
      *     returns java.lang.String
@@ -325,7 +298,7 @@ public class NotFenixPort implements NotFenixPortType {
 	}
 
 	/**
-     * 
+     *
      * @param token
      * @return
      *     returns java.lang.String
@@ -340,4 +313,3 @@ public class NotFenixPort implements NotFenixPortType {
 		return NotFenixManager.instance().getAllDoctorsKeys(token);
 	}
 }
-    
