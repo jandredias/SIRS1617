@@ -235,53 +235,6 @@ public class NotFenixPort implements NotFenixPortType {
 
     /**
      * 
-     * @param infoName
-     * @param name
-     * @param token
-     * @return
-     *     returns java.lang.String
-     */
-    @WebMethod
-    @WebResult(name = "infoValue", targetNamespace = "")
-    @RequestWrapper(localName = "getPublicInfoPatient", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetPublicInfoPatient")
-    @ResponseWrapper(localName = "getPublicInfoPatientResponse", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetPublicInfoPatientResponse")
-    public String getPublicInfoPatient(
-        @WebParam(name = "token", targetNamespace = "")
-        String token,
-        @WebParam(name = "name", targetNamespace = "")
-        String name,
-        @WebParam(name = "infoName", targetNamespace = "")
-        String infoName){
-    	return NotFenixManager.instance().getPublicInfoPatient(token, name, infoName);
-    }
-
-    /**
-     * 
-     * @param infoName
-     * @param infoValue
-     * @param name
-     * @param token
-     * @return
-     *     returns java.lang.String
-     */
-    @WebMethod
-    @WebResult(name = "out", targetNamespace = "")
-    @RequestWrapper(localName = "setPublicInfoPatient", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.SetPublicInfoPatient")
-    @ResponseWrapper(localName = "setPublicInfoPatientResponse", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.SetPublicInfoPatientResponse")
-    public String setPublicInfoPatient(
-        @WebParam(name = "token", targetNamespace = "")
-        String token,
-        @WebParam(name = "name", targetNamespace = "")
-        String name,
-        @WebParam(name = "infoName", targetNamespace = "")
-        String infoName,
-        @WebParam(name = "infoValue", targetNamespace = "")
-        String infoValue){
-    	return NotFenixManager.instance().setPublicInfoPatient(token, name, infoName, infoValue);
-    }
-
-    /**
-     * 
      * @param token
      * @param username
      * @return
@@ -298,5 +251,93 @@ public class NotFenixPort implements NotFenixPortType {
         String username){
     	return NotFenixManager.instance().getPatient(token, username);
     }
+
+    /**
+     * 
+     * @param detailsEnc
+     * @param keyMaster
+     * @param name
+     * @param iv2String
+     * @param keyDoctor
+     * @param detailsPublicEnc
+     * @param allKeysEncString
+     * @param ivString
+     * @param token
+     * @return
+     *     returns boolean
+     */
+    @WebMethod
+    @WebResult(name = "success", targetNamespace = "")
+    @RequestWrapper(localName = "addPatient", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.AddPatient")
+    @ResponseWrapper(localName = "addPatientResponse", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.AddPatientResponse")
+    public boolean addPatient(
+        @WebParam(name = "token", targetNamespace = "")
+        String token,
+        @WebParam(name = "name", targetNamespace = "")
+        String name,
+        @WebParam(name = "keyMaster", targetNamespace = "")
+        String keyMaster,
+        @WebParam(name = "keyDoctor", targetNamespace = "")
+        String keyDoctor,
+        @WebParam(name = "iv_string", targetNamespace = "")
+        String ivString,
+        @WebParam(name = "detailsEnc", targetNamespace = "")
+        String detailsEnc,
+        @WebParam(name = "allKeysEnc_string", targetNamespace = "")
+        String allKeysEncString,
+        @WebParam(name = "iv2_string", targetNamespace = "")
+        String iv2String,
+        @WebParam(name = "detailsPublicEnc", targetNamespace = "")
+        String detailsPublicEnc) {
+    	return NotFenixManager.instance().addPatient(token, name, keyMaster, keyDoctor, ivString, detailsEnc, allKeysEncString, iv2String, detailsPublicEnc);
+	}
+
+	/**
+     * 
+     * @param token
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(name = "key", targetNamespace = "")
+    @RequestWrapper(localName = "getMasterKey", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetMasterKey")
+    @ResponseWrapper(localName = "getMasterKeyResponse", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetMasterKeyResponse")
+    public String getMasterKey(
+        @WebParam(name = "token", targetNamespace = "")
+        String token) {
+		return NotFenixManager.instance().getMasterKey(token);
+	}
+
+	/**
+     * 
+     * @param token
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(name = "key", targetNamespace = "")
+    @RequestWrapper(localName = "getMyKey", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetMyKey")
+    @ResponseWrapper(localName = "getMyKeyResponse", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetMyKeyResponse")
+    public String getMyKey(
+        @WebParam(name = "token", targetNamespace = "")
+        String token) {
+		return NotFenixManager.instance().getMyKey(token);
+	}
+
+	/**
+     * 
+     * @param token
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(name = "key", targetNamespace = "")
+    @RequestWrapper(localName = "getAllDoctorsKeys", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetAllDoctorsKeys")
+    @ResponseWrapper(localName = "getAllDoctorsKeysResponse", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetAllDoctorsKeysResponse")
+    public String getAllDoctorsKeys(
+        @WebParam(name = "token", targetNamespace = "")
+        String token){
+		return NotFenixManager.instance().getAllDoctorsKeys(token);
+	}
 }
     
