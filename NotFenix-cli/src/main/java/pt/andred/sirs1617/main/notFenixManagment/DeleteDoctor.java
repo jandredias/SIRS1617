@@ -9,7 +9,7 @@ import pt.andred.sirs1617.ws.cli.NotFenixClient;
 
 public class DeleteDoctor extends Command<NotFenixClient> {
 	public DeleteDoctor(NotFenixClient client){
-		super("Login", client);
+		super("Delete Doctor", client);
 	}
 
 	@Override

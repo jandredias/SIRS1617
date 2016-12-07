@@ -31,7 +31,6 @@ public class SetPatient extends Command<NotFenixClient> {
 			try{
 				int p = Integer.parseInt(pname);
 				if(p==0){
-					pt.andred.sirs1617.main.doctor.MenuBuilder.menuFor(_receiver);
 					return;
 				}
 			} catch(Exception e){}
@@ -72,7 +71,6 @@ public class SetPatient extends Command<NotFenixClient> {
 			success	= _receiver.setInfoPatient(pname, P_PUBLIC_DETAILS, new_info);
 		else{
 				Dialog.IO().println("An error occured");
-				pt.andred.sirs1617.main.doctor.MenuBuilder.menuFor(_receiver);
 				return;
 		}
 

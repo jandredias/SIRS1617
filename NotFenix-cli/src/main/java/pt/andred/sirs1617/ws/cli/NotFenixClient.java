@@ -176,8 +176,7 @@ public class NotFenixClient {
     }
 
 		public boolean setInfoPatient(String name, String infoMode, String info){
-			//TODO;
-			return false;
+			return _port.setInfoPatient(_token, name, infoMode, info);
 		}
 
 		public String  getMasterKey(){

@@ -14,6 +14,17 @@ public class ChangePassword extends Command<NotFenixClient> {
 
 	@Override
 	public void execute() throws DialogException, IOException {
-		// TODO Auto-generated method stub
+		String password = Dialog.IO().readPassword("Old Password? ");
+		String new_pass = Dialog.IO().readPassword("New Password? ");
+		String rep_new_pass = Dialog.IO().readPassword("Repeat new Password? ");
+		if(new_pass.equals(rep_new_pass)){
+			if(!_receiver.ChangePassword(username, new_pass, password))
+				Dialog.IO().println("Server error or old Password is wrong");
+		}
+		else{
+			Dialog.IO().println("");
+			Dialog.IO().println("Passwords don't match");
+			Dialog.IO().println("");
+		}
 	}
 }

@@ -26,7 +26,7 @@ public class NotFenixManager {
 	private String P_PUBLIC_KEY = "P_PUBLIC_KEY";
 	private String P_PUBLIC_DETAILS = "P_PUBLIC_DETAILS";
 
-	private String RH_MASTER = "RH";
+	private String HR_MASTER = "RH";
 
 
 
@@ -39,10 +39,29 @@ public class NotFenixManager {
 	/*	_doctors.put("andre.dias", "andre");
 		_doctors.put("jorge.veiga", "andre");
 		_doctors.put("miguel.amaral", "andre");*/
-		_doctors.put(RH_MASTER, "MASTER");
+		_doctors.put(HR_MASTER, "MASTER");
+
+		PublicKey HR_public = getPublicKey(HR_MASTER);
+		byte[] HR_public_byte = HR_public.getEncoded();
+		String HR_public_string = new String(HR_public_byte, "UTF-8");
+		_doctorKeys.put(HR_MASTER, HR_public_string);
+
+
 		_port = new NotFenixPort();
 		_endpoint = Endpoint.create(_port);
 		// TODO Auto-generated constructor stub
+	}
+
+	private PublicKey getPublicKey(String username){
+		if(isPublicKeyPresent(username) == false)
+			return null;
+			ObjectInputStream inputStream;
+		try{
+			inputStream = new ObjectInputStream(new FileInputStream(username + PUBLIC_KEY_FILE));
+			return(PublicKey) inputStream.readObject();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public static NotFenixManager instance(){
@@ -231,13 +250,19 @@ public class NotFenixManager {
 		return false;
 	}
 
-	public String setPublicInfoPatient(String token, String name, String infoName, String infoValue) {
-		// TODO Auto-generated method stub
-		return null;
+	public String getMasterKey(){
+		return _doctorKeys.get(HR_MASTER);
+	}
+	public String getAllDoctorKeys(){
+		String data= "";
+		Set<String> allDoctors = _doctorKeys.keySet();
+		Iterator itr = allDoctors.iterator();
+
+		while(itr.hasNext()){
+			String doc = itr.next();
+			data += _doctorKeys.get(doc);
+		}
 	}
 
-	public String getPublicInfoPatient(String token, String name, String infoName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 }

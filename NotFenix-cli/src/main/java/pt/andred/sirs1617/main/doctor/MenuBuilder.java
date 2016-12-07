@@ -14,7 +14,6 @@ public abstract class MenuBuilder {
 			new AddPatient(client),
 			new SeePatient(client),
 			new SetPatient(client),
-			new DeletePatient(client),
 			new SharePatient(client),
 			new ChangePassword(client),
 			new ChangeKey(client) });
