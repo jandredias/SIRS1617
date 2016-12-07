@@ -4,8 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Set;
+import java.util.Iterator;
 
+import java.security.PublicKey;
 import javax.xml.ws.Endpoint;
+
+import java.io.ObjectInputStream;
+import java.io.FileInputStream;
 
 import pt.andred.sirs1617.ui.Dialog;
 
@@ -25,6 +30,7 @@ public class NotFenixManager {
 	private String P_DETAILS_TAG = "P_DETAILS";
 	private String P_PUBLIC_KEY = "P_PUBLIC_KEY";
 	private String P_PUBLIC_DETAILS = "P_PUBLIC_DETAILS";
+  public static final String PUBLIC_KEY_FILE = "_public.key";
 
 	private String HR_MASTER = "RH";
 
@@ -53,8 +59,6 @@ public class NotFenixManager {
 	}
 
 	private PublicKey getPublicKey(String username){
-		if(isPublicKeyPresent(username) == false)
-			return null;
 			ObjectInputStream inputStream;
 		try{
 			inputStream = new ObjectInputStream(new FileInputStream(username + PUBLIC_KEY_FILE));
@@ -166,7 +170,7 @@ public class NotFenixManager {
 
 	public boolean deletePatient(String token, String pname) {
 		String name = checkToken(token);
-		if (name != RH_MASTER)
+		if (name != HR_MASTER)
 			return false; //TODO: must retunr a problem
 
 		_patientsPrivate.remove(pname);
@@ -191,7 +195,7 @@ public class NotFenixManager {
 		String name = checkToken(token);
 		if (name == null)
 			return false; //TODO: must retunr a problem
-		if(name != RH_MASTER)
+		if(name != HR_MASTER)
 			if(name != username)
 				return false;
 		String _old = _doctors.get(username);
@@ -206,7 +210,7 @@ public class NotFenixManager {
 		String name = checkToken(token);
 		if (name == null)
 			return false; //TODO: must retunr a problem
-		if(name != RH_MASTER)
+		if(name != HR_MASTER)
 			if(name != username)
 				return false;
 		if(_doctorKeys.containsKey(username)){
@@ -220,7 +224,7 @@ public class NotFenixManager {
 		String name = checkToken(token);
 		if (name == null)
 			return false; //TODO: must retunr a problem
-		if(name != RH_MASTER)
+		if(name != HR_MASTER)
 			if(name != username)
 				return false;
 		if(_doctors.containsKey(username))
@@ -231,7 +235,7 @@ public class NotFenixManager {
 
 	public boolean addDoctor(String token, String username, String password, String publicKey) {
 		String name = checkToken(token);
-		if(name != RH_MASTER)
+		if(name != HR_MASTER)
 			return false; //TODO: must retunr a problem
 		if(_doctors.containsKey(username))
 			return false;
@@ -259,7 +263,7 @@ public class NotFenixManager {
 		Iterator itr = allDoctors.iterator();
 
 		while(itr.hasNext()){
-			String doc = itr.next();
+			String doc = (String) itr.next();
 			data += _doctorKeys.get(doc);
 		}
 	}
