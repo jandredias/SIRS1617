@@ -131,12 +131,6 @@ public class NotFenixManager {
 			patient.setKeyMaster(infoValue);
 			return true;
 		}*/
-		else if(infoName.matches(P_KEY_DOCTOR_TAG)){
-			if(!patient.checkDoctor(name))
-				return false;
-			patient.setKeyDoctor(name, infoValue);
-			return true;
-		}
 		else if (infoName.matches(P_DETAILS_TAG)){
 			patient.setDetails(infoValue);
 			return true;
@@ -152,7 +146,21 @@ public class NotFenixManager {
 		else
 			return false;
 	}
-	public boolean setInfoPatient(String token, String pname, String infoName, String infoValue, String infoValue2) {
+	public boolean sharePatient(String token, String pname, String dname, String key_enc) {
+		String name = checkToken(token);
+		if (name == null)
+			return false; //TODO: must retunr a problem
+
+		PatientPrivateInfo patient = _patientsPrivate.get(pname);
+		if (patient == null)
+			return false;
+
+		if(!patient.checkDoctor(name))
+			return false;
+		patient.setKeyDoctor(dname, key_enc);
+		return true;
+
+	}
 
 	public String getInfoPatient(String token, String pname, String infoName) {
 		String name = checkToken(token);
@@ -343,7 +351,7 @@ public class NotFenixManager {
 		return null;
 	}
 
-	public String getAllDoctorsKeys(String token) {
+	public String getAllDoctorKeys(String token) {
 		String name = checkToken(token);
 		if (name == null)
 			return null; //TODO: must retunr a problem
