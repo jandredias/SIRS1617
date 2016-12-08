@@ -64,9 +64,9 @@ public class NotFenixClient {
         String username,
         String password){
     	Dialog.IO().debug("Login request");
-    	String token = _port.login(username, password);
+    	_token = _port.login(username, password);
     	Dialog.IO().debug("Login response");
-    	if(token == null) return false;
+    	if(_token == null) return false;
     	Dialog.IO().debug("Login successful");
 			_username = username;
     	return true;
@@ -76,7 +76,8 @@ public class NotFenixClient {
                 String username,
                 String password){
 
-			if(!Crypter.generateRSAKey(username))
+			KeyPair key = Crypter.generateRSAKey(_username);
+			if(key == null)
 				return false;
 			PublicKey pk_new = Crypter.getPublicKey(username);
 			if(pk_new == null)
@@ -159,7 +160,7 @@ public class NotFenixClient {
 						privateKeyOS.writeObject(key.getPrivate());
 						privateKeyOS.close();
 					}catch (Exception e) {
-						Dialog.IO().System.out.println("A problem has been found and your key is no longer valid. Pelase ask HR to put you back in the system");
+						Dialog.IO().println("A problem has been found and your key is no longer valid. Pelase ask HR to put you back in the system");
 					}
 					return false;
 				}
@@ -178,8 +179,8 @@ public class NotFenixClient {
 				for(int i = 0; i < fullSize; i+=_keySize){
 				  byte[] toDecrypt_byte = Arrays.copyOfRange(allKeys_byte, i, i+_keySize);
 					String toEncrypt_String = Crypter.decrypt_RSA(toDecrypt_byte, old_private);
-					byte[] encripted = Crypter.encrypt_RSA(toEncript_string, newPublic);
-				  outputStream.write(encripted.getBytes("UTF-8"));
+					byte[] encrypted = Crypter.encrypt_RSA(toEncrypt_String, newPublic);
+				  outputStream.write(encrypted);
 				}
 				byte allKeysEnc[] = outputStream.toByteArray();
 				allKeysEnc_string = new String(allKeysEnc, "UTF-8");
@@ -193,7 +194,7 @@ public class NotFenixClient {
                 String username,
                 String password,
                 String oldPassword){
-    	return _port.changePassword(_token, username, password, oldPassword);
+    	return _port.changePassword(__token, username, password, oldPassword);
     }
 
     public boolean addPatient(
@@ -319,7 +320,7 @@ public class NotFenixClient {
 			}
 
 			//Check if doctor has access to private details
-			String private_symmkey_enc_string  = _port.getInfoPatient(token, name, P_KEY_DOCTOR_TAG);
+			String private_symmkey_enc_string  = _port.getInfoPatient(_token, name, P_KEY_DOCTOR_TAG);
 			if(!private_symmkey_enc_string == null){
 
 				//Private details
@@ -330,10 +331,10 @@ public class NotFenixClient {
 					SecretKeySpec private_symmKey = new SecretKeySpec(private_symmKey_string.getBytes("UTF-8"), "AES");
 
 					//get IV
-					String private_iv_string = _port.getInfoPatient(token, name, P_PRIVATE_IV);
+					String private_iv_string = _port.getInfoPatient(_token, name, P_PRIVATE_IV);
 
 					//get details
-					String private_details_enc_string = _port.getInfoPatient(token, name, P_DETAILS_TAG);
+					String private_details_enc_string = _port.getInfoPatient(_token, name, P_DETAILS_TAG);
 					byte[] private_details_enc_byte = private_details_enc_string.getBytes("UTF-8");
 					String private_details = Crypter.decrypt_AES(private_details_enc_byte, private_symmKey, private_iv_string);
 
@@ -347,17 +348,17 @@ public class NotFenixClient {
 
 			//Public Details
 			//Get Symmkey
-			String public_symmkey_enc_string  = _port.getInfoPatient(token, name, P_PUBLIC_KEY);
+			String public_symmkey_enc_string  = _port.getInfoPatient(_token, name, P_PUBLIC_KEY);
 			byte[] public_symmkey_enc_byte = public_symmkey_enc_string.getBytes("UTF-8");
 			try{
 				String public_symmKey_string = Crypter.decrypt_RSA(public_symmkey_enc_byte, private_key);
 				SecretKeySpec public_symmKey = new SecretKeySpec(public_symmKey_string.getBytes("UTF-8"), "AES");
 
 				//get IV
-				String public_iv_string = _port.getInfoPatient(token, name, P_PUBLIC_IV);
+				String public_iv_string = _port.getInfoPatient(_token, name, P_PUBLIC_IV);
 
 				//get details
-				String public_details_enc_string = _port.getInfoPatient(token, name, P_PUBLIC_DETAILS);
+				String public_details_enc_string = _port.getInfoPatient(_token, name, P_PUBLIC_DETAILS);
 				byte[] public_details_enc_byte = public_details_enc_string.getBytes("UTF-8");
 				String public_details = Crypter.decrypt_AES(public_details_enc_byte, public_symmKey, public_iv_string);
 
