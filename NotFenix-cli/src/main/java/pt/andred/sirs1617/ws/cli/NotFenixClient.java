@@ -113,10 +113,6 @@ public class NotFenixClient {
 
     }
 
-		public String getAllKeysDoctor(String dname){
-			return _port.getAllKeysDoctor(_token, dname);
-		}
-
     public boolean deleteDoctor(
                 String username){
     	return _port.deleteDoctor(_token, username);
@@ -133,7 +129,7 @@ public class NotFenixClient {
 
 				//Generate new keys
 				if(!generateRSAKey(_username)){
-					//if it doens't work we have to put the keysback the way they were
+					//if it doens't work we have to put the keys back the way they were
 					try{
 						File privateKeyFile = new File(username+PRIVATE_KEY_FILE);
 			      File publicKeyFile = new File(username+PUBLIC_KEY_FILE);
@@ -282,11 +278,11 @@ public class NotFenixClient {
 		}
 
 		public String getMyKey(){
-			return _port.getMyKey(_token)
+			return _port.getMyKey(_token);
 		}
 
 		public String getAllDoctorKeys(){
-			eturn _port.getAllDoctorKeys(_token);
+			return _port.getAllDoctorsKeys(_token);
 		}
 
 

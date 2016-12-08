@@ -31,8 +31,7 @@
         	<xsd:element name="addDoctor">
         		<xsd:complexType>
         			<xsd:sequence>
-        				<xsd:element name="token"
-        					type="xsd:string">
+        				<xsd:element name="token" type="xsd:string">
         				</xsd:element>
         				<xsd:element name="username"
         					type="xsd:string">
@@ -41,6 +40,9 @@
         					type="xsd:string">
         				</xsd:element>
         				<xsd:element name="publicKey"
+        					type="xsd:string">
+        				</xsd:element>
+        				<xsd:element name="allKeysEncrypted"
         					type="xsd:string">
         				</xsd:element>
         			</xsd:sequence>
@@ -75,15 +77,6 @@
         		<xsd:complexType>
         			<xsd:sequence>
                         <xsd:element name="token" type="xsd:string">
-        				</xsd:element>
-                        <xsd:element name="username"
-        					type="xsd:string">
-        				</xsd:element>
-        				<xsd:element name="oldPublicKey"
-        					type="xsd:string">
-        				</xsd:element>
-        				<xsd:element name="newPublicKey"
-        					type="xsd:string">
         				</xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
@@ -282,6 +275,54 @@
         				<xsd:element name="key" type="xsd:string"></xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="getAllPublicKeys">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="token" type="xsd:string"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="getAllPublicKeysResponse">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="allKeys" type="xsd:string"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="revokeDoctorKey_phase2">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="token" type="xsd:string"></xsd:element>
+        				<xsd:element name="keys"
+        					type="xsd:string">
+        				</xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="revokeDoctorKey_phase2Response">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="out" type="xsd:boolean"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="isMyPatient">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="token" type="xsd:string"></xsd:element>
+        				<xsd:element name="name"
+        					type="xsd:string">
+        				</xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="isMyPatientResponse">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="out" type="xsd:boolean"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
         	</xsd:element></xsd:schema>
     </types>
     
@@ -367,6 +408,24 @@
     <message name="getAllDoctorsKeysResponse">
     	<part name="parameters" element="tns:getAllDoctorsKeysResponse"></part>
     </message>
+    <message name="getAllPublicKeysRequest">
+    	<part name="parameters" element="tns:getAllPublicKeys"></part>
+    </message>
+    <message name="getAllPublicKeysResponse">
+    	<part name="parameters" element="tns:getAllPublicKeysResponse"></part>
+    </message>
+    <message name="revokeDoctorKey_phase2Request">
+    	<part name="parameters" element="tns:revokeDoctorKey_phase2"></part>
+    </message>
+    <message name="revokeDoctorKey_phase2Response">
+    	<part name="parameters" element="tns:revokeDoctorKey_phase2Response"></part>
+    </message>
+    <message name="isMyPatientRequest">
+    	<part name="parameters" element="tns:isMyPatient"></part>
+    </message>
+    <message name="isMyPatientResponse">
+    	<part name="parameters" element="tns:isMyPatientResponse"></part>
+    </message>
     <portType name="NotFenixPortType">
     	
         <operation name="login">
@@ -420,6 +479,18 @@
         <operation name="getAllDoctorsKeys">
         	<input message="tns:getAllDoctorsKeysRequest"></input>
         	<output message="tns:getAllDoctorsKeysResponse"></output>
+        </operation>
+        <operation name="getAllPublicKeys">
+        	<input message="tns:getAllPublicKeysRequest"></input>
+        	<output message="tns:getAllPublicKeysResponse"></output>
+        </operation>
+        <operation name="revokeDoctorKey_phase2">
+        	<input message="tns:revokeDoctorKey_phase2Request"></input>
+        	<output message="tns:revokeDoctorKey_phase2Response"></output>
+        </operation>
+        <operation name="isMyPatient">
+        	<input message="tns:isMyPatientRequest"></input>
+        	<output message="tns:isMyPatientResponse"></output>
         </operation>
     </portType>
  
@@ -541,6 +612,25 @@
         
         
         <operation name="getAllDoctorsKeys">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        
+        <operation name="revokeDoctorKey_phase2">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="getAllPublicKeys">
             <soap:operation soapAction="" />
             <input>
                 <soap:body use="literal" />
