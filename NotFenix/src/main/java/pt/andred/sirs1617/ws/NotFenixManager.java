@@ -224,12 +224,9 @@ public class NotFenixManager {
 		}
 		return false;
 	}
-	//
-	public String revokeDoctorKey(String token){
-		String name = checkToken(token);
-		if (name == null)
-			return false; //TODO: must retunr a problem
 
+
+	private String getAllKeysDoctor_private_method(String dname){
 
 		Set<String> patients = _patientsPrivate.keySet();
 		Iterator itr = patients.iterator();
@@ -243,11 +240,24 @@ public class NotFenixManager {
 		return toReturn;
 	}
 
+
+	public String revokeDoctorKey(String token){
+		String name = checkToken(token);
+		if (name == null)
+			return false; //TODO: must retunr a problem
+
+		return getAllKeysDoctor_private_method(name);
+	}
+
 	public boolean revokeDoctorKey_phase2(String token, String allKeysEnc){
 		String name = checkToken(token);
 		if (name == null)
 			return false; //TODO: must retunr a problem
 
+		return putNewPublicKeysEnc_private_method(name, allKeysEnc)
+	}
+
+	private boolean putNewPublicKeysEnc_private_method(String name, String allKeysEnc){
 		Set<String> patients = _patientsPrivate.keySet();
 		Iterator itr = patients.iterator();
 		int i = 0;
@@ -291,11 +301,13 @@ public class NotFenixManager {
 		return true;
 	}
 
-	public boolean addDoctor(String token, String username, String password, String publicKey) {
+	public boolean addDoctor(String token, String username, String password, String publicKey, String allKeysEnc) {
 		String name = checkToken(token);
 		if(name != HR_MASTER)
 			return false; //TODO: must retunr a problem
 		if(_doctors.containsKey(username))
+			return false;
+		if(return putNewPublicKeysEnc_private_method(username, allKeysEnc))
 			return false;
 		_doctors.put(username, password);
 		_doctorKeys.put(username, publicKey);
@@ -313,14 +325,26 @@ public class NotFenixManager {
 	}
 
 	public String getMasterKey(String token){
+		String name = checkToken(token);
+		if (name == null)
+			return null; //TODO: must retunr a problem
+
 		return _doctorKeys.get(HR_MASTER);
 	}
 	public String getMyKey(String token) {
+		String name = checkToken(token);
+		if (name == null)
+			return null; //TODO: must retunr a problem
+
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public String getAllDoctorsKeys(String token) {
+		String name = checkToken(token);
+		if (name == null)
+			return null; //TODO: must retunr a problem
+
 		String data= "";
 		Set<String> allDoctors = _doctorKeys.keySet();
 		Iterator itr = allDoctors.iterator();
@@ -330,6 +354,35 @@ public class NotFenixManager {
 			data += _doctorKeys.get(doc);
 		}
 	}
+
+	public String getAllPublicKeys(String token){
+		String name = checkToken(token);
+		if (name == null)
+			return null;
+		if(name != HR_MASTER)
+			return null;
+
+		String data= "";
+		Set<String> allPatients = _patientsPrivate.keySet();
+		Iterator itr = allPatients.iterator();
+		while(itr.hasNext()){
+			String patient = (String) itr.next();
+			data += patient.getPublicKey(name);
+		}
+		return data;
+	}
+
+	public boolean isMyPatient(Stirng token, String pname){
+		String name = checkToken(token);
+		if (name == null)
+			return false; //TODO: must retunr a problem
+		PatientPrivateInfo p = _patientsPrivate.get(pname);
+		if(p == null)
+			return false;
+		return p.checkDoctor(doctor);
+	}
+
+
 
 
 

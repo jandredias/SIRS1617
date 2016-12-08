@@ -16,15 +16,19 @@ public class SharePatient extends Command<NotFenixClient> {
 	public void execute() throws DialogException, IOException {
 
 
-
-		//TODO, NOT DONE!
+////NOT DONE
 		String pname = Dialog.IO().readString("Patient's name?");
 		String dsname =  Dialog.IO().readString("Doctor to be shared with?");
-		Boolean success = _receiver.getPatient(username);
-		if(!success){
-			Dialog.IO().println("Patient exists");
-		}else{
-			Dialog.IO().println("No such patient");
+		Boolean success = _receiver.isMyPatient(pname);
+		if(!_receiver.getPatient(pname))
+			Dialog.IO().println("This patient does not exist");
+		else if(!_receiver.isMyPatient(pname))
+			Dialog.IO().println("You don't have access to this patient");
+		else{
+			if(_receiver.sharePatient(pname, dsname))
+				Dialog.IO().println("Patient successfully shared");
+			else
+				Dialog.IO().println("An error happened. Are you sure tha doctor exists?");
 		}
 	}
 }

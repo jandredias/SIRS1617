@@ -19,6 +19,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.spec.X509EncodedKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 public class NotFenixClient {
 	private NotFenixService _client;
@@ -67,7 +68,7 @@ public class NotFenixClient {
 
 			if(!Crypter.generateRSAKey(username))
 				return false;
-			PublicKey pk = Crypter.getPublicKey(username);
+			PublicKey pk_new = Crypter.getPublicKey(username);
 			if(pk == null)
 				return false;
 			byte[] pk_byte = pk.getEncoded();
@@ -79,8 +80,38 @@ public class NotFenixClient {
 			}
 			if(_keySize == 0)
 				_keySize = pk_byte.length;
-    	return _port.addDoctor(_token, username, password, pKey);
+
+
+			String allKeys = _port.getAllPublicKeys(_token);
+			PrivateKey private_key = Crypter.getPrivateKey(_username);
+			//Decrypt and encrypt all keys with the new public Key
+
+			byte allKeys_byte[] = allKeys.getBytes("UTF-8");
+			int fullSize = allKeys_byte.length;
+			String allKeysEnc_string;
+			try{
+				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+				for(int i = 0; i < fullSize; i+=_keySize){
+					byte[] toDecrypt_byte = Arrays.copyOfRange(allKeys_byte, i, i+_keySize);
+					String toEncrypt_String = Crypter.decrypt_RSA(toDecrypt_byte, private_key);
+					byte[] encripted = Crypter.encrypt_RSA(toEncript_string, pk_new);
+					outputStream.write(encripted.getBytes("UTF-8"));
+				}
+				byte allKeysEnc[] = outputStream.toByteArray();
+				allKeysEnc_string = new String(allKeysEnc, "UTF-8");
+
+			}catch (Exception e) {
+				return false;
+			}
+				if(!_port.addDoctor(_token, username, password, pKey, allKeysEnc_string))
+					return false;
+
+
     }
+
+		public String getAllKeysDoctor(String dname){
+			return _port.getAllKeysDoctor(_token, dname);
+		}
 
     public boolean deleteDoctor(
                 String username){
@@ -137,7 +168,7 @@ public class NotFenixClient {
 				  byte[] toDecrypt_byte = Arrays.copyOfRange(allKeys_byte, i, i+_keySize);
 					String toEncrypt_String = Crypter.decrypt_RSA(toDecrypt_byte, old_private);
 					byte[] encripted = Crypter.encrypt_RSA(toEncript_string, newPublic);
-				  outputStream.write(encripted.getBytes());
+				  outputStream.write(encripted.getBytes("UTF-8"));
 				}
 				byte allKeysEnc[] = outputStream.toByteArray();
 				allKeysEnc_string = new String(allKeysEnc, "UTF-8");
@@ -207,7 +238,7 @@ public class NotFenixClient {
 				//Generate 2nd IV
 				randomSecureRandom = SecureRandom.getInstance("SHA1PRNG");
 				byte[] iv2 = new byte[_keySize];
-				randomSecureRandom.nextBytes(iv);
+				randomSecureRandom.nextBytes(iv2);
 				IvParameterSpec ivParams2 = new IvParameterSpec(iv2);
 				iv2_string = new String(ivParams2.getIV(), "UTF.8");
 
@@ -226,7 +257,7 @@ public class NotFenixClient {
 				  byte[] odKey = Arrays.copyOfRange(allKeys_byte, i, i+_keySize);
 				  PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(odKey));
 					String odKey_enc = new String(Crypter.encrypt_RSA(sk2_string, mKey),"UTF-8");
-				  outputStream.write(odKey_enc.getBytes());
+				  outputStream.write(odKey_enc.getBytes("UTF-8"));
 				}
 				byte allKeysEnc[] = outputStream.toByteArray();
 				allKeysEnc_string = new String(allKeysEnc, "UTF-8");
@@ -267,20 +298,62 @@ public class NotFenixClient {
     }
 
 		public void seePatient(String name){
-			String private_enc = _port.getInfoPatient(token, name, P_KEY_DOCTOR_TAG);
-			if(!private_enc == null){
-				String private_details = _port.getInfoPatient(token, name, P_DETAILS_TAG);
-				String private_iv = _port.getInfoPatient(token, name, P_PRIVATE_IV);
 
-				try{
-
-				}catch (Exception e) {
-					Dialog.IO().println("An error happened. Please try again");
-					return;
-				}
-
+			PrivateKey private_key = Crypter.getPrivate(_username);
+			if(private_key == null){
+				Dialog.IO().println("Your Private Key is not here. You can't access patient's files. Please speak to HR");
+				return;
 			}
 
+			//Check if doctor has access to private details
+			String private_symmkey_enc_string  = _port.getInfoPatient(token, name, P_KEY_DOCTOR_TAG);
+			if(!private_symmkey_enc_string == null){
+
+				//Private details
+				//Get Symmkey
+				byte[] private_symmkey_enc_byte = private_symmkey_enc_string.getBytes("UTF-8");
+				try{
+					String private_symmKey_string = Crypter.decrypt_RSA(private_symmkey_enc_byte, private_key);
+					SecretKeySpec private_symmKey = new SecretKeySpec(private_symmKey_string.getBytes("UTF-8"), "AES");
+
+					//get IV
+					String private_iv_string = _port.getInfoPatient(token, name, P_PRIVATE_IV);
+
+					//get details
+					String private_details_enc_string = _port.getInfoPatient(token, name, P_DETAILS_TAG);
+					byte[] private_details_enc_byte = private_details_enc_string.getBytes("UTF-8");
+					String private_details = Crypter.decrypt_AES(private_details_enc_byte, private_symmKey, private_iv_string);
+
+					Dialog.IO().println("Private patient's details:");
+					Dialog.IO().println(private_details);
+
+				}catch (Exception e) {
+					Dialog.IO().println("An error with the private details happened. Please try again");
+				}
+			}
+
+			//Public Details
+			//Get Symmkey
+			String public_symmkey_enc_string  = _port.getInfoPatient(token, name, P_PUBLIC_KEY);
+			byte[] public_symmkey_enc_byte = public_symmkey_enc_string.getBytes("UTF-8");
+			try{
+				String public_symmKey_string = Crypter.decrypt_RSA(public_symmkey_enc_byte, private_key);
+				SecretKeySpec public_symmKey = new SecretKeySpec(public_symmKey_string.getBytes("UTF-8"), "AES");
+
+				//get IV
+				String public_iv_string = _port.getInfoPatient(token, name, P_PUBLIC_IV);
+
+				//get details
+				String public_details_enc_string = _port.getInfoPatient(token, name, P_PUBLIC_DETAILS);
+				byte[] public_details_enc_byte = public_details_enc_string.getBytes("UTF-8");
+				String public_details = Crypter.decrypt_AES(public_details_enc_byte, public_symmKey, public_iv_string);
+
+				Dialog.IO().println("Public patient's details:");
+				Dialog.IO().println(public_details);
+
+			}catch (Exception e) {
+				Dialog.IO().println("An error with the private details happened. Please try again");
+			}
 		}
 
 
@@ -288,6 +361,10 @@ public class NotFenixClient {
         String username){
     	return _port.getPatient(_token, username);
     }
+
+		public boolean isMyPatient(String pname){
+			return _port.isMyPatient(_token, name);
+		}
 
 
 
