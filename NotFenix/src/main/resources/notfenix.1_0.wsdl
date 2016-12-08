@@ -323,6 +323,44 @@
         				<xsd:element name="out" type="xsd:boolean"></xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="sharePatient">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="token" type="xsd:string"></xsd:element>
+        				<xsd:element name="pname" type="xsd:string">
+        				</xsd:element>
+        				<xsd:element name="dsname" type="xsd:string">
+        				</xsd:element>
+        				<xsd:element name="symmkey_enc_new_string"
+        					type="xsd:string">
+        				</xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="sharePatientResponse">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="out" type="xsd:boolean"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="getDoctorKey">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="token" type="xsd:string"></xsd:element>
+        				<xsd:element name="dname"
+        					type="xsd:string">
+        				</xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="getDoctorKeyResponse">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="key" type="xsd:string"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
         	</xsd:element></xsd:schema>
     </types>
     
@@ -426,6 +464,18 @@
     <message name="isMyPatientResponse">
     	<part name="parameters" element="tns:isMyPatientResponse"></part>
     </message>
+    <message name="sharePatientRequest">
+    	<part name="parameters" element="tns:sharePatient"></part>
+    </message>
+    <message name="sharePatientResponse">
+    	<part name="parameters" element="tns:sharePatientResponse"></part>
+    </message>
+    <message name="getDoctorKeyRequest">
+    	<part name="parameters" element="tns:getDoctorKey"></part>
+    </message>
+    <message name="getDoctorKeyResponse">
+    	<part name="parameters" element="tns:getDoctorKeyResponse"></part>
+    </message>
     <portType name="NotFenixPortType">
     	
         <operation name="login">
@@ -491,6 +541,14 @@
         <operation name="isMyPatient">
         	<input message="tns:isMyPatientRequest"></input>
         	<output message="tns:isMyPatientResponse"></output>
+        </operation>
+        <operation name="sharePatient">
+        	<input message="tns:sharePatientRequest"></input>
+        	<output message="tns:sharePatientResponse"></output>
+        </operation>
+        <operation name="getDoctorKey">
+        	<input message="tns:getDoctorKeyRequest"></input>
+        	<output message="tns:getDoctorKeyResponse"></output>
         </operation>
     </portType>
  
@@ -631,6 +689,33 @@
             </output>
         </operation>
         <operation name="getAllPublicKeys">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+                <operation name="sharePatient">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+		<operation name="isMyPatient">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="getDoctorKey">
             <soap:operation soapAction="" />
             <input>
                 <soap:body use="literal" />

@@ -371,4 +371,66 @@ public class NotFenixPort implements NotFenixPortType {
         String token){
     	return NotFenixManager.instance().getAllPublicKeys(token);
 	}
+
+    /**
+     * 
+     * @param pname
+     * @param dsname
+     * @param symmkeyEncNewString
+     * @param token
+     * @return
+     *     returns boolean
+     */
+    @WebMethod
+    @WebResult(name = "out", targetNamespace = "")
+    @RequestWrapper(localName = "sharePatient", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.SharePatient")
+    @ResponseWrapper(localName = "sharePatientResponse", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.SharePatientResponse")
+    public boolean sharePatient(
+        @WebParam(name = "token", targetNamespace = "")
+        String token,
+        @WebParam(name = "pname", targetNamespace = "")
+        String pname,
+        @WebParam(name = "dsname", targetNamespace = "")
+        String dsname,
+        @WebParam(name = "symmkey_enc_new_string", targetNamespace = "")
+        String symmkeyEncNewString){
+		return NotFenixManager.instance().sharePatient(token, pname, dsname, symmkeyEncNewString);
+	}
+
+	/**
+     * 
+     * @param name
+     * @param token
+     * @return
+     *     returns boolean
+     */
+    @WebMethod
+    @WebResult(name = "out", targetNamespace = "")
+    @RequestWrapper(localName = "isMyPatient", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.IsMyPatient")
+    @ResponseWrapper(localName = "isMyPatientResponse", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.IsMyPatientResponse")
+    public boolean isMyPatient(
+        @WebParam(name = "token", targetNamespace = "")
+        String token,
+        @WebParam(name = "name", targetNamespace = "")
+        String name){
+		return NotFenixManager.instance().isMyPatient(token, name);
+	}
+    /**
+     * 
+     * @param dname
+     * @param token
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(name = "key", targetNamespace = "")
+    @RequestWrapper(localName = "getDoctorKey", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetDoctorKey")
+    @ResponseWrapper(localName = "getDoctorKeyResponse", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetDoctorKeyResponse")
+    public String getDoctorKey(
+        @WebParam(name = "token", targetNamespace = "")
+        String token,
+        @WebParam(name = "dname", targetNamespace = "")
+        String dname){
+    	return NotFenixManager.instance().getDoctorKey(token, dname);
+    }
 }

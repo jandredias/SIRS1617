@@ -77,6 +77,7 @@ public class NotFenixManager {
 			_keySize = pk.getEncoded().length;
 			return pk;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.io.FileOutputStream;
 
 import javax.xml.ws.BindingProvider;
@@ -16,12 +17,8 @@ import pt.andred.sirs1617.ws.NotFenixService;
 import pt.andred.sirs1617.main.Crypter;
 
 import java.security.*;
-import java.security.SecureRandom;
-import java.security.PublicKey;
-import java.security.PrivateKey;
-import java.security.KeyFactory;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.security.KeyPair;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.Cipher;
@@ -101,7 +98,14 @@ public class NotFenixClient {
 			}
 
 			//Decrypt and encrypt all keys with the new public Key
-			byte allKeys_byte[] = allKeys.getBytes("UTF-8");
+			byte allKeys_byte[] = null;
+			try {
+				allKeys_byte = allKeys.getBytes("UTF-8");
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+				//this won't happen...
+				//we hope so :P
+			}
 			int fullSize = allKeys_byte.length;
 			String allKeysEnc_string;
 			try{
@@ -121,7 +125,7 @@ public class NotFenixClient {
 				if(!_port.addDoctor(_token, username, password, pKey, allKeysEnc_string))
 					return false;
 
-
+		return true;
     }
 
     public boolean deleteDoctor(
@@ -187,7 +191,8 @@ public class NotFenixClient {
 			}catch (Exception e) {
 				return false;
 			}
-			return _port.revokeDoctorKey_phase2(_token, allKeysEnc_string);
+			
+			return _port.revokeDoctorKeyPhase2(_token, allKeysEnc_string);
     }
 
     public boolean changePassword(
@@ -325,7 +330,13 @@ public class NotFenixClient {
 
 				//Private details
 				//Get Symmkey
-				byte[] private_symmkey_enc_byte = private_symmkey_enc_string.getBytes("UTF-8");
+				byte[] private_symmkey_enc_byte = null;
+				try {
+					private_symmkey_enc_byte = private_symmkey_enc_string.getBytes("UTF-8");
+				} catch (UnsupportedEncodingException e1) {
+					// Hope this won't happen
+					e1.printStackTrace();
+				}
 				try{
 					String private_symmKey_string = Crypter.decrypt_RSA(private_symmkey_enc_byte, private_key);
 					SecretKeySpec private_symmKey = new SecretKeySpec(private_symmKey_string.getBytes("UTF-8"), "AES");
@@ -349,7 +360,13 @@ public class NotFenixClient {
 			//Public Details
 			//Get Symmkey
 			String public_symmkey_enc_string  = _port.getInfoPatient(_token, name, P_PUBLIC_KEY);
-			byte[] public_symmkey_enc_byte = public_symmkey_enc_string.getBytes("UTF-8");
+			byte[] public_symmkey_enc_byte = null;
+			try {
+				public_symmkey_enc_byte = public_symmkey_enc_string.getBytes("UTF-8");
+			} catch (UnsupportedEncodingException e1) {
+				// Hope this won't happen
+				e1.printStackTrace();
+			}
 			try{
 				String public_symmKey_string = Crypter.decrypt_RSA(public_symmkey_enc_byte, private_key);
 				SecretKeySpec public_symmKey = new SecretKeySpec(public_symmKey_string.getBytes("UTF-8"), "AES");
@@ -386,7 +403,19 @@ public class NotFenixClient {
 			String d_key = _port.getDoctorKey(_token, dsname);
 			if(d_key == null)
 				return false;
-			PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(d_key.getBytes("UTF-8")));
+			PublicKey publicKey = null;
+			try {
+				publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(d_key.getBytes("UTF-8")));
+			} catch (InvalidKeySpecException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			//get my private key
 			PrivateKey private_key = Crypter.getPrivateKey(_username);
@@ -399,14 +428,26 @@ public class NotFenixClient {
 			String symmkey_enc_string = _port.getInfoPatient(_token, pname, P_KEY_DOCTOR_TAG);
 			if(symmkey_enc_string == null)
 				return false;
-			byte[] symmkey_enc_byte = symmkey_enc_string.getBytes("UTF-8");
+			byte[] symmkey_enc_byte = null;
+			try {
+				symmkey_enc_byte = symmkey_enc_string.getBytes("UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			//Decrypt SymmKey
 			String symmkey_string = Crypter.decrypt_RSA(symmkey_enc_byte, private_key);
 
-			//Encrypt SymmKey with new doctor's public key
+			//Encrypt SymmKey with	 new doctor's public key
 			byte[] symmkey_enc_new_byte = Crypter.encrypt_RSA(symmkey_string, publicKey);
-			String symmkey_enc_new_string = new String(symmkey_enc_new_byte, "UTF-8");
+			String symmkey_enc_new_string = null;
+			try {
+				symmkey_enc_new_string = new String(symmkey_enc_new_byte, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			return _port.sharePatient(_token, pname, dsname, symmkey_enc_new_string);
 		}
