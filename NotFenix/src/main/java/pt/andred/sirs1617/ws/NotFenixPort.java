@@ -106,7 +106,7 @@ public class NotFenixPort implements NotFenixPortType {
      *     returns boolean
      */
     @WebMethod
-    @WebResult(name = "success", targetNamespace = "")
+    @WebResult(name = "keys", targetNamespace = "")
     @RequestWrapper(localName = "revokeDoctorKey", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.RevokeDoctorKey")
     @ResponseWrapper(localName = "revokeDoctorKeyResponse", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.RevokeDoctorKeyResponse")
     public String revokeDoctorKey(

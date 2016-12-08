@@ -71,7 +71,7 @@ public class AuthenticationHandler implements SOAPHandler<SOAPMessageContext>{
 	}
 
 	private boolean checkSignature(SOAPMessageContext arg0) {
-		try{
+		/*try{
 			PrivateKey privateKey = PrivateKeyReader.get("private_key.der");
 			
 			// specify mode and padding instead of relying on defaults (use OAEP if available!)
@@ -91,12 +91,12 @@ public class AuthenticationHandler implements SOAPHandler<SOAPMessageContext>{
 		}catch(Exception e){
 			//TODO
 			e.printStackTrace();
-		}
+		}*/
 		return true;
 	}
 
 	private void signMessage(SOAPMessageContext arg0) {
-		try{
+		/*try{
 			PublicKey publicKey = PublicKeyReader.get("public_key.der");
 			
 			// specify mode and padding instead of relying on defaults (use OAEP if available!)
@@ -117,7 +117,7 @@ public class AuthenticationHandler implements SOAPHandler<SOAPMessageContext>{
 			//TODO
 			e.printStackTrace();
 		}
-		
+		*/
 	}
 
 	public Set<QName> getHeaders() {
