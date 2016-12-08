@@ -19,6 +19,6 @@ public class SeePatient extends Command<NotFenixClient> {
 			Dialog.IO().println("Patient does not exist in database");
 			return;
 		}
-		_receiver.SeePatient(username);
+		_receiver.seePatient(username);
 	}
 }

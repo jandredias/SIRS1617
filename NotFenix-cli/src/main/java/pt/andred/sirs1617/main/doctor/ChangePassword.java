@@ -18,7 +18,7 @@ public class ChangePassword extends Command<NotFenixClient> {
 		String new_pass = Dialog.IO().readPassword("New Password? ");
 		String rep_new_pass = Dialog.IO().readPassword("Repeat new Password? ");
 		if(new_pass.equals(rep_new_pass)){
-			if(!_receiver.ChangePassword(username, new_pass, password))
+			if(!_receiver.changePassword(_receiver.getUsername(), new_pass, password))
 				Dialog.IO().println("Server error or old Password is wrong");
 		}
 		else{

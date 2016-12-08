@@ -412,7 +412,7 @@ public class NotFenixClient {
 
 
 		}
-
-
-
-}
+		public String getUsername() {
+			return _username;
+		}
+	}
