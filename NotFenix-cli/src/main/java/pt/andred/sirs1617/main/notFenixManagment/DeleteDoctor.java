@@ -21,5 +21,6 @@ public class DeleteDoctor extends Command<NotFenixClient> {
 				Dialog.IO().println("Doctor deleted successfully");
 		else
 				Dialog.IO().println("Some Error");
+	}
 
 }

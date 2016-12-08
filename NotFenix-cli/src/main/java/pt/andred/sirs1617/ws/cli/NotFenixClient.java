@@ -2,23 +2,30 @@ package pt.andred.sirs1617.ws.cli;
 
 import java.util.Map;
 import java.util.Arrays;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.ObjectOutputStream;
+import java.io.FileOutputStream;
 
 import javax.xml.ws.BindingProvider;
+
 import pt.andred.sirs1617.ui.Dialog;
 import pt.andred.sirs1617.ws.NotFenixPortType;
 import pt.andred.sirs1617.ws.NotFenixService;
 import pt.andred.sirs1617.main.Crypter;
+
 import java.security.*;
 import java.security.SecureRandom;
 import java.security.PublicKey;
 import java.security.PrivateKey;
 import java.security.KeyFactory;
+import java.security.spec.X509EncodedKeySpec;
+import java.security.KeyPair;
+
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
-import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class NotFenixClient {
@@ -35,8 +42,11 @@ public class NotFenixClient {
 	private String P_DETAILS_TAG = "P_DETAILS";
 	private String P_PUBLIC_KEY = "P_PUBLIC_KEY";
 	private String P_PUBLIC_DETAILS = "P_PUBLIC_DETAILS";
-	private Stirng P_PRIVATE_IV = "P_PRIVATE_IV";
+	private String P_PRIVATE_IV = "P_PRIVATE_IV";
 	private String P_PUBLIC_IV = "P_PUBLIC_IV";
+
+  private static final String PRIVATE_KEY_FILE = "_private.key";
+  private static final String PUBLIC_KEY_FILE = "_public.key";
 
 	public NotFenixClient(String url){
 		_token = null;
@@ -69,9 +79,9 @@ public class NotFenixClient {
 			if(!Crypter.generateRSAKey(username))
 				return false;
 			PublicKey pk_new = Crypter.getPublicKey(username);
-			if(pk == null)
+			if(pk_new == null)
 				return false;
-			byte[] pk_byte = pk.getEncoded();
+			byte[] pk_byte = pk_new.getEncoded();
 			String pKey;
 			try{
 				pKey = new String(pk_byte, "UTF-8");
@@ -86,10 +96,10 @@ public class NotFenixClient {
 			PrivateKey private_key = Crypter.getPrivateKey(_username);
 			if(private_key == null){
 				Dialog.IO().println("Your Private Key is not here. You can't access patient's files. Please speak to HR");
-				return;
+				return false;
 			}
-			//Decrypt and encrypt all keys with the new public Key
 
+			//Decrypt and encrypt all keys with the new public Key
 			byte allKeys_byte[] = allKeys.getBytes("UTF-8");
 			int fullSize = allKeys_byte.length;
 			String allKeysEnc_string;
@@ -98,8 +108,8 @@ public class NotFenixClient {
 				for(int i = 0; i < fullSize; i+=_keySize){
 					byte[] toDecrypt_byte = Arrays.copyOfRange(allKeys_byte, i, i+_keySize);
 					String toEncrypt_String = Crypter.decrypt_RSA(toDecrypt_byte, private_key);
-					byte[] encripted = Crypter.encrypt_RSA(toEncript_string, pk_new);
-					outputStream.write(encripted.getBytes("UTF-8"));
+					byte[] encrypted = Crypter.encrypt_RSA(toEncrypt_String, pk_new);
+					outputStream.write(encrypted);
 				}
 				byte allKeysEnc[] = outputStream.toByteArray();
 				allKeysEnc_string = new String(allKeysEnc, "UTF-8");
@@ -128,11 +138,12 @@ public class NotFenixClient {
 				PrivateKey old_private = Crypter.getPrivateKey(_username);
 
 				//Generate new keys
-				if(!generateRSAKey(_username)){
+				KeyPair key = Crypter.generateRSAKey(_username);
+				if(key == null){
 					//if it doens't work we have to put the keys back the way they were
 					try{
-						File privateKeyFile = new File(username+PRIVATE_KEY_FILE);
-			      File publicKeyFile = new File(username+PUBLIC_KEY_FILE);
+						File privateKeyFile = new File(_username+PRIVATE_KEY_FILE);
+			      File publicKeyFile = new File(_username+PUBLIC_KEY_FILE);
 						privateKeyFile.createNewFile();
 						publicKeyFile.createNewFile();
 
@@ -172,6 +183,8 @@ public class NotFenixClient {
 				}
 				byte allKeysEnc[] = outputStream.toByteArray();
 				allKeysEnc_string = new String(allKeysEnc, "UTF-8");
+			}catch (Exception e) {
+				return false;
 			}
 			return _port.revokeDoctorKey_phase2(token, allKeysEnc_string);
     }
@@ -363,13 +376,13 @@ public class NotFenixClient {
     }
 
 		public boolean isMyPatient(String pname){
-			return _port.isMyPatient(_token, name);
+			return _port.isMyPatient(_token, pname);
 		}
 
-		public boolean sharePatient(String pname, dsname){
+		public boolean sharePatient(String pname, String dsname){
 
 			//Get new Doctor public key
-			String d_key = _receiver.getDoctorKey(_token, dsname)
+			String d_key = _receiver.getDoctorKey(_token, dsname);
 			if(d_key == null)
 				return false;
 			PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(d_key));

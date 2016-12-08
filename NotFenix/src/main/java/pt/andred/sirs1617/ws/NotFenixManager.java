@@ -262,8 +262,6 @@ public class NotFenixManager {
 		String name = checkToken(token);
 		if (name == null)
 			return null; //TODO: must return a problem
-
-
 		return getAllKeysDoctor_private_method(name);
 	}
 

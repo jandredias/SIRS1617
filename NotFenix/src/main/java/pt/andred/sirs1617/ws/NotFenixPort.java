@@ -109,7 +109,7 @@ public class NotFenixPort implements NotFenixPortType {
     @WebResult(name = "success", targetNamespace = "")
     @RequestWrapper(localName = "revokeDoctorKey", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.RevokeDoctorKey")
     @ResponseWrapper(localName = "revokeDoctorKeyResponse", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.RevokeDoctorKeyResponse")
-    public boolean revokeDoctorKey(
+    public String revokeDoctorKey(
         @WebParam(name = "token", targetNamespace = "")
         String token){
     	return NotFenixManager.instance().revokeDoctorKey(token);
@@ -353,7 +353,7 @@ public class NotFenixPort implements NotFenixPortType {
         String token,
         @WebParam(name = "keys", targetNamespace = "")
         String keys){
-    	return NotFenixManager.instance().revokeDoctorKey(token);
+    	return NotFenixManager.instance().revokeDoctorKey_phase2(token, keys);
    }
 
     /**

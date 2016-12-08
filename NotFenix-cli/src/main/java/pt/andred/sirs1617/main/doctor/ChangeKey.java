@@ -17,7 +17,7 @@ public class ChangeKey extends Command<NotFenixClient> {
 			Dialog.IO().println("Are you sure you want to change your key?");
 			String answer = Dialog.IO().readString("yes/no");
 			if(answer.matches("yes"))
-				if(_receiver.revokeDoctorKey());
+				if(_receiver.revokeDoctorKey())
 						Dialog.IO().println("You have been assigned a new key. A new file has been created with the keys");
 				else
 						Dialog.IO().println("There was an error. Speak to HR");

@@ -21,9 +21,9 @@ import javax.crypto.SecretKey;
 
 public class Crypter{
 
-  public static final String PRIVATE_KEY_FILE = "_private.key";
-  public static final String PUBLIC_KEY_FILE = "_public.key";
-  public static final String SYMM_KEY_FILE = "_symmetric.key";
+  private static final String PRIVATE_KEY_FILE = "_private.key";
+  private static final String PUBLIC_KEY_FILE = "_public.key";
+  private static final String SYMM_KEY_FILE = "_symmetric.key";
 
   /**
    * Generate key which contains a pair of private and public key using 1024
@@ -33,11 +33,12 @@ public class Crypter{
    * @throws IOException
    * @throws FileNotFoundException
    */
-  public static boolean generateRSAKey(String username) {
+  public static KeyPair generateRSAKey(String username) {
+    KeyPair key;
     try {
       final KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
       keyGen.initialize(1024);
-      final KeyPair key = keyGen.generateKeyPair();
+      key = keyGen.generateKeyPair();
 
       File privateKeyFile = new File(username+PRIVATE_KEY_FILE);
       File publicKeyFile = new File(username+PUBLIC_KEY_FILE);
@@ -59,9 +60,9 @@ public class Crypter{
       privateKeyOS.writeObject(key.getPrivate());
       privateKeyOS.close();
     } catch (Exception e) {
-      return false;
+      return null;
     }
-    return true;
+    return key;
 
   }
 
