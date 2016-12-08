@@ -187,14 +187,14 @@ public class NotFenixClient {
 			}catch (Exception e) {
 				return false;
 			}
-			return _port.revokeDoctorKey_phase2(token, allKeysEnc_string);
+			return _port.revokeDoctorKey_phase2(_token, allKeysEnc_string);
     }
 
     public boolean changePassword(
                 String username,
                 String password,
                 String oldPassword){
-    	return _port.changePassword(__token, username, password, oldPassword);
+    	return _port.changePassword(_token, username, password, oldPassword);
     }
 
     public boolean addPatient(
@@ -313,7 +313,7 @@ public class NotFenixClient {
 
 		public void seePatient(String name){
 
-			PrivateKey private_key = Crypter.getPrivate(_username);
+			PrivateKey private_key = Crypter.getPrivateKey(_username);
 			if(private_key == null){
 				Dialog.IO().println("Your Private Key is not here. You can't access patient's files. Please speak to HR");
 				return;
@@ -321,7 +321,7 @@ public class NotFenixClient {
 
 			//Check if doctor has access to private details
 			String private_symmkey_enc_string  = _port.getInfoPatient(_token, name, P_KEY_DOCTOR_TAG);
-			if(!private_symmkey_enc_string == null){
+			if(private_symmkey_enc_string != null){
 
 				//Private details
 				//Get Symmkey
@@ -383,10 +383,10 @@ public class NotFenixClient {
 		public boolean sharePatient(String pname, String dsname){
 
 			//Get new Doctor public key
-			String d_key = _receiver.getDoctorKey(_token, dsname);
+			String d_key = _port.getDoctorKey(_token, dsname);
 			if(d_key == null)
 				return false;
-			PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(d_key));
+			PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(d_key.getBytes("UTF-8")));
 
 			//get my private key
 			PrivateKey private_key = Crypter.getPrivateKey(_username);
@@ -402,17 +402,15 @@ public class NotFenixClient {
 			byte[] symmkey_enc_byte = symmkey_enc_string.getBytes("UTF-8");
 
 			//Decrypt SymmKey
-			byte[] symmkey_byte = Crypter.decrypt_RSA(symmkey_enc_byte, private_key);
-			String symmkey_string = new String(symmkey_byte, "UTF-8");
+			String symmkey_string = Crypter.decrypt_RSA(symmkey_enc_byte, private_key);
 
 			//Encrypt SymmKey with new doctor's public key
-			byte[] symmkey_enc_new = Crypter.encrypt_RSA(symmkey_string, publicKey);
+			byte[] symmkey_enc_new_byte = Crypter.encrypt_RSA(symmkey_string, publicKey);
+			String symmkey_enc_new_string = new String(symmkey_enc_new_byte, "UTF-8");
 
-			return _port.sharePatient(_token, pname, dsname, symmkey_enc_new);
-
-
-
+			return _port.sharePatient(_token, pname, dsname, symmkey_enc_new_string);
 		}
+		
 		public String getUsername() {
 			return _username;
 		}

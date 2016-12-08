@@ -16,7 +16,7 @@ public class DeleteDoctor extends Command<NotFenixClient> {
 	public void execute() throws DialogException, IOException {
 		Dialog.IO().println("");
 		String dname = Dialog.IO().readString("Name of doctor to remove? ");
-		Boolean success = _receiver.DeleteDoctor(dname);
+		Boolean success = _receiver.deleteDoctor(dname);
 		if(success)
 				Dialog.IO().println("Doctor deleted successfully");
 		else

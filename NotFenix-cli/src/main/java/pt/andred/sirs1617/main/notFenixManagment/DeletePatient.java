@@ -15,7 +15,7 @@ public class DeletePatient extends Command<NotFenixClient> {
 	@Override
 	public void execute() throws DialogException, IOException {
 		String username = Dialog.IO().readString("Patient's name?");
-		Boolean success = _receiver.DeletePatient(username);
+		Boolean success = _receiver.deletePatient(username);
 		if(!success){
 			Dialog.IO().println("Patient deleted");
 		}else{
