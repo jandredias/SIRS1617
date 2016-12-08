@@ -35,7 +35,7 @@ public class NotFenixClient {
 	private String P_DETAILS_TAG = "P_DETAILS";
 	private String P_PUBLIC_KEY = "P_PUBLIC_KEY";
 	private String P_PUBLIC_DETAILS = "P_PUBLIC_DETAILS";
-	private Stirng P_PRIVATE_IV = "P_PRIVATE_IV";
+	private String P_PRIVATE_IV = "P_PRIVATE_IV";
 	private String P_PUBLIC_IV = "P_PUBLIC_IV";
 
 	public NotFenixClient(String url){
@@ -399,7 +399,7 @@ public class NotFenixClient {
 
 
 		}
-
-
-
-}
+		public String getUsername() {
+			return _username;
+		}
+	}
