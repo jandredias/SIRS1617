@@ -131,10 +131,12 @@ public class NotFenixManager {
 			patient.setKeyMaster(infoValue);
 			return true;
 		}*/
-	/*	else if(infoName.matches(P_KEY_DOCTOR_TAG)){
+		else if(infoName.matches(P_KEY_DOCTOR_TAG)){
+			if(!patient.checkDoctor(name))
+				return false;
 			patient.setKeyDoctor(name, infoValue);
 			return true;
-		}*/
+		}
 		else if (infoName.matches(P_DETAILS_TAG)){
 			patient.setDetails(infoValue);
 			return true;
@@ -150,6 +152,7 @@ public class NotFenixManager {
 		else
 			return false;
 	}
+	public boolean setInfoPatient(String token, String pname, String infoName, String infoValue, String infoValue2) {
 
 	public String getInfoPatient(String token, String pname, String infoName) {
 		String name = checkToken(token);
@@ -331,12 +334,12 @@ public class NotFenixManager {
 
 		return _doctorKeys.get(HR_MASTER);
 	}
-	public String getMyKey(String token) {
+	public String getDoctorKey(String token, String name) {
 		String name = checkToken(token);
 		if (name == null)
 			return null; //TODO: must retunr a problem
 
-		// TODO Auto-generated method stub
+		return _doctorKeys.get(name);
 		return null;
 	}
 

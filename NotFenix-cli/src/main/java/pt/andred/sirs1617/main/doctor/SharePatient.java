@@ -28,7 +28,7 @@ public class SharePatient extends Command<NotFenixClient> {
 			if(_receiver.sharePatient(pname, dsname))
 				Dialog.IO().println("Patient successfully shared");
 			else
-				Dialog.IO().println("An error happened. Are you sure tha doctor exists?");
+				Dialog.IO().println("An error happened. Are you sure that doctor exists?");
 		}
 	}
 }

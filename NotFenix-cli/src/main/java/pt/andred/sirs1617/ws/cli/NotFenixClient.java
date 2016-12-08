@@ -84,6 +84,10 @@ public class NotFenixClient {
 
 			String allKeys = _port.getAllPublicKeys(_token);
 			PrivateKey private_key = Crypter.getPrivateKey(_username);
+			if(private_key == null){
+				Dialog.IO().println("Your Private Key is not here. You can't access patient's files. Please speak to HR");
+				return;
+			}
 			//Decrypt and encrypt all keys with the new public Key
 
 			byte allKeys_byte[] = allKeys.getBytes("UTF-8");
@@ -364,6 +368,40 @@ public class NotFenixClient {
 
 		public boolean isMyPatient(String pname){
 			return _port.isMyPatient(_token, name);
+		}
+
+		public boolean sharePatient(String pname, dsname){
+
+			//Get new Doctor public key
+			String d_key = _receiver.getDoctorKey(_token, dsname)
+			if(d_key == null)
+				return false;
+			PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(d_key));
+
+			//get my private key
+			PrivateKey private_key = Crypter.getPrivateKey(_username);
+			if(private_key == null){
+				Dialog.IO().println("Your Private Key is not here. You can't access patient's files. Please speak to HR");
+				return false;
+			}
+
+			//Get Patient's SymmKey
+			String symmkey_enc_string = _port.getInfoPatient(_token, pname, P_KEY_DOCTOR_TAG);
+			if(symmkey_enc_string == null)
+				return false;
+			byte[] symmkey_enc_byte = symmkey_enc_string.getBytes("UTF-8");
+
+			//Decrypt SymmKey
+			byte[] symmkey_byte = Crypter.decrypt_RSA(symmkey_enc_byte, private_key);
+			String symmkey_string = new String(symmkey_byte, "UTF-8");
+
+			//Encrypt SymmKey with new doctor's public key
+			byte[] symmkey_enc_new = Crypter.encrypt_RSA(symmkey_string, publicKey);
+
+			return _port.sharePatient(_token, pname, dsname, symmkey_enc_new);
+
+
+
 		}
 
 
