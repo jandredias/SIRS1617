@@ -254,14 +254,12 @@ public class NotFenixManager {
 	}
 
 
-	public boolean revokeDoctorKey(String token){
+	public String revokeDoctorKey(String token){
 		String name = checkToken(token);
 		if (name == null)
-			return false; //TODO: must return a problem
+			return null; //TODO: must return a problem
 		
-		//FIXME should return a boolean or a String?
-		return true;
-		//return getAllKeysDoctor_private_method(name);
+		return getAllKeysDoctor_private_method(name);
 	}
 
 	public boolean revokeDoctorKey_phase2(String token, String allKeysEnc){

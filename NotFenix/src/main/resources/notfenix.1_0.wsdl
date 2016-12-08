@@ -84,7 +84,7 @@
         	<xsd:element name="revokeDoctorKeyResponse">
         		<xsd:complexType>
         			<xsd:sequence>
-        				<xsd:element name="success" type="xsd:boolean"></xsd:element>
+        				<xsd:element name="keys" type="xsd:string"></xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
         	</xsd:element>
