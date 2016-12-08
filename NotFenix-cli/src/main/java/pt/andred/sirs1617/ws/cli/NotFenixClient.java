@@ -113,9 +113,9 @@ public class NotFenixClient {
 
     }
 
-		public String getAllKeysDoctor(String dname){
+		/*public String getAllKeysDoctor(String dname){
 			return _port.getAllKeysDoctor(_token, dname);
-		}
+		}*/
 
     public boolean deleteDoctor(
                 String username){
@@ -282,11 +282,11 @@ public class NotFenixClient {
 		}
 
 		public String getMyKey(){
-			return _port.getMyKey(_token)
+			return _port.getMyKey(_token);
 		}
 
 		public String getAllDoctorKeys(){
-			eturn _port.getAllDoctorKeys(_token);
+			return _port.getAllDoctorKeys(_token);
 		}
 
 
