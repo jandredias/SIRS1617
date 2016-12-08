@@ -1,5 +1,7 @@
 package pt.andred.sirs1617.ws;
 
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.Set;
 
 import javax.crypto.Cipher;
@@ -69,12 +71,52 @@ public class AuthenticationHandler implements SOAPHandler<SOAPMessageContext>{
 	}
 
 	private boolean checkSignature(SOAPMessageContext arg0) {
-		// TODO Auto-generated method stub
+		try{
+			PrivateKey privateKey = PrivateKeyReader.get("private_key.der");
+			
+			// specify mode and padding instead of relying on defaults (use OAEP if available!)
+			Cipher decrypt=Cipher.getInstance("RSA/ECB/PKCS1Padding");
+			// init with the *public key*!
+			decrypt.init(Cipher.DECRYPT_MODE, privateKey);
+			// encrypt with known character encoding, you should probably use hybrid cryptography instead 
+					
+			SOAPMessage a = arg0.getMessage();
+			SOAPBody body = a.getSOAPBody();
+			
+			byte[] decryptedMessage = decrypt.doFinal(body.getTextContent().getBytes());
+			body.setTextContent(new String(decryptedMessage));
+			
+			a.setProperty("body", body);
+			arg0.setMessage(a);
+		}catch(Exception e){
+			//TODO
+			e.printStackTrace();
+		}
 		return true;
 	}
 
 	private void signMessage(SOAPMessageContext arg0) {
-		// TODO Auto-generated method stub
+		try{
+			PublicKey publicKey = PublicKeyReader.get("public_key.der");
+			
+			// specify mode and padding instead of relying on defaults (use OAEP if available!)
+			Cipher encrypt = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+			// init with the *public key*!
+			encrypt.init(Cipher.ENCRYPT_MODE, publicKey);
+			// encrypt with known character encoding, you should probably use hybrid cryptography instead 
+					
+			SOAPMessage a = arg0.getMessage();
+			SOAPBody body = a.getSOAPBody();
+			
+			byte[] encrypted = encrypt.doFinal(body.getTextContent().getBytes());
+			body.setTextContent(new String(encrypted));
+			
+			a.setProperty("body", body);
+			arg0.setMessage(a);
+		}catch(Exception e){
+			//TODO
+			e.printStackTrace();
+		}
 		
 	}
 
