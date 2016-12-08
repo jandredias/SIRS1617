@@ -58,6 +58,9 @@ class PatientPrivateInfo{
   public void removeDoctor(String doctor){
     _keysDoctor.remove(doctor);
   }
+  public void removePublicDoctor(String doctor){
+    _publicKeys.remove(doctor);
+  }
   //Set's and Get's
   public void setName(String name){
     _name = name;

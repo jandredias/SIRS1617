@@ -14,6 +14,12 @@ public class DeleteDoctor extends Command<NotFenixClient> {
 
 	@Override
 	public void execute() throws DialogException, IOException {
-		// TODO Auto-generated method stub
-	}
+		Dialog.IO().println("");
+		String dname = Dialog.IO().readString("Name of doctor to remove? ");
+		Boolean success = _receiver.DeleteDoctor(dname);
+		if(success)
+				Dialog.IO().println("Doctor deleted successfully");
+		else
+				Dialog.IO().println("Some Error");
+
 }

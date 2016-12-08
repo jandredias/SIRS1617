@@ -15,8 +15,10 @@ public class SeePatient extends Command<NotFenixClient> {
 	@Override
 	public void execute() throws DialogException, IOException {
 		String username = Dialog.IO().readString("Patient's name?");
-		Boolean success = _receiver.getPatient(username);
-
+		if(!_receiver.getPatient(username)){
+			Dialog.IO().println("Patient does not exist in database");
+			return;
 		}
+		_receiver.SeePatient(username);
 	}
 }

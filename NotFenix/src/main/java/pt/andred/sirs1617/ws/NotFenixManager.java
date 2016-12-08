@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.Set;
 import java.util.Iterator;
+import java.util.Arrays;
 
 import java.security.PublicKey;
 import javax.xml.ws.Endpoint;
@@ -30,6 +31,8 @@ public class NotFenixManager {
 	private String P_DETAILS_TAG = "P_DETAILS";
 	private String P_PUBLIC_KEY = "P_PUBLIC_KEY";
 	private String P_PUBLIC_DETAILS = "P_PUBLIC_DETAILS";
+	private String P_PRIVATE_IV = "P_PRIVATE_IV";
+	private String P_PUBLIC_IV = "P_PUBLIC_IV";
   private String PUBLIC_KEY_FILE = "_public.key";
 
 	private String HR_MASTER = "RH";
@@ -136,7 +139,7 @@ public class NotFenixManager {
 			patient.setDetails(infoValue);
 			return true;
 		}
-	/*	else if (infoName.matches(P_PUBLIC_KEY)){
+		/*else if (infoName.matches(P_PUBLIC_KEY)){
 			patient.setPublicKey(name, infoValue);
 			return true;
 		}*/
@@ -162,12 +165,16 @@ public class NotFenixManager {
 			return patient.getKeyMaster();
 		else if(infoName.matches(P_KEY_DOCTOR_TAG))
 			return patient.getKeyDoctor(name);
-		else if (infoName.matches(P_DETAILS_TAG))
+		else if(infoName.matches(P_DETAILS_TAG))
 			return patient.getDetails();
-		else if (infoName.matches(P_PUBLIC_KEY))
-				return patient.getPublicKey(name);
-		else if (infoName.matches(P_PUBLIC_DETAILS))
-				return patient.getPublicDetails();
+		else if(infoName.matches(P_PUBLIC_KEY))
+			return patient.getPublicKey(name);
+		else if(infoName.matches(P_PUBLIC_DETAILS))
+			return patient.getPublicDetails();
+		else if(infoName.matches(P_PRIVATE_IV))
+			return patient.getIV();
+		else if(infoName.matches(P_PUBLIC_IV))
+			return patient.getPublicIV();
 		else
 			return null;
 	}
@@ -218,30 +225,69 @@ public class NotFenixManager {
 		return false;
 	}
 	//
-	public boolean revokeDoctorKey(String token, String username, String oldPublicKey, String newPublicKey) {
+	public String revokeDoctorKey(String token){
 		String name = checkToken(token);
 		if (name == null)
 			return false; //TODO: must retunr a problem
-		if(name != HR_MASTER)
-			if(name != username)
-				return false;
-		if(_doctorKeys.containsKey(username)){
-			_doctorKeys.put(username, newPublicKey);
-			return true;
+
+
+		Set<String> patients = _patientsPrivate.keySet();
+		Iterator itr = patients.iterator();
+		String toReturn = "";
+		while(itr.hasnext()){
+			PatientPrivateInfo patient = _patientsPrivate.get(itr.next());
+			if(patient.checkDoctor(name))
+				toReturn += patient.getKeyDoctor(name)
+			toReturn += patient.getPublicKey(doctor);
 		}
-		return false;
+		return toReturn;
 	}
 
-	public boolean deleteDoctor(String token, String username) {
+	public boolean revokeDoctorKey_phase2(String token, String allKeysEnc){
+		String name = checkToken(token);
+		if (name == null)
+			return false; //TODO: must retunr a problem
+
+		Set<String> patients = _patientsPrivate.keySet();
+		Iterator itr = patients.iterator();
+		int i = 0;
+		byte[] allKeysEnc_byte = allKeysEnc.getBytes();
+		int max = allKeysEnc_byte.length;
+		while(itr.hasnext()){
+			if(i=>max)
+				return false;
+			PatientPrivateInfo patient = _patientsPrivate.get(itr.next());
+			if(patient.checkDoctor(name)){
+				byte[] b = Arrays.copyOfRange(allKeysEnc, i, i+_keySize);
+				String k = new String(b, "UTF-8");
+				patient.setKeyDoctor(name, k);
+				i+=_keySize;
+			}
+				byte[] ba = Arrays.copyOfRange(allKeysEnc, i, i+_keySize);
+				String ka = new String(ba, "UTF-8");
+				patient.setPublicKeyDoctor(name, ka);
+				i+=_keySize;
+		}
+		return true;
+	}
+
+	public boolean deleteDoctor(String token, String doctor) {
 		String name = checkToken(token);
 		if (name == null)
 			return false; //TODO: must retunr a problem
 		if(name != HR_MASTER)
-			if(name != username)
+			if(name != doctor)
 				return false;
-		if(_doctors.containsKey(username))
+		if(_doctors.containsKey(doctor))
 			return false;
-		_doctors.remove(username);
+		_doctors.remove(doctor);
+		Set<String> keys = _patientsPrivate.keySet();
+		Iterator itr = keys.iterator();
+		while(itr.hasnext()){
+			PatientPrivateInfo patient = _patientsPrivate.get(itr.next());
+			patient.removeDoctor(doctor);
+			patient.removePublicDoctor(doctor);
+		}
 		return true;
 	}
 

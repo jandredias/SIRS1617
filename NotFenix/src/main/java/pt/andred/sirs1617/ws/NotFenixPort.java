@@ -91,28 +91,39 @@ public class NotFenixPort implements NotFenixPortType {
 
     /**
      *
-     * @param newPublicKey
-     * @param oldPublicKey
      * @param token
-     * @param username
      * @return
-     *     returns boolean
+     *     returns String
      */
     @WebMethod
     @WebResult(name = "success", targetNamespace = "")
     @RequestWrapper(localName = "revokeDoctorKey", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.RevokeDoctorKey")
     @ResponseWrapper(localName = "revokeDoctorKeyResponse", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.RevokeDoctorKeyResponse")
-    public boolean revokeDoctorKey(
+    public String revokeDoctorKey(
+        @WebParam(name = "token", targetNamespace = "")
+        String token){
+    	return NotFenixManager.instance().revokeDoctorKey(token);
+    }
+
+		/**
+     *
+     * @param token
+		 * @param allLeysEnc
+     * @return
+     *     returns boolean
+     */
+    @WebMethod
+    @WebResult(name = "success", targetNamespace = "")
+    @RequestWrapper(localName = "revokeDoctorKey_phase2", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.RevokeDoctorKey_phase2")
+    @ResponseWrapper(localName = "revokeDoctorKeyResponse_phase2", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.RevokeDoctorKeyResponse_phase2")
+    public boolean revokeDoctorKey_phase2(
         @WebParam(name = "token", targetNamespace = "")
         String token,
-        @WebParam(name = "username", targetNamespace = "")
-        String username,
-        @WebParam(name = "oldPublicKey", targetNamespace = "")
-        String oldPublicKey,
-        @WebParam(name = "newPublicKey", targetNamespace = "")
-        String newPublicKey){
-    	return NotFenixManager.instance().revokeDoctorKey(token, username, oldPublicKey, newPublicKey);
+				@WebParam(name = "allKeysEnc", targetNamespace = "")
+				String allKeysEnc){
+    	return NotFenixManager.instance().revokeDoctorKey(token);
     }
+
 
     /**
      *
