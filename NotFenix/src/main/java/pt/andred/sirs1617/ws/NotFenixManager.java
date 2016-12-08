@@ -36,7 +36,7 @@ public class NotFenixManager {
 	private String P_PUBLIC_IV = "P_PUBLIC_IV";
 	private String PUBLIC_KEY_FILE = "_public.key";
 
-	private String HR_MASTER = "RH";
+	private String HR_MASTER = "HR";
 
 	private static int _keySize;
 
@@ -338,7 +338,12 @@ public class NotFenixManager {
 			return false; //TODO: must return a problem
 		if(_doctors.containsKey(username))
 			return false;
-		if(putNewPublicKeysEnc_private_method(username, allKeysEnc))
+		if(allKeysEnc == null){
+			if(!_patientsPrivate.isEmpty()){
+				return false;
+			}
+		}
+		else if(putNewPublicKeysEnc_private_method(username, allKeysEnc))
 			return false;
 		_doctors.put(username, password);
 		_doctorKeys.put(username, publicKey);

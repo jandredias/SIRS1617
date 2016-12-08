@@ -9,7 +9,7 @@ import pt.andred.sirs1617.ws.cli.NotFenixClient;
 
 public class Login extends Command<NotFenixClient> {
 
-		private String RH_MASTER = "RH";
+		private String HR_MASTER = "HR";
 
 	public Login(NotFenixClient client){
 		super("Login", client);
@@ -21,10 +21,12 @@ public class Login extends Command<NotFenixClient> {
 		String password = Dialog.IO().readPassword("Password? ");
 		Boolean success = _receiver.login(username, password);
 		if(success){
-			if(username == RH_MASTER)
+			if(username.equals(HR_MASTER)){
 				pt.andred.sirs1617.main.notFenixManagment.MenuBuilder.menuFor(_receiver);
-			else
+			}
+			else{
 				pt.andred.sirs1617.main.doctor.MenuBuilder.menuFor(_receiver);
+			}
 		}else{
 			Dialog.IO().println("");
 			Dialog.IO().println("Incorrect data");

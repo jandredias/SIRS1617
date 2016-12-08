@@ -19,11 +19,15 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+
+import pt.andred.sirs1617.ui.Dialog;
+
 public class Crypter{
 
   private static final String PRIVATE_KEY_FILE = "_private.key";
   private static final String PUBLIC_KEY_FILE = "_public.key";
   private static final String SYMM_KEY_FILE = "_symmetric.key";
+  private static final String KEY_PREFIX = "";
 
   /**
    * Generate key which contains a pair of private and public key using 1024
@@ -39,20 +43,24 @@ public class Crypter{
       final KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
       keyGen.initialize(1024);
       key = keyGen.generateKeyPair();
+      Dialog.IO().println("Crypter generateRSAKey teste 1"); //TESTE
 
-      File privateKeyFile = new File(username+PRIVATE_KEY_FILE);
-      File publicKeyFile = new File(username+PUBLIC_KEY_FILE);
+      File privateKeyFile = new File(KEY_PREFIX + username+PRIVATE_KEY_FILE);
+      File publicKeyFile = new File(KEY_PREFIX +username+PUBLIC_KEY_FILE);
+      Dialog.IO().println("Crypter generateRSAKey teste 2"); //TESTE
 
       // Create files to store public and private key
 
       privateKeyFile.createNewFile();
       publicKeyFile.createNewFile();
+      Dialog.IO().println("Crypter generateRSAKey teste 3"); //TESTE
 
       // Saving the Public key in a file
       ObjectOutputStream publicKeyOS = new ObjectOutputStream(
           new FileOutputStream(publicKeyFile));
       publicKeyOS.writeObject(key.getPublic());
       publicKeyOS.close();
+      Dialog.IO().println("Crypter generateRSAKey teste 4"); //TESTE
 
       // Saving the Private key in a file
       ObjectOutputStream privateKeyOS = new ObjectOutputStream(
@@ -91,8 +99,8 @@ public class Crypter{
    */
   public static boolean areRSAKeysPresent(String username) {
 
-    File privateKey = new File(username+PRIVATE_KEY_FILE);
-    File publicKey = new File(username+PUBLIC_KEY_FILE);
+    File privateKey = new File(KEY_PREFIX + username+PRIVATE_KEY_FILE);
+    File publicKey = new File(KEY_PREFIX + username+PUBLIC_KEY_FILE);
 
     if (privateKey.exists() && publicKey.exists()) {
       return true;
@@ -100,17 +108,21 @@ public class Crypter{
     return false;
   }
   public static boolean isPublicKeyPresent(String username) {
+    Dialog.IO().println("Crypter isPublicKeyPresent teste 1"); //TESTE
 
-    File publicKey = new File(username+PUBLIC_KEY_FILE);
+    File publicKey = new File(KEY_PREFIX + username+PUBLIC_KEY_FILE);
+      Dialog.IO().println("Crypter isPublicKeyPresent teste 2"); //TESTE
+
 
     if (publicKey.exists()) {
       return true;
     }
+      Dialog.IO().println("Crypter isPublicKeyPresent teste 3"); //TESTE
     return false;
   }
   public static boolean isPrivateKeyPresent(String username) {
 
-    File privateKey = new File(username+PRIVATE_KEY_FILE);
+    File privateKey = new File(KEY_PREFIX + username+PRIVATE_KEY_FILE);
 
     if (privateKey.exists()) {
       return true;
@@ -119,7 +131,7 @@ public class Crypter{
   }
   public static boolean isSymmKeyPresent(String username) {
 
-    File SymmKey = new File(username+PRIVATE_KEY_FILE);
+    File SymmKey = new File(KEY_PREFIX + username+PRIVATE_KEY_FILE);
 
     if (SymmKey.exists()) {
       return true;
@@ -191,9 +203,10 @@ public class Crypter{
   public static PublicKey getPublicKey(String username){
     if(isPublicKeyPresent(username) == false)
       return null;
+    Dialog.IO().println("Crypter getPublicKey teste 1"); //TESTE
       ObjectInputStream inputStream;
     try{
-      inputStream = new ObjectInputStream(new FileInputStream(username + PUBLIC_KEY_FILE));
+      inputStream = new ObjectInputStream(new FileInputStream(KEY_PREFIX + username + PUBLIC_KEY_FILE));
       return(PublicKey) inputStream.readObject();
     } catch (Exception e) {
       return null;
@@ -204,7 +217,7 @@ public class Crypter{
       return null;
       ObjectInputStream inputStream;
     try{
-      inputStream = new ObjectInputStream(new FileInputStream(username + PRIVATE_KEY_FILE));
+      inputStream = new ObjectInputStream(new FileInputStream(KEY_PREFIX + username + PRIVATE_KEY_FILE));
       return(PrivateKey) inputStream.readObject();
     }catch (Exception e) {
       return null;
@@ -215,7 +228,7 @@ public class Crypter{
       return null;
       ObjectInputStream inputStream;
     try{
-      inputStream = new ObjectInputStream(new FileInputStream(username + SYMM_KEY_FILE));
+      inputStream = new ObjectInputStream(new FileInputStream(KEY_PREFIX + username + SYMM_KEY_FILE));
       return(SecretKeySpec) inputStream.readObject();
     }catch (Exception e) {
       return null;

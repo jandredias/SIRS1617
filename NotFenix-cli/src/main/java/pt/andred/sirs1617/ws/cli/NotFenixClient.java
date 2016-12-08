@@ -70,19 +70,23 @@ public class NotFenixClient {
     }
 
     public boolean addDoctor(
-                String username,
+                String dname,
                 String password){
-
-			KeyPair key = Crypter.generateRSAKey(_username);
+			KeyPair key = Crypter.generateRSAKey(dname);
 			if(key == null)
 				return false;
-			PublicKey pk_new = Crypter.getPublicKey(username);
+			PublicKey pk_new = key.getPublic();
+
 			if(pk_new == null)
 				return false;
+
 			byte[] pk_byte = pk_new.getEncoded();
 			String pKey;
+
+      Dialog.IO().println("client addDoctor teste 1"); //TESTE
 			try{
 				pKey = new String(pk_byte, "UTF-8");
+
 			} catch(Exception e){
 				return false;
 			}
@@ -91,38 +95,49 @@ public class NotFenixClient {
 
 
 			String allKeys = _port.getAllPublicKeys(_token);
+      Dialog.IO().println("allKeys_String = "+ allKeys); //TESTE
 			PrivateKey private_key = Crypter.getPrivateKey(_username);
 			if(private_key == null){
 				Dialog.IO().println("Your Private Key is not here. You can't access patient's files. Please speak to HR");
 				return false;
 			}
+      Dialog.IO().println("client addDoctor teste 2"); //TESTE
 
 			//Decrypt and encrypt all keys with the new public Key
 			byte allKeys_byte[] = null;
-			try {
-				allKeys_byte = allKeys.getBytes("UTF-8");
-			} catch (UnsupportedEncodingException e1) {
-				e1.printStackTrace();
-				//this won't happen...
-				//we hope so :P
-			}
-			int fullSize = allKeys_byte.length;
-			String allKeysEnc_string;
-			try{
-				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-				for(int i = 0; i < fullSize; i+=_keySize){
-					byte[] toDecrypt_byte = Arrays.copyOfRange(allKeys_byte, i, i+_keySize);
-					String toEncrypt_String = Crypter.decrypt_RSA(toDecrypt_byte, private_key);
-					byte[] encrypted = Crypter.encrypt_RSA(toEncrypt_String, pk_new);
-					outputStream.write(encrypted);
-				}
-				byte allKeysEnc[] = outputStream.toByteArray();
-				allKeysEnc_string = new String(allKeysEnc, "UTF-8");
+			String allKeysEnc_string=null;
+			if(allKeys != null){
+				  Dialog.IO().println("client addDoctor teste 2.1"); //TESTE
+				try {
 
-			}catch (Exception e) {
-				return false;
+					  Dialog.IO().println("client addDoctor teste 2.11"); //TESTE
+					allKeys_byte = allKeys.getBytes("UTF-8");
+					  Dialog.IO().println("client addDoctor teste 2.2"); //TESTE
+				} catch (UnsupportedEncodingException e1) {
+					e1.printStackTrace();
+					//this won't happen...
+					//we hope so :P
+				}
+	      Dialog.IO().println("client addDoctor teste 3"); //TESTE
+				int fullSize = allKeys_byte.length;
+
+				try{
+					ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+					for(int i = 0; i < fullSize; i+=_keySize){
+						byte[] toDecrypt_byte = Arrays.copyOfRange(allKeys_byte, i, i+_keySize);
+						String toEncrypt_String = Crypter.decrypt_RSA(toDecrypt_byte, private_key);
+						byte[] encrypted = Crypter.encrypt_RSA(toEncrypt_String, pk_new);
+						outputStream.write(encrypted);
+					}
+					byte allKeysEnc[] = outputStream.toByteArray();
+					allKeysEnc_string = new String(allKeysEnc, "UTF-8");
+
+				}catch (Exception e) {
+					return false;
+				}
 			}
-				if(!_port.addDoctor(_token, username, password, pKey, allKeysEnc_string))
+      Dialog.IO().println("client addDoctor teste 4"); //TESTE
+				if(!_port.addDoctor(_token, dname, password, pKey, allKeysEnc_string))
 					return false;
 
 		return true;
@@ -191,7 +206,7 @@ public class NotFenixClient {
 			}catch (Exception e) {
 				return false;
 			}
-			
+
 			return _port.revokeDoctorKeyPhase2(_token, allKeysEnc_string);
     }
 
@@ -451,7 +466,7 @@ public class NotFenixClient {
 
 			return _port.sharePatient(_token, pname, dsname, symmkey_enc_new_string);
 		}
-		
+
 		public String getUsername() {
 			return _username;
 		}
