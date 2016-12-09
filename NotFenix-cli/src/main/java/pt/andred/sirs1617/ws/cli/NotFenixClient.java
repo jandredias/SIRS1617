@@ -143,7 +143,7 @@ public class NotFenixClient {
 
       Dialog.IO().println("client addDoctor teste 1"); //TESTE
 			try{
-				pKey = new String(pk_byte, "UTF-8");
+				pKey = Base64.getEncoder().encodeToString(pk_byte);
 
 			} catch(Exception e){
 				return false;
@@ -165,17 +165,11 @@ public class NotFenixClient {
 			byte allKeys_byte[] = null;
 			String allKeysEnc_string= NULL_STRING_TAG;
 			if(allKeys != null){
-				  Dialog.IO().println("client addDoctor teste 2.1"); //TESTE
-				try {
-
-					  Dialog.IO().println("client addDoctor teste 2.11"); //TESTE
-					allKeys_byte = allKeys.getBytes("UTF-8");
-					  Dialog.IO().println("client addDoctor teste 2.2"); //TESTE
-				} catch (UnsupportedEncodingException e1) {
-					e1.printStackTrace();
-					//this won't happen...
-					//we hope so :P
-				}
+				Dialog.IO().println("client addDoctor teste 2.1"); //TESTE
+				Dialog.IO().println("client addDoctor teste 2.11"); //TESTE
+				allKeys_byte = Base64.getDecoder().decode(allKeys);
+				Dialog.IO().println("client addDoctor teste 2.2"); //TESTE
+				
 	      Dialog.IO().println("client addDoctor teste 3"); //TESTE
 				int fullSize = allKeys_byte.length;
 
@@ -188,7 +182,7 @@ public class NotFenixClient {
 						outputStream.write(encrypted);
 					}
 					byte allKeysEnc[] = outputStream.toByteArray();
-					allKeysEnc_string = new String(allKeysEnc, "UTF-8");
+					allKeysEnc_string = Base64.getEncoder().encodeToString(allKeysEnc);
 
 				}catch (Exception e) {
 					return false;
@@ -260,7 +254,7 @@ public class NotFenixClient {
 				String allKeys = _port.revokeDoctorKey(encrypt(_token));
 
 				//Decrypt and encrypt all keys with the new public Key
-				byte allKeys_byte[] = allKeys.getBytes("UTF-8");
+				byte allKeys_byte[] = Base64.getDecoder().decode(allKeys);
 				int fullSize = allKeys_byte.length;
 				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 				for(int i = 0; i < fullSize; i+=_keySize){
@@ -270,7 +264,7 @@ public class NotFenixClient {
 				  outputStream.write(encrypted);
 				}
 				byte allKeysEnc[] = outputStream.toByteArray();
-				allKeysEnc_string = new String(allKeysEnc, "UTF-8");
+				allKeysEnc_string = Base64.getEncoder().encodeToString(allKeysEnc);
 			}catch (Exception e) {
 				return false;
 			}
