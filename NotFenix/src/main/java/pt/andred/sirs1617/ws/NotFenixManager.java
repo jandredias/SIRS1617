@@ -270,19 +270,28 @@ public class NotFenixManager {
 			allKeysEnc = null;
 		}
 		PatientPrivateInfo patient;
-		String temp = publicDetailsEnc;
-		publicDetailsEnc = null;
-		Dialog.IO().debug("HERE ddPatient teste 2 chave encoded= ", keyDoctor); //TESTE
+		//String temp = publicDetailsEnc;
+		//publicDetailsEnc = null;
+		Dialog.IO().debug("*******************publicDetailsEnced= ", publicDetailsEnc); //TESTE
 		try{
-			patient = new PatientPrivateInfo(pname, key_master,
-			name, keyDoctor, privateIV, detailsEnc, _doctorKeys.keySet(),
-			allKeysEnc, publicIV, publicDetailsEnc, _keySize);
+			patient = new PatientPrivateInfo(
+					pname, 
+					key_master,
+					name, 
+					keyDoctor, 
+					privateIV,
+					detailsEnc,
+					_doctorKeys.keySet(),
+					allKeysEnc, 
+					publicIV, 
+					publicDetailsEnc,
+					_keySize);
 			Dialog.IO().println("addPatient teste 5"); //TESTE
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
-		patient.setPublicKeyDoctor(name, temp);
+		//patient.setPublicKeyDoctor(name, temp);
 		_patientsPrivate.put(pname, patient);
 		return true;
 	}

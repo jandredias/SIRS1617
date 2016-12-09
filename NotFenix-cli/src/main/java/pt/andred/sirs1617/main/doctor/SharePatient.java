@@ -19,7 +19,7 @@ public class SharePatient extends Command<NotFenixClient> {
 ////NOT DONE
 		String pname = Dialog.IO().readString("Patient's name? ");
 		String dsname =  Dialog.IO().readString("Doctor to be shared with? ");
-		Boolean success = _receiver.isMyPatient(pname);
+	//	Boolean success = _receiver.isMyPatient(pname);
 		if(!_receiver.getPatient(pname))
 			Dialog.IO().println("This patient does not exist");
 		else if(!_receiver.isMyPatient(pname))

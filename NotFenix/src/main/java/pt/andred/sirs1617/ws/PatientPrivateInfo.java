@@ -4,6 +4,9 @@ package pt.andred.sirs1617.ws;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import pt.andred.sirs1617.ui.Dialog;
+
 import java.util.Iterator;
 import java.util.Arrays;
 
@@ -37,30 +40,27 @@ class PatientPrivateInfo{
     _privateIV = privateIV;
     _publicDetails = publicDetailsEnc;
     _keySize = keysize;
-
-    Iterator itr= allDoctors.iterator();
+	byte[] keySet_bytes = keyPublicDoctors.getBytes();
+    int max = keySet_bytes.length;
+    System.out.println("PatientPrivateInfo keySet_bytes = "+keySet_bytes); //TESTE
+    System.out.println("PatientPrivateInfo keysize = "+keysize);//TESTE
     int i = 0;
-    if(keyPublicDoctors!=null){
-      byte[] keySet_bytes = keyPublicDoctors.getBytes();
-      System.out.println("PatientPrivateInfo keySet_bytes = "+keySet_bytes); //TESTE
-      System.out.println("PatientPrivateInfo keysize = "+keysize);//TESTE
-
-      int max = keySet_bytes.length;
-      while(itr.hasNext()) {
-        if(i>=max)
-          throw new Exception("Failed");
-        String doc = (String) itr.next();
-        byte[] bytes = Arrays.copyOfRange(keySet_bytes, i, i+_keySize);
-        System.out.println("PatientPrivateInfo bytes = "+bytes);//TESTE
-        String key = new String(bytes);
-        System.out.println("PatientPrivateInfo doc = "+doc);//TESTE
-        System.out.println("PatientPrivateInfo key = "+key);//TESTE
-        System.out.println("PatientPrivateInfo LENGHT = "+bytes.length);//TESTE
-        _publicKeys.put(doc, key);
-        i+=_keySize;
-      }
-
+    for(String doc : allDoctors){
+        if(i >= max ){
+        	return;
+        	//throw new Exception("Failed");
+        }
+		byte[] bytes = Arrays.copyOfRange(keySet_bytes, i, i+_keySize);
+		Dialog.IO().debug("PatientPrivateInfo bytes = ","" + bytes);//TESTE
+		String key = new String(bytes);
+		Dialog.IO().debug("PatientPrivateInfo doc = ",doc);//TESTE
+		Dialog.IO().debug("PatientPrivateInfo key = ",key);//TESTE
+		Dialog.IO().debug("PatientPrivateInfo LENGHT = ","" + bytes.length);//TESTE
+		_publicKeys.put(doc, key);
+		i+=_keySize;
     }
+    
+ 
 
   }
 

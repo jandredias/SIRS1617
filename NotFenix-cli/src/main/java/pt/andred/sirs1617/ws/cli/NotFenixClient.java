@@ -150,12 +150,12 @@ public class NotFenixClient {
 
 			try{
 				pKey = Base64.getEncoder().encodeToString(pk_byte);
-				Dialog.IO().println(_token);
-				Dialog.IO().println(dname);
-				Dialog.IO().println(password);
-				Dialog.IO().println(pKey);
+				Dialog.IO().debug(_token);
+				Dialog.IO().debug(dname);
+				Dialog.IO().debug(password);
+				Dialog.IO().debug(pKey);
 				_port.addDoctor(encrypt(_token), encrypt(dname), encrypt(password), encrypt(pKey), encrypt(new String()));
-
+				
 			} catch(Exception e){
 				return false;
 			}
@@ -267,7 +267,7 @@ public class NotFenixClient {
     public boolean addPatient(
                 String name,
                 String private_details,
-								String public_details){
+				String public_details){
 			if(_keySize == 0) return false;
 			String keyMaster;
 			String keyDoctor;
@@ -284,6 +284,7 @@ public class NotFenixClient {
 				SecretKeySpec sk = Crypter.getSymmKey(name, "first");
 				if(sk == null)
 				  return false;
+
 				String sk_string = Base64.getEncoder().encodeToString(sk.getEncoded());
 
 
@@ -337,6 +338,7 @@ public class NotFenixClient {
 				//detailsPublicEnc = Base64.getEncoder().encodeToString(Crypter.encrypt_AES(public_details, sk2, ivParams2));
 	      		//XXX
 				detailsPublicEnc = Base64.getEncoder().encodeToString(Crypter.encrypt_AES(public_details, sk2, "1111111111111111"));
+				Dialog.IO().debug("----------------------detailsPublicEnc = "+detailsPublicEnc);
 				//Encrypt 2nd key with Doctor
 				 keyDoctor2 = Base64.getEncoder().encodeToString(Crypter.encrypt_RSA(sk2_string, dKey));
 				
@@ -366,10 +368,10 @@ public class NotFenixClient {
 								sk2_string,
 								publicKey));
 					_port.setInfoPatient2(
-							encrypt(_token), 
-							encrypt(name), 
-							encrypt(df.getName()), 
-							encrypt(P_PUBLIC_KEY), 
+							encrypt(_token),
+							encrypt(name),
+							encrypt(df.getName()),
+							encrypt(P_PUBLIC_KEY),
 							encrypt(odKey_enc));
 
 				}
@@ -413,12 +415,14 @@ public class NotFenixClient {
     public String getInfoPatient(
                 String name,
                 String infoName){
-		if(!Objects.equals(infoName, P_DETAILS_TAG))
+		//if(!Objects.equals(infoName, P_DETAILS_TAG))
     	return _port.getInfoPatient(
     			encrypt(_token),
     			encrypt(name),
     			encrypt(infoName));
-			return seePatient(name);
+
+
+		//	return seePatient(name);
 
     }
 
@@ -467,9 +471,9 @@ public class NotFenixClient {
 							encrypt(name),
 							encrypt(P_DETAILS_TAG));
 					byte[] private_details_encoded_byte = private_details_encoded_string.getBytes();
-					System.out.println("seePatient private_details_encoded_byte= "+private_details_encoded_byte); //TESTE
+					Dialog.IO().debug("seePatient private_details_encoded_byte= "+private_details_encoded_byte); //TESTE
 					byte[] private_details_encrypted_byte = Base64.getDecoder().decode(private_details_encoded_byte);
-					System.out.println("seePatient private_details_encrypted_byte= "+private_details_encrypted_byte); //TESTE
+					Dialog.IO().debug("seePatient private_details_encrypted_byte= "+private_details_encrypted_byte); //TESTE
 					private_details = Crypter.decrypt_AES(private_details_encrypted_byte, private_symmKey, private_iv_string);
 
 				//	Dialog.IO().println("Private patient's details:");
@@ -479,8 +483,7 @@ public class NotFenixClient {
 					e.printStackTrace();
 					Dialog.IO().println("An error with the private details happened. Please try again");
 				}
-				Dialog.IO().println("Private patient's details:");
-				 Dialog.IO().println(private_details);
+				Dialog.IO().println("Private patient's details:" + private_details);
 			}
 
 			//Public Details
@@ -489,15 +492,20 @@ public class NotFenixClient {
 					encrypt(_token),
 					encrypt(name),
 					encrypt(P_PUBLIC_KEY));
-					Dialog.IO().println("public_symmkey_encoded_string= " +public_symmkey_encoded_string); //TESTE
+					Dialog.IO().debug("public_symmkey_encoded_string= " +public_symmkey_encoded_string); //TESTE
 			try{
+				if(public_symmkey_encoded_string == null){
+					Dialog.IO().println("Doctor has no access to this patient");
+					Dialog.IO().println("Public information is not functional, please request access to the HR department");
+					return null;
+				}
 				byte[] public_symmkey_encrypted_byte = Base64.getDecoder().decode(public_symmkey_encoded_string);
-				Dialog.IO().println("public_symmkey_encrypted_byte= " +public_symmkey_encrypted_byte); //TESTE
+				Dialog.IO().debug("public_symmkey_encrypted_byte= " +public_symmkey_encrypted_byte); //TESTE
 				Dialog.IO().debug("ENCRYPTED KEY", public_symmkey_encoded_string);
 				Dialog.IO().debug("ENCRYPTED KEY", public_symmkey_encrypted_byte.toString());
 				String public_symmKey_string  =	Crypter.decrypt_RSA(public_symmkey_encrypted_byte, private_key);
-				Dialog.IO().println("public_symmKey_string= " +public_symmKey_string); //TESTE
-				Dialog.IO().println("public_symmKey_BYTES= " +public_symmKey_string.getBytes()); //TESTE
+				Dialog.IO().debug("public_symmKey_string= " +public_symmKey_string); //TESTE
+				Dialog.IO().debug("public_symmKey_BYTES= " +public_symmKey_string.getBytes()); //TESTE
 				SecretKeySpec public_symmKey = new SecretKeySpec(Base64.getDecoder().decode(public_symmKey_string), "AES");
 
 				//get IV
@@ -515,8 +523,7 @@ public class NotFenixClient {
 					byte[] public_details_encrypted_byte = Base64.getDecoder().decode(public_details_encoded_byte);
 					String public_details = Crypter.decrypt_AES(public_details_encrypted_byte, public_symmKey, public_iv_string);
 	
-					Dialog.IO().println("Public patient's details:");
-					Dialog.IO().println(public_details);
+					Dialog.IO().println("Public patient's details:" + public_details);
 				}
 			}catch (Exception e) {
 				e.printStackTrace();
