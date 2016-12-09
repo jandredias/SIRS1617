@@ -162,12 +162,12 @@ public class NotFenixManager {
 			patient.setDetails(infoValue);
 			return true;
 		}
-		else if (infoName.matches(P_PUBLIC_KEY)){
-			patient.setPublicKeyDoctor(name, infoValue);
-			return true;
-		}
 		else if (infoName.matches(P_PUBLIC_DETAILS)){
 			patient.setPublicDetails(infoValue);
+			return true;
+		}
+		else if(infoName.matches(P_PUBLIC_KEY)){
+			patient.setPublicKeyDoctor(name, infoValue);
 			return true;
 		}
 		else
@@ -475,7 +475,6 @@ public class NotFenixManager {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	public List<DoctorInfo> getDoctorsKeysNewFunction(String token) {
 		List<DoctorInfo> list = new ArrayList<>();
 		for(Map.Entry<String, String> entry : _doctorKeys.entrySet()){
