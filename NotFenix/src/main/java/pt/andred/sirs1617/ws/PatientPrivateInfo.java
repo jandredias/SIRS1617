@@ -30,20 +30,32 @@ class PatientPrivateInfo{
     _keyEncryptedMaster = key_master;
     _keysDoctor = new HashMap<>();
     _keysDoctor.put(doctorName, doctorKey);
+    _publicKeys = new HashMap<>();
     _details = detailsEnc;
+    System.out.println("PatientPrivateInfo detailsEnc = "+_details);//TESTE
     _publicIV = publicIV;
+    _privateIV = privateIV;
     _publicDetails = publicDetailsEnc;
     _keySize = keysize;
 
     Iterator itr= allDoctors.iterator();
     int i = 0;
-    byte[] keySet_bytes = keyPublicDoctors.getBytes("UTF-8");
+    byte[] keySet_bytes = keyPublicDoctors.getBytes();
+    System.out.println("PatientPrivateInfo keySet_bytes = "+keySet_bytes); //TESTE
+    System.out.println("PatientPrivateInfo keysize = "+keysize);//TESTE
+
     int max = keySet_bytes.length;
     while(itr.hasNext()) {
       if(i>=max)
         throw new Exception("Failed");
       String doc = (String) itr.next();
-      _publicKeys.put(doc, new String(Arrays.copyOfRange(keySet_bytes, i, i+_keySize), "UTF-8"));
+      byte[] bytes = Arrays.copyOfRange(keySet_bytes, i, i+_keySize);
+      System.out.println("PatientPrivateInfo bytes = "+bytes);//TESTE
+      String key = new String(bytes);
+      System.out.println("PatientPrivateInfo doc = "+doc);//TESTE
+      System.out.println("PatientPrivateInfo key = "+key);//TESTE
+      System.out.println("PatientPrivateInfo LENGHT = "+bytes.length);//TESTE
+      _publicKeys.put(doc, key);
       i+=_keySize;
 
     }

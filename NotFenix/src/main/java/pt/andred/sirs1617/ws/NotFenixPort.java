@@ -241,7 +241,7 @@ public class NotFenixPort implements NotFenixPortType {
     			decrypt(keyDoctor),
     			decrypt(ivString),
     			decrypt(detailsEnc),
-    			decrypt(allKeysEncString),
+    			allKeysEncString,
     			decrypt(iv2String),
     			decrypt(detailsPublicEnc));
     }

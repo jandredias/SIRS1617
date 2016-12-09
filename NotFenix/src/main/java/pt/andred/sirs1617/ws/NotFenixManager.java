@@ -65,9 +65,9 @@ public class NotFenixManager {
 		byte[] HR_public_byte = HR_public.getEncoded();
 		String HR_public_string = null;
 		try {
-			HR_public_string = new String(HR_public_byte, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// Let's assume this won't happen... there's no time left to handle this :(
+			//HR_public_string = new String(HR_public_byte);
+			HR_public_string = Base64.getEncoder().encodeToString(HR_public_byte);
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		_doctorKeys.put(HR_MASTER, HR_public_string);
@@ -82,7 +82,10 @@ public class NotFenixManager {
 		try{
 			inputStream = new ObjectInputStream(new FileInputStream(username + PUBLIC_KEY_FILE));
 			PublicKey pk = (PublicKey) inputStream.readObject();
-			_keySize = pk.getEncoded().length;
+			byte[] pk_byte = pk.getEncoded();
+			String pk_encoded_byte = Base64.getEncoder().encodeToString(pk_byte);
+			_keySize = pk_encoded_byte.getBytes().length;
+			Dialog.IO().println("keySize= "+_keySize);
 			return pk;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -187,7 +190,9 @@ public class NotFenixManager {
 		PatientPrivateInfo patient = _patientsPrivate.get(pname);
 		if (patient == null)
 			return null;
-
+			Dialog.IO().println("getInfoPatient"); //TESTE
+			Dialog.IO().println("pname= " + pname); //TESTE
+			Dialog.IO().println("infoName= "+infoName); //TESTE
 		if(infoName.matches(P_NAME_TAG))
 			return patient.getName();
 		else if(infoName.matches(P_KEY_MASTER_TAG))
@@ -225,20 +230,23 @@ public class NotFenixManager {
 		String name = checkToken(token);
 		if (name == null)
 			return false; //TODO: must return a problem
+			Dialog.IO().println("addPatient teste 1"); //TESTE
 
-		if(allKeysEnc.equals(NULL_STRING_TAG))
+		if(allKeysEnc == null || allKeysEnc.equals("") || allKeysEnc.equals(NULL_STRING_TAG))
 			allKeysEnc = null;
 		PatientPrivateInfo patient;
+		Dialog.IO().println("addPatient teste 2 allKeysEnc= "+ allKeysEnc); //TESTE
 		try{
 			patient = new PatientPrivateInfo(pname, key_master,
 			name, keyDoctor, privateIV, detailsEnc, _doctorKeys.keySet(),
 			allKeysEnc, publicIV, publicDetailsEnc, _keySize);
+			Dialog.IO().println("addPatient teste 5"); //TESTE
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
-		if(_patientsPrivate.put(pname, patient)!= null)
-			return true;
-		return false;
+		_patientsPrivate.put(pname, patient);
+		return true;
 	}
 
 	public boolean changePassword(String token, String username, String password, String oldPassword) {
@@ -302,8 +310,8 @@ public class NotFenixManager {
 				byte[] b = Arrays.copyOfRange(allKeysEnc.getBytes(), i, i+_keySize);
 				String k = null;
 				try {
-					k = new String(b, "UTF-8");
-				} catch (UnsupportedEncodingException e) {
+					k = new String(b);
+				} catch (Exception e) {
 					//Let's assume this won't happen
 					//There's no time to fix this :(
 					e.printStackTrace();
@@ -314,8 +322,8 @@ public class NotFenixManager {
 				byte[] ba = Arrays.copyOfRange(allKeysEnc.getBytes(), i, i+_keySize);
 				String ka = null;
 				try {
-					ka = new String(ba, "UTF-8");
-				} catch (UnsupportedEncodingException e) {
+					ka = new String(ba);
+				} catch (Exception e) {
 					//Let's assume this won't happen
 					//There's no time to fix this :(
 					e.printStackTrace();
@@ -392,8 +400,10 @@ public class NotFenixManager {
 		String name = checkToken(token);
 		if (name == null)
 			return null; //TODO: must return a problem
-
-		return _doctorKeys.get(HR_MASTER);
+		Dialog.IO().println("---------getMasterKey teste 1"); //TESTE
+		String k= _doctorKeys.get(HR_MASTER);
+			Dialog.IO().println("---------getMasterKey teste 2 key= "+k); //TESTE
+		return k;
 	}
 	public String getDoctorKey(String token, String name) {
 		String dname = checkToken(token);
@@ -411,10 +421,12 @@ public class NotFenixManager {
 		String data= "";
 		Set<String> allDoctors = _doctorKeys.keySet();
 		Iterator itr = allDoctors.iterator();
-
+		Dialog.IO().println("---------------------gettallDoctorskeys teste 1"); //TESTE
 		while(itr.hasNext()){
 			String doc = (String) itr.next();
+			Dialog.IO().println("---------------------gettallDoctorskeys teste 2 doc= "+ doc); //TESTE
 			data += _doctorKeys.get(doc);
+			Dialog.IO().println("---------------------gettallDoctorskeys teste 3 data= "+ data); //TESTE
 		}
 		return data;
 	}

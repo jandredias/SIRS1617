@@ -2,6 +2,7 @@ package pt.andred.sirs1617.main;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-import java.util.Base64;
+//import java.util.Base64;
 
 import pt.andred.sirs1617.ui.Dialog;
 
@@ -117,6 +118,7 @@ public class Crypter{
 
 
     if (publicKey.exists()) {
+        Dialog.IO().println("Crypter isPublicKeyPresent teste 2"); //TESTE
       return true;
     }
     return false;
@@ -196,6 +198,7 @@ public class Crypter{
       dectyptedText = cipher.doFinal(text);
 
     } catch (Exception ex) {
+      ex.printStackTrace();
       return null;
     }
 
@@ -243,13 +246,13 @@ public class Crypter{
   }*/
   public static byte[] encrypt_AES(String text, SecretKeySpec key, String IV_string){
     try{
-      IvParameterSpec iv =  new IvParameterSpec(Base64.getDecoder().decode(size16(IV_string)));
+      IvParameterSpec iv =  new IvParameterSpec(IV_string.getBytes());
       return encrypt_AES(text, key, iv);
     } catch(Exception e){
       return null;
     }
   }
-  public static String size16 (String input){
+/*  public static String size16 (String input){
     Dialog.IO().println("---------------------size16 teste 0"); //TESTE
     int size = input.length();
     Dialog.IO().println("---------------------size16 teste 1"); //TESTE
@@ -263,6 +266,32 @@ public class Crypter{
       input += " ";
         Dialog.IO().println("---------------------size16 teste 3"); //TESTE
     return input;
+  }*/
+  public static byte[] size16 (byte[] input){
+    Dialog.IO().println("---------------------size16 teste 0"); //TESTE
+    int size = input.length;
+    Dialog.IO().println("---------------------size16 teste 1"); //TESTE
+    if(size % 16 == 0){
+      Dialog.IO().println("---------------------size16 teste 2"); //TESTE
+      return input;
+    }
+    int i;
+    byte[] toReturn;
+    ByteArrayOutputStream outputStream;
+    try{
+      for(i = 0; i< size; i+=16);
+      	outputStream = new ByteArrayOutputStream();
+        outputStream.write(input);
+      for(;size<i; size ++){
+        outputStream.write(" ".getBytes()[0]);
+      }
+          Dialog.IO().println("---------------------size16 teste 3 size:" + input.length); //TESTE
+      toReturn = outputStream.toByteArray();
+      Dialog.IO().println("---------------------size16 teste 3 toreturnsize:" + toReturn.length); //TESTE
+    }catch (Exception e) {
+      return null;
+    }
+    return toReturn;
   }
   public static byte[] encrypt_AES(String text, SecretKeySpec key, IvParameterSpec iv){
     try{
@@ -270,11 +299,12 @@ public class Crypter{
       Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding", "SunJCE");
       Dialog.IO().println("---------------------encrypt_AES teste 1"); //TESTE
       cipher.init(Cipher.ENCRYPT_MODE, key, iv);
-      text = size16(text);
-      Dialog.IO().println("---------------------encrypt_AES teste 2 input: <"+ text+">"); //TESTE
-      byte[] a = Base64.getDecoder().decode(text);
+      //text = size16(text);
+      byte[] text2 = size16(text.getBytes());
+      Dialog.IO().println("---------------------encrypt_AES teste 2 input: <"+ text2+">"); //TESTE
+    //  byte[] a = text.getBytes();
       Dialog.IO().println("---------------------encrypt_AES teste 2.1"); //TESTE
-      byte[] t = cipher.doFinal(a);
+      byte[] t = cipher.doFinal(text2);
       Dialog.IO().println("---------------------encrypt_AES teste 3"); //TESTE
       return t;
     } catch(Exception e){
@@ -285,9 +315,13 @@ public class Crypter{
   public static String decrypt_AES(byte[] cipherText, SecretKeySpec key, String iv){
     try{
        Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding", "SunJCE");
-       cipher.init(Cipher.DECRYPT_MODE, key,new IvParameterSpec(Base64.getDecoder().decode(size16(iv))));
+       IvParameterSpec ivparam = new IvParameterSpec(iv.getBytes());
+       Dialog.IO().println("decrypt_AES iv= "+iv); //TESTE
+       Dialog.IO().println("decrypt_AES key= "+key.getEncoded()); //TESTE
+       cipher.init(Cipher.DECRYPT_MODE, key, ivparam);
        return new String(cipher.doFinal(cipherText),"UTF-8");
     } catch(Exception e){
+      e.printStackTrace();
       return null;
     }
   }
