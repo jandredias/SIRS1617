@@ -20,6 +20,8 @@ public class AddDoctor extends Command<NotFenixClient> {
 		if(password.equals(rep_pass)){
 			if(!_receiver.addDoctor(username, password))
 				Dialog.IO().println("Server error");
+			else
+				Dialog.IO().println("Doctor Created");
 		}
 		else{
 			Dialog.IO().println("");
