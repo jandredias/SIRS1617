@@ -533,7 +533,12 @@ public class NotFenixPort implements NotFenixPortType {
         String infoValue,
         @WebParam(name = "dname", targetNamespace = "")
         String dname){
-    	return NotFenixManager.instance().setInfoPatient2(decrypt(token), decrypt(pName), decrypt(infoName), decrypt(infoValue), decrypt(dname));
+    	return NotFenixManager.instance().setInfoPatient2(
+    			decrypt(token), 
+    			decrypt(pName), 
+    			decrypt(infoName), 
+    			decrypt(infoValue), 
+    			decrypt(dname));
     }
     
     /**
