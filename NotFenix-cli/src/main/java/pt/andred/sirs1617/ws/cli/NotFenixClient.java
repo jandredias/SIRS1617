@@ -601,7 +601,7 @@ public class NotFenixClient {
 
 			//Public Details
 			//Get Symmkey
-		/*	String public_symmkey_encoded_string  = _port.getInfoPatient(
+			String public_symmkey_encoded_string  = _port.getInfoPatient(
 					encrypt(_token),
 					encrypt(name),
 					encrypt(P_PUBLIC_KEY));
@@ -635,7 +635,7 @@ public class NotFenixClient {
 			}catch (Exception e) {
 				e.printStackTrace();
 				Dialog.IO().println("An error with the public details happened. Please try again");
-			}*/
+			}
 			return null;
 		}
 
