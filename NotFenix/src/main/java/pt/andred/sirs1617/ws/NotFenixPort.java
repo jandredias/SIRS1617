@@ -34,22 +34,22 @@ public class NotFenixPort implements NotFenixPortType {
 		// TODO Auto-generated constructor stub
 	}
 	private String encrypt(String text){
-		Dialog.IO().println("signMessage signing");
+		//Dialog.IO().println("signMessage signing");
 		PublicKey publicKey;
 		try {
 			publicKey = PublicKeyReader.get("public_key.der");
-			
+
 			// specify mode and padding instead of relying on defaults (use OAEP if available!)
 			Cipher encrypt = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 			// init with the *public key*!
 			encrypt.init(Cipher.ENCRYPT_MODE, publicKey);
-			// encrypt with known character encoding, you should probably use hybrid cryptography instead 
-					
+			// encrypt with known character encoding, you should probably use hybrid cryptography instead
+
 			byte[] bodyByte = text.getBytes("UTF-8");
 			byte[] bodyByteEncrypted = encrypt.doFinal(bodyByte);
 			String encrypted = Base64.getEncoder().encodeToString(bodyByteEncrypted);
 
-			Dialog.IO().println("fim do signing");
+			//Dialog.IO().println("fim do signing");
 			return encrypted;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -60,12 +60,12 @@ public class NotFenixPort implements NotFenixPortType {
 	private String decrypt(String encryptedText){
 		try {
 			PrivateKey privateKey = PrivateKeyReader.get("private_key.der");
-		
+
 			Cipher decrypt=Cipher.getInstance("RSA/ECB/PKCS1Padding");
 			decrypt.init(Cipher.DECRYPT_MODE, privateKey);
-			
+
 			byte[] bodyByte64 = Base64.getDecoder().decode(encryptedText);
-			
+
 			byte[] bodyByteDecrypted = decrypt.doFinal(bodyByte64);
 			String bodyDecrypted;
 			bodyDecrypted = new String(bodyByteDecrypted, "UTF-8");
@@ -80,7 +80,7 @@ public class NotFenixPort implements NotFenixPortType {
 		return null;
 	}
 	/**
-     * 
+     *
      * @param password
      * @param username
      * @return
@@ -99,7 +99,7 @@ public class NotFenixPort implements NotFenixPortType {
     }
 
     /**
-     * 
+     *
      * @param password
      * @param allKeysEncrypted
      * @param publicKey
@@ -124,15 +124,15 @@ public class NotFenixPort implements NotFenixPortType {
         @WebParam(name = "allKeysEncrypted", targetNamespace = "")
         String allKeysEncrypted){
     	return NotFenixManager.instance().addDoctor(
-    			decrypt(token), 
-    			decrypt(username), 
-    			decrypt(password), 
+    			decrypt(token),
+    			decrypt(username),
+    			decrypt(password),
     			decrypt(publicKey),
     			decrypt(allKeysEncrypted));
     }
 
     /**
-     * 
+     *
      * @param token
      * @param username
      * @return
@@ -148,12 +148,12 @@ public class NotFenixPort implements NotFenixPortType {
         @WebParam(name = "username", targetNamespace = "")
         String username){
     	return NotFenixManager.instance().deleteDoctor(
-    			decrypt(token), 
+    			decrypt(token),
     			decrypt(username));
     }
 
     /**
-     * 
+     *
      * @param token
      * @return
      *     returns boolean
@@ -169,7 +169,7 @@ public class NotFenixPort implements NotFenixPortType {
     }
 
     /**
-     * 
+     *
      * @param password
      * @param oldPassword
      * @param token
@@ -191,14 +191,14 @@ public class NotFenixPort implements NotFenixPortType {
         @WebParam(name = "oldPassword", targetNamespace = "")
         String oldPassword){
     	return NotFenixManager.instance().changePassword(
-    			decrypt(token), 
-    			decrypt(username), 
-    			decrypt(password), 
+    			decrypt(token),
+    			decrypt(username),
+    			decrypt(password),
     			decrypt(oldPassword));
    }
-    
+
     /**
-     * 
+     *
      * @param detailsEnc
      * @param keyMaster
      * @param name
@@ -235,19 +235,19 @@ public class NotFenixPort implements NotFenixPortType {
         @WebParam(name = "detailsPublicEnc", targetNamespace = "")
         String detailsPublicEnc){
     	return NotFenixManager.instance().addPatient(
-    			decrypt(token), 
-    			decrypt(name), 
-    			decrypt(keyMaster), 
-    			decrypt(keyDoctor), 
-    			decrypt(ivString), 
-    			decrypt(detailsEnc), 
-    			decrypt(allKeysEncString), 
-    			decrypt(iv2String), 
+    			decrypt(token),
+    			decrypt(name),
+    			decrypt(keyMaster),
+    			decrypt(keyDoctor),
+    			decrypt(ivString),
+    			decrypt(detailsEnc),
+    			decrypt(allKeysEncString),
+    			decrypt(iv2String),
     			decrypt(detailsPublicEnc));
     }
-    
+
     /**
-     * 
+     *
      * @param name
      * @param token
      * @return
@@ -266,7 +266,7 @@ public class NotFenixPort implements NotFenixPortType {
     }
 
     /**
-     * 
+     *
      * @param infoName
      * @param name
      * @param token
@@ -285,13 +285,13 @@ public class NotFenixPort implements NotFenixPortType {
         @WebParam(name = "infoName", targetNamespace = "")
         String infoName){
     	return NotFenixManager.instance().getInfoPatient(
-    			decrypt(token), 
-    			decrypt(name), 
+    			decrypt(token),
+    			decrypt(name),
     			decrypt(infoName));
     }
 
     /**
-     * 
+     *
      * @param infoName
      * @param infoValue
      * @param name
@@ -313,14 +313,14 @@ public class NotFenixPort implements NotFenixPortType {
         @WebParam(name = "infoValue", targetNamespace = "")
         String infoValue){
     	return NotFenixManager.instance().setInfoPatient(
-    			decrypt(token), 
-    			decrypt(name), 
-    			decrypt(infoName), 
+    			decrypt(token),
+    			decrypt(name),
+    			decrypt(infoName),
     			decrypt(infoValue));
     }
 
     /**
-     * 
+     *
      * @param token
      * @param username
      * @return
@@ -336,14 +336,14 @@ public class NotFenixPort implements NotFenixPortType {
         @WebParam(name = "username", targetNamespace = "")
         String username){
     	return NotFenixManager.instance().getPatient(
-    			decrypt(token), 
+    			decrypt(token),
 				decrypt(username));
     }
 
-    
+
 
     /**
-     * 
+     *
      * @param token
      * @return
      *     returns java.lang.String
@@ -359,7 +359,7 @@ public class NotFenixPort implements NotFenixPortType {
 	}
 
     /**
-     * 
+     *
      * @param token
      * @return
      *     returns java.lang.String
@@ -375,7 +375,7 @@ public class NotFenixPort implements NotFenixPortType {
 	}
 
     /**
-     * 
+     *
      * @param token
      * @return
      *     returns java.lang.String
@@ -389,9 +389,9 @@ public class NotFenixPort implements NotFenixPortType {
         String token){
 		return NotFenixManager.instance().getAllDoctorsKeys(decrypt(token));
 	}
-    
+
     /**
-     * 
+     *
      * @param keys
      * @param token
      * @return
@@ -410,7 +410,7 @@ public class NotFenixPort implements NotFenixPortType {
    }
 
     /**
-     * 
+     *
      * @param token
      * @return
      *     returns java.lang.String
@@ -426,7 +426,7 @@ public class NotFenixPort implements NotFenixPortType {
 	}
 
     /**
-     * 
+     *
      * @param pname
      * @param dsname
      * @param symmkeyEncNewString
@@ -448,14 +448,14 @@ public class NotFenixPort implements NotFenixPortType {
         @WebParam(name = "symmkey_enc_new_string", targetNamespace = "")
         String symmkeyEncNewString){
 		return NotFenixManager.instance().sharePatient(
-				decrypt(token), 
-				decrypt(pname), 
-				decrypt(dsname), 
+				decrypt(token),
+				decrypt(pname),
+				decrypt(dsname),
 				decrypt(symmkeyEncNewString));
 	}
 
 	/**
-     * 
+     *
      * @param name
      * @param token
      * @return
@@ -473,7 +473,7 @@ public class NotFenixPort implements NotFenixPortType {
 		return NotFenixManager.instance().isMyPatient(decrypt(token), decrypt(name));
 	}
     /**
-     * 
+     *
      * @param dname
      * @param token
      * @return

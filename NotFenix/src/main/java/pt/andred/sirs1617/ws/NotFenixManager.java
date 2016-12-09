@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.Iterator;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Objects;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
@@ -95,13 +96,13 @@ public class NotFenixManager {
 		return _instance;
 	}
 
-	
+
 	public String login(String username, String password){
-		Dialog.IO().debug("Login try:" + username + " " + password);
+		Dialog.IO().println("Login try:" + username + " " + password);
 		if(_doctors.containsKey(username) && _doctors.get(username).equals(password))
 			return generateNewToken(username);
 		return null;
-		
+
 	}
 	private String generateNewToken(String username) {
 		UUID token = UUID.randomUUID();
@@ -120,8 +121,10 @@ public class NotFenixManager {
 
 	public String checkToken(String token){
 		String username = _logins.get(token);
+		Dialog.IO().println("Check Token name: " + username); //TESTE
+		Dialog.IO().println("Check Token toke: " + token); //TESTE
 		if(username == null){
-			Dialog.IO().print("Invalid Token");
+			Dialog.IO().println("Invalid Token");
 			return null;
 		}
 		return username;
@@ -207,7 +210,7 @@ public class NotFenixManager {
 
 	public boolean deletePatient(String token, String pname) {
 		String name = checkToken(token);
-		if (name != HR_MASTER)
+		if (!Objects.equals(name, HR_MASTER))
 			return false; //TODO: must return a problem
 
 		_patientsPrivate.remove(pname);
@@ -242,8 +245,8 @@ public class NotFenixManager {
 		String name = checkToken(token);
 		if (name == null)
 			return false; //TODO: must return a problem
-		if(name != HR_MASTER)
-			if(name != username)
+		if(!Objects.equals(name, HR_MASTER))
+			if(!Objects.equals(name, username))
 				return false;
 		String _old = _doctors.get(username);
 		if(_old.equals(oldPassword)){
@@ -327,11 +330,14 @@ public class NotFenixManager {
 		String name = checkToken(token);
 		if (name == null)
 			return false; //TODO: must return a problem
-		if(name != HR_MASTER)
-			if(name != doctor)
+		Dialog.IO().println("deleteDoctor teste 1"); //TESTE
+		if(!Objects.equals(name, HR_MASTER))
+			if(!Objects.equals(name, doctor))
 				return false;
-		if(_doctors.containsKey(doctor))
+			Dialog.IO().println("deleteDoctor teste 2 doctor: <" + doctor + ">"); //TESTE
+		if(!_doctors.containsKey(doctor))
 			return false;
+		Dialog.IO().println("deleteDoctor teste 3"); //TESTE
 		_doctors.remove(doctor);
 		Set<String> keys = _patientsPrivate.keySet();
 		Iterator<String> itr = keys.iterator();
@@ -340,24 +346,35 @@ public class NotFenixManager {
 			patient.removeDoctor(doctor);
 			patient.removePublicDoctor(doctor);
 		}
+			_logins.remove(doctor);
 		return true;
 	}
 
 	public boolean addDoctor(String token, String username, String password, String publicKey, String allKeysEnc) {
 		String name = checkToken(token);
-		if(name != HR_MASTER)
+		Dialog.IO().println("addDoctor teste 1"); //TESTE
+
+		Dialog.IO().println("/name: <" + name + "> /HR: <"+ HR_MASTER +">"); //TESTE
+
+		if(!Objects.equals(name, HR_MASTER))
 			return false; //TODO: must return a problem
+			Dialog.IO().println("addDoctor teste 2"); //TESTE
 		if(_doctors.containsKey(username))
 			return false;
-		if(allKeysEnc.equals(NULL_STRING_TAG)){
+			Dialog.IO().println("addDoctor teste 3"); //TESTE
+		if(Objects.equals(allKeysEnc,NULL_STRING_TAG)|| allKeysEnc == null){
 			if(!_patientsPrivate.isEmpty()){
+				Dialog.IO().println("addDoctor teste 3.1"); //TESTE
 				return false;
 			}
 		}
-		else if(putNewPublicKeysEnc_private_method(username, allKeysEnc))
+		else if(putNewPublicKeysEnc_private_method(username, allKeysEnc)){
+			Dialog.IO().println("addDoctor teste 3.2"); //TESTE
 			return false;
+		}
 		_doctors.put(username, password);
 		_doctorKeys.put(username, publicKey);
+		Dialog.IO().println("addDoctor teste 4"); //TESTE
 		return true;
 	}
 
@@ -406,7 +423,7 @@ public class NotFenixManager {
 		String name = checkToken(token);
 		if (name == null)
 			return null;
-		if(name != HR_MASTER)
+		if(!Objects.equals(name, HR_MASTER))
 			return null;
 
 		String data= "";

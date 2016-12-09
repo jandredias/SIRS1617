@@ -3,6 +3,8 @@ package pt.andred.sirs1617.ws.cli;
 import java.util.Map;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Objects;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.ObjectOutputStream;
@@ -65,7 +67,7 @@ public class NotFenixClient {
 	}
 
 	private String encrypt(String text){
-		Dialog.IO().println("signMessage signing");
+		//Dialog.IO().println("signMessage signing");
 		PublicKey publicKey;
 		try {
 			publicKey = PublicKeyReader.get("public_key.der");
@@ -73,12 +75,12 @@ public class NotFenixClient {
 			Cipher encrypt = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 			// init with the *public key*!
 			encrypt.init(Cipher.ENCRYPT_MODE, publicKey);
-			// encrypt with known character encoding, you should probably use hybrid cryptography instead 
+			// encrypt with known character encoding, you should probably use hybrid cryptography instead
 			byte[] bodyByte = text.getBytes("UTF-8");
 			byte[] bodyByteEncrypted = encrypt.doFinal(bodyByte);
 			String encrypted = Base64.getEncoder().encodeToString(bodyByteEncrypted);
 
-			Dialog.IO().println("fim do encrypt");
+		//	Dialog.IO().println("fim do encrypt");
 			return encrypted;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -93,9 +95,9 @@ public class NotFenixClient {
 
 			Cipher decrypt=Cipher.getInstance("RSA/ECB/PKCS1Padding");
 			decrypt.init(Cipher.DECRYPT_MODE, privateKey);
-			
+
 			byte[] bodyByte64 = Base64.getDecoder().decode(encryptedText);
-			
+
 			byte[] bodyByteDecrypted = decrypt.doFinal(bodyByte64);
 			String bodyDecrypted;
 			bodyDecrypted = new String(bodyByteDecrypted, "UTF-8");
@@ -118,6 +120,11 @@ public class NotFenixClient {
     	if(_token == null) return false;
     	Dialog.IO().debug("Login successful");
 		_username = username;
+		if(_keySize==0){
+			PublicKey pk = Crypter.getPublicKey(_username);
+			byte[] pk_byte = pk.getEncoded();
+			_keySize = pk_byte.length;
+		}
     	return true;
     }
 
@@ -135,7 +142,6 @@ public class NotFenixClient {
 			byte[] pk_byte = pk_new.getEncoded();
 			String pKey;
 
-      Dialog.IO().println("client addDoctor teste 1"); //TESTE
 			try{
 				pKey = Base64.getEncoder().encodeToString(pk_byte);
 
@@ -147,24 +153,18 @@ public class NotFenixClient {
 
 
 			String allKeys = _port.getAllPublicKeys(encrypt(_token));
-      Dialog.IO().println("allKeys_String = "+ allKeys); //TESTE
+      Dialog.IO().println("allKeys_String = <"+ allKeys + ">"); //TESTE
 			PrivateKey private_key = Crypter.getPrivateKey(_username);
 			if(private_key == null){
 				Dialog.IO().println("Your Private Key is not here. You can't access patient's files. Please speak to HR");
 				return false;
 			}
-      Dialog.IO().println("client addDoctor teste 2"); //TESTE
 
 			//Decrypt and encrypt all keys with the new public Key
 			byte allKeys_byte[] = null;
 			String allKeysEnc_string= NULL_STRING_TAG;
-			if(allKeys != null){
-				Dialog.IO().println("client addDoctor teste 2.1"); //TESTE
-				Dialog.IO().println("client addDoctor teste 2.11"); //TESTE
+			if(!Objects.equals(allKeys, "")){
 				allKeys_byte = Base64.getDecoder().decode(allKeys);
-				Dialog.IO().println("client addDoctor teste 2.2"); //TESTE
-				
-	      Dialog.IO().println("client addDoctor teste 3"); //TESTE
 				int fullSize = allKeys_byte.length;
 
 				try{
@@ -182,12 +182,6 @@ public class NotFenixClient {
 					return false;
 				}
 			}
-      Dialog.IO().println("client addDoctor teste 4"); //TESTE
-      Dialog.IO().println("_token -> " +_token); //TESTE
-      Dialog.IO().println("dname -> " +dname); //TESTE
-      Dialog.IO().println("password -> " +password); //TESTE
-      Dialog.IO().println("pKey -> " +pKey); //TESTE
-      Dialog.IO().println("allKeysEnc_string -> " +allKeysEnc_string); //TESTE
 
 				if(!_port.addDoctor(encrypt(_token),
 						encrypt(dname),
@@ -200,8 +194,15 @@ public class NotFenixClient {
     }
 
     public boolean deleteDoctor(
-                String username){
-    	return _port.deleteDoctor(encrypt(_token), encrypt(username));
+                String pname){
+			if(Objects.equals(_username, pname)){
+				//XXX este é SO NOT IMPORTANT pq nunca vai acontecer segundo o nosso programa
+				// è porque uma pessoa se apagou a si propria,
+				//o seu token já foi apagado do manager mas o client
+				//tem que kickar a pessoa de volta ao login screen
+				//Ou seja, se este if for verdade -> login screen
+			}
+    	return _port.deleteDoctor(encrypt(_token), encrypt(pname));
     }
 
     public boolean revokeDoctorKey(){
@@ -270,9 +271,9 @@ public class NotFenixClient {
                 String password,
                 String oldPassword){
     	return _port.changePassword(
-    			encrypt(_token), 
-    			encrypt(username), 
-    			encrypt(password), 
+    			encrypt(_token),
+    			encrypt(username),
+    			encrypt(password),
     			encrypt(oldPassword));
     }
 
@@ -288,31 +289,52 @@ public class NotFenixClient {
 			String allKeysEnc_string = NULL_STRING_TAG;
 			String iv2_string;
 			String iv_string;
+
+      Dialog.IO().println("---------------------addPatient teste 1"); //TESTE
 			try{
 				//Generate 1st key
 				if(!Crypter.generateAESKey(name, "first"))
 				  return false;
-				SecretKeySpec sk = Crypter.getSymmKey(name);
+				SecretKeySpec sk = Crypter.getSymmKey(name, "first");
+
+	      Dialog.IO().println("---------------------addPatient teste 1.1"); //TESTE
 				if(sk == null)
 				  return false;
+
+				Dialog.IO().println("---------------------addPatient teste 1.1.1"); //TESTE
 				String sk_string = Base64.getEncoder().encodeToString(sk.getEncoded());
+	      Dialog.IO().println("---------------------addPatient teste 2"); //TESTE
 
 
 				//Generate 1st IV
 				SecureRandom randomSecureRandom = SecureRandom.getInstance("SHA1PRNG");
-				byte[] iv = new byte[_keySize];
+				byte[] iv = new byte[16];
 				randomSecureRandom.nextBytes(iv);
+	      Dialog.IO().println("---------------------addPatient teste 2"); //TESTE
 				IvParameterSpec ivParams = new IvParameterSpec(iv);
 				iv_string = Base64.getEncoder().encodeToString(ivParams.getIV());
+	      Dialog.IO().println("---------------------addPatient teste 2.1"); //TESTE
+				Dialog.IO().println("---------------------addPatient teste IV= <"+iv_string+">"); //TESTE
+				Dialog.IO().println("---------------------addPatient teste SK= <"+sk_string+">"); //TESTE
+				Dialog.IO().println("---------------------addPatient teste De= <"+private_details+">"); //TESTE
 
 
 				//Encrypt private details with 1st IV and 1st key
-				detailsEnc = Base64.getEncoder().encodeToString(Crypter.encrypt_AES(private_details, sk, ivParams));
+				byte[] enc = Crypter.encrypt_AES(private_details, sk, ivParams);
+	      Dialog.IO().println("---------------------addPatient teste 2.1.1"); //TESTE
+				if(enc == null){
+		      Dialog.IO().println("---------------------addPatient teste 2.1.1 NULL"); //TESTE
+				}
+				Dialog.IO().println("---------------------enc: <" + new String(enc, "UTF-8")+">"); //TESTE
+				detailsEnc = Base64.getEncoder().encodeToString(enc);
+	      Dialog.IO().println("---------------------addPatient teste 2.2"); //TESTE
 
 
 				//Encrypt 1st key with Master
 				String mKey = getMasterKey();
+	      Dialog.IO().println("---------------------addPatient teste 2.3"); //TESTE
 				keyMaster = Base64.getEncoder().encodeToString(Crypter.encrypt_RSA(sk_string, mKey));
+	      Dialog.IO().println("---------------------addPatient teste 3"); //TESTE
 
 
 				//Encrypt 1st key with Doctor
@@ -323,17 +345,18 @@ public class NotFenixClient {
 				//Generate 2nd Key
 				if(!Crypter.generateAESKey(name, "second"))
 				  return false;
-				SecretKeySpec sk2 = Crypter.getSymmKey(name);
+				SecretKeySpec sk2 = Crypter.getSymmKey(name, "second");
 				if(sk2 == null)
 				  return false;
 				String sk2_string = Base64.getEncoder().encodeToString(sk2.getEncoded());
 
 				//Generate 2nd IV
 				randomSecureRandom = SecureRandom.getInstance("SHA1PRNG");
-				byte[] iv2 = new byte[_keySize];
+				byte[] iv2 = new byte[16];
 				randomSecureRandom.nextBytes(iv2);
 				IvParameterSpec ivParams2 = new IvParameterSpec(iv2);
-				iv2_string = new String(ivParams2.getIV(), "UTF.8");
+				iv2_string = Base64.getEncoder().encodeToString(ivParams2.getIV());
+	      Dialog.IO().println("---------------------addPatient teste 4"); //TESTE
 
 
 				//Encrypt public details with 1st IV and 1st key
@@ -355,27 +378,29 @@ public class NotFenixClient {
 					}
 					byte allKeysEnc[] = outputStream.toByteArray();
 					allKeysEnc_string = Base64.getEncoder().encodeToString(allKeysEnc);
+		      Dialog.IO().println("---------------------addPatient teste 5"); //TESTE
 				}
 			}catch (Exception e) {
 				return false;
 			}
+			Dialog.IO().println("---------------------addPatient teste 6"); //TESTE
     	return _port.addPatient(
-    			encrypt(_token), 
-    			encrypt(name), 
-    			encrypt(keyMaster), 
+    			encrypt(_token),
+    			encrypt(name),
+    			encrypt(keyMaster),
     			encrypt(keyDoctor),
-    			encrypt(iv_string), 
-    			encrypt(detailsEnc), 
-    			encrypt(allKeysEnc_string), 
+    			encrypt(iv_string),
+    			encrypt(detailsEnc),
+    			encrypt(allKeysEnc_string),
     			encrypt(iv2_string),
     			encrypt(detailsPublicEnc));
     }
 
 		public boolean setInfoPatient(String name, String infoMode, String info){
 			return _port.setInfoPatient(
-					encrypt(_token), 
-					encrypt(name), 
-					encrypt(infoMode), 
+					encrypt(_token),
+					encrypt(name),
+					encrypt(infoMode),
 					encrypt(info));
 		}
 
@@ -395,7 +420,7 @@ public class NotFenixClient {
     public boolean deletePatient(
                 String name){
     	return _port.deletePatient(
-    			encrypt(_token), 
+    			encrypt(_token),
     			encrypt(name));
     }
 
@@ -403,8 +428,8 @@ public class NotFenixClient {
                 String name,
                 String infoName){
     	return _port.getInfoPatient(
-    			encrypt(_token), 
-    			encrypt(name), 
+    			encrypt(_token),
+    			encrypt(name),
     			encrypt(infoName));
     }
 
@@ -424,15 +449,15 @@ public class NotFenixClient {
 				//Get Symmkey
 				byte[] private_symmkey_enc_byte = null;
 				private_symmkey_enc_byte = Base64.getDecoder().decode(private_symmkey_enc_string);
-				
+
 				try{
 					String private_symmKey_string = Crypter.decrypt_RSA(private_symmkey_enc_byte, private_key);
 					SecretKeySpec private_symmKey = new SecretKeySpec(Base64.getDecoder().decode(private_symmKey_string), "AES");
 
 					//get IV
 					String private_iv_string = _port.getInfoPatient(
-							encrypt(_token), 
-							encrypt(name), 
+							encrypt(_token),
+							encrypt(name),
 
 							encrypt(P_PRIVATE_IV));
 
@@ -460,7 +485,7 @@ public class NotFenixClient {
 					encrypt(P_PUBLIC_KEY));
 			byte[] public_symmkey_enc_byte = null;
 			public_symmkey_enc_byte = Base64.getDecoder().decode(public_symmkey_enc_string);
-			
+
 			try{
 				String public_symmKey_string = Crypter.decrypt_RSA(public_symmkey_enc_byte, private_key);
 				SecretKeySpec public_symmKey = new SecretKeySpec(Base64.getDecoder().decode(public_symmKey_string), "AES");
@@ -532,7 +557,7 @@ public class NotFenixClient {
 			byte[] symmkey_enc_new_byte = Crypter.encrypt_RSA(symmkey_string, publicKey);
 			String symmkey_enc_new_string = null;
 			symmkey_enc_new_string = Base64.getEncoder().encodeToString(symmkey_enc_new_byte);
-			
+
 
 			return _port.sharePatient(encrypt(_token), encrypt(pname), encrypt(dsname), encrypt(symmkey_enc_new_string));
 		}

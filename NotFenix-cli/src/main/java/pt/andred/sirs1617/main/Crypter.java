@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -19,6 +20,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+import java.util.Base64;
 
 import pt.andred.sirs1617.ui.Dialog;
 
@@ -117,7 +119,6 @@ public class Crypter{
     if (publicKey.exists()) {
       return true;
     }
-      Dialog.IO().println("Crypter isPublicKeyPresent teste 3"); //TESTE
     return false;
   }
   public static boolean isPrivateKeyPresent(String username) {
@@ -129,9 +130,9 @@ public class Crypter{
     }
     return false;
   }
-  public static boolean isSymmKeyPresent(String username) {
+  public static boolean isSymmKeyPresent(String username, String type) {
 
-    File SymmKey = new File(KEY_PREFIX + username+PRIVATE_KEY_FILE);
+    File SymmKey = new File(username +"_" + type +SYMM_KEY_FILE);
 
     if (SymmKey.exists()) {
       return true;
@@ -223,12 +224,12 @@ public class Crypter{
       return null;
     }
   }
-  public static SecretKeySpec getSymmKey(String username){
-    if(isSymmKeyPresent(username) == false)
+  public static SecretKeySpec getSymmKey(String username, String type){
+    if(isSymmKeyPresent(username, type) == false)
       return null;
       ObjectInputStream inputStream;
     try{
-      inputStream = new ObjectInputStream(new FileInputStream(KEY_PREFIX + username + SYMM_KEY_FILE));
+      inputStream = new ObjectInputStream(new FileInputStream(KEY_PREFIX + username +"_" + type+  SYMM_KEY_FILE));
       return(SecretKeySpec) inputStream.readObject();
     }catch (Exception e) {
       return null;
@@ -242,25 +243,49 @@ public class Crypter{
   }*/
   public static byte[] encrypt_AES(String text, SecretKeySpec key, String IV_string){
     try{
-      IvParameterSpec iv =  new IvParameterSpec(IV_string.getBytes("UTF-8"));
+      IvParameterSpec iv =  new IvParameterSpec(Base64.getDecoder().decode(size16(IV_string)));
       return encrypt_AES(text, key, iv);
     } catch(Exception e){
       return null;
     }
   }
+  public static String size16 (String input){
+    Dialog.IO().println("---------------------size16 teste 0"); //TESTE
+    int size = input.length();
+    Dialog.IO().println("---------------------size16 teste 1"); //TESTE
+    if(size % 16 == 0){
+      Dialog.IO().println("---------------------size16 teste 2"); //TESTE
+      return input;
+    }
+    int i;
+    for(i = 0; i< size; i+=16);
+    for(;size<=i; size ++)
+      input += " ";
+        Dialog.IO().println("---------------------size16 teste 3"); //TESTE
+    return input;
+  }
   public static byte[] encrypt_AES(String text, SecretKeySpec key, IvParameterSpec iv){
     try{
+      Dialog.IO().println("---------------------encrypt_AES teste 0"); //TESTE
       Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding", "SunJCE");
+      Dialog.IO().println("---------------------encrypt_AES teste 1"); //TESTE
       cipher.init(Cipher.ENCRYPT_MODE, key, iv);
-      return cipher.doFinal(text.getBytes("UTF-8"));
+      text = size16(text);
+      Dialog.IO().println("---------------------encrypt_AES teste 2 input: <"+ text+">"); //TESTE
+      byte[] a = Base64.getDecoder().decode(text);
+      Dialog.IO().println("---------------------encrypt_AES teste 2.1"); //TESTE
+      byte[] t = cipher.doFinal(a);
+      Dialog.IO().println("---------------------encrypt_AES teste 3"); //TESTE
+      return t;
     } catch(Exception e){
+      e.printStackTrace();
       return null;
     }
   }
   public static String decrypt_AES(byte[] cipherText, SecretKeySpec key, String iv){
     try{
        Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding", "SunJCE");
-       cipher.init(Cipher.DECRYPT_MODE, key,new IvParameterSpec(iv.getBytes("UTF-8")));
+       cipher.init(Cipher.DECRYPT_MODE, key,new IvParameterSpec(Base64.getDecoder().decode(size16(iv))));
        return new String(cipher.doFinal(cipherText),"UTF-8");
     } catch(Exception e){
       return null;

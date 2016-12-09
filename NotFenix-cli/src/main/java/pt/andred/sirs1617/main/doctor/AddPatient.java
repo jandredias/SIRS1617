@@ -23,7 +23,10 @@ public class AddPatient extends Command<NotFenixClient> {
 				Dialog.IO().println("Patient already exists");
 				return;
 			}
-			_receiver.addPatient(pname, private_details, public_details);
+			if(_receiver.addPatient(pname, private_details, public_details))
+				Dialog.IO().println("Patient added successfully");
+			else
+				Dialog.IO().println("Server Error");
 
 
 	}
