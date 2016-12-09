@@ -153,8 +153,25 @@ public class NotFenixClient {
 			if(_keySize == 0)
 				_keySize = pk_byte.length;
 
-/*
-			String allKeys = _port.getAllPublicKeys(encrypt(_token));
+
+		PrivateKey private_key = Crypter.getPrivateKey(_username);
+		if(private_key == null){
+			Dialog.IO().println("Your Private Key is not here. You can't access patient's files. Please speak to HR");
+			return false;
+		}
+
+		List<> patients = (_token);
+		for( p : patients){
+			String toEncrypt_String = Crypter.decrypt_RSA(
+					Base64.getDecoder().decode(p.getPublicKey), private_key);
+			byte[] key_encrypted = Crypter.encrypt_RSA(toEncrypt_String, pk_new);
+			String key_string = Base64.getEncoder().encodeToString(key_encrypted);
+
+			_port.setInfoPatient2(_token, p.getName(), dname, P_PUBLIC_KEY, )
+		}
+		return true;
+
+	/*		String allKeys = _port.getAllPublicKeys(encrypt(_token));
       Dialog.IO().println("allKeys_String = <"+ allKeys + ">"); //TESTE
 			PrivateKey private_key = Crypter.getPrivateKey(_username);
 			if(private_key == null){
