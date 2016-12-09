@@ -30,7 +30,6 @@ public class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
 	}
 
 	public boolean handleMessage(SOAPMessageContext arg0) {
-		System.out.println("WSHANLDERS");
 		logToSystemOut(arg0);
 		return true;
 	}

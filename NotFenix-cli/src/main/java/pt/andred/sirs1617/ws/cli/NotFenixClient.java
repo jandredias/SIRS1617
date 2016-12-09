@@ -275,20 +275,20 @@ public class NotFenixClient {
 			String iv2_string;
 			String iv_string;
 			String keyDoctor2;
-			Dialog.IO().println("---------------------addPatient teste 1"); //TESTE
+			Dialog.IO().debug("---------------------addPatient teste 1"); //TESTE
 			try{
 				//Simetrica Priv Generate 1st key
 				if(!Crypter.generateAESKey(name, "first"))
 				  return false;
 				SecretKeySpec sk = Crypter.getSymmKey(name, "first");
 				Dialog.IO().debug("CHAVE SIMETRICA INFORMACAO PRIVADA", Base64.getEncoder().encodeToString(sk.getEncoded()));
-				Dialog.IO().println("---------------------addPatient teste 1.1"); //TESTE
+				Dialog.IO().debug("---------------------addPatient teste 1.1"); //TESTE
 				if(sk == null)
 				  return false;
 
-				Dialog.IO().println("---------------------addPatient teste 1.1.1= "+ sk.getEncoded().length +"---------------------***************"); //TESTE
+				Dialog.IO().debug("---------------------addPatient teste 1.1.1= "+ sk.getEncoded().length +"---------------------***************"); //TESTE
 				String sk_string = Base64.getEncoder().encodeToString(sk.getEncoded());
-				Dialog.IO().println("---------------------addPatient teste 2"); //TESTE
+				Dialog.IO().debug("---------------------addPatient teste 2"); //TESTE
 
 
 				//Generate 1st IV
@@ -305,30 +305,30 @@ public class NotFenixClient {
 				Dialog.IO().debug("TEEEEEEEEEESTE", "SIZE: " + "1111111111111111".getBytes().length);
 
 				byte[] enc = Crypter.encrypt_AES(private_details, sk, "1111111111111111");
-				Dialog.IO().println("---------------------addPatient teste 2.1.1"); //TESTE
+				Dialog.IO().debug("---------------------addPatient teste 2.1.1"); //TESTE
 				if(enc == null){
-					Dialog.IO().println("---------------------addPatient teste 2.1.1 NULL"); //TESTE
+					Dialog.IO().debug("---------------------addPatient teste 2.1.1 NULL"); //TESTE
 				}
-				Dialog.IO().println("---------------------enc: <" + new String(enc, "UTF-8")+">"); //TESTE
+				Dialog.IO().debug("---------------------enc: <" + new String(enc, "UTF-8")+">"); //TESTE
 				detailsEnc = Base64.getEncoder().encodeToString(enc);
-				Dialog.IO().println("---------------------addPatient teste 2.2"); //TESTE
+				Dialog.IO().debug("---------------------addPatient teste 2.2"); //TESTE
 
 
 				//Encrypt 1st key with Master
 				String mKey_encoded = getMasterKey();
-				Dialog.IO().println("---------------------addPatient teste 2.3"); //TESTE
+				Dialog.IO().debug("---------------------addPatient teste 2.3"); //TESTE
 				byte[] mKey_byte = Base64.getDecoder().decode(mKey_encoded);
 				PublicKey mKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(mKey_byte));
 				keyMaster = Base64.getEncoder().encodeToString(Crypter.encrypt_RSA(sk_string, mKey));
 
-				Dialog.IO().println("---------------------addPatient teste 3"); //TESTE
+				Dialog.IO().debug("---------------------addPatient teste 3"); //TESTE
 
 
 				//Encrypt 1st key with Doctor
 				PublicKey dKey = Crypter.getPublicKey(_username);
-				Dialog.IO().println("---------------------addPatient teste 3.0.1"); //TESTE
+				Dialog.IO().debug("---------------------addPatient teste 3.0.1"); //TESTE
 				keyDoctor = Base64.getEncoder().encodeToString(Crypter.encrypt_RSA(sk_string, dKey));
-				Dialog.IO().println("---------------------addPatient teste 3.1"); //TESTE
+				Dialog.IO().debug("---------------------addPatient teste 3.1"); //TESTE
 
 
 				//Generate 2nd Key
@@ -338,14 +338,14 @@ public class NotFenixClient {
 				if(sk2 == null)
 				  return false;
 				String sk2_string = Base64.getEncoder().encodeToString(sk2.getEncoded());
-	      Dialog.IO().println("---------------------addPatient teste 3.2 = "+ sk2.getEncoded().length +"---------------------***************"); //TESTE
+	      Dialog.IO().debug("---------------------addPatient teste 3.2 = "+ sk2.getEncoded().length +"---------------------***************"); //TESTE
 
 				//Generate 2nd IV
 				byte[] iv2 = new byte[16];
 				SecureRandom.getInstance("SHA1PRNG").nextBytes(iv2);
 				IvParameterSpec ivParams2 = new IvParameterSpec(iv2);
 				iv2_string = Base64.getEncoder().encodeToString(ivParams2.getIV());
-	      Dialog.IO().println("---------------------addPatient teste 4"); //TESTE
+	      Dialog.IO().debug("---------------------addPatient teste 4"); //TESTE
 
 
 				//Encrypt public details with 2nd IV and 2nd key
@@ -353,9 +353,9 @@ public class NotFenixClient {
 	      		//XXX
 				detailsPublicEnc = Base64.getEncoder().encodeToString(Crypter.encrypt_AES(public_details, sk2, "1111111111111111"));
 				//Encrypt 2nd key with Doctor
-				Dialog.IO().println("---------------------addPatient teste 3.0.1"); //TESTE
+				Dialog.IO().debug("---------------------addPatient teste 3.0.1"); //TESTE
 				 keyDoctor2 = Base64.getEncoder().encodeToString(Crypter.encrypt_RSA(sk2_string, dKey));
-				Dialog.IO().println("---------------------addPatient teste 3.1"); //TESTE
+				Dialog.IO().debug("---------------------addPatient teste 3.1"); //TESTE
 
 				//Encrypt 2nd key with all keys;
 
@@ -397,17 +397,17 @@ public class NotFenixClient {
 
 			/*	String allKeys= getAllDoctorKeys();
 
-	      Dialog.IO().println("---------------------addPatient teste 5 allKeysdd= "+allKeys);
-				Dialog.IO().println("---------------------addPatient teste 5 mKey_enco= "+mKey_encoded);
-				Dialog.IO().println("---------------------addPatient teste 5 keyDoctor= "+keyDoctor);
+	      Dialog.IO().debug("---------------------addPatient teste 5 allKeysdd= "+allKeys);
+				Dialog.IO().debug("---------------------addPatient teste 5 mKey_enco= "+mKey_encoded);
+				Dialog.IO().debug("---------------------addPatient teste 5 keyDoctor= "+keyDoctor);
 
 				if(!Objects.equals(allKeys, "")){
 					byte allKeys_byte[] = allKeys.getBytes();
 
 					int fullSize = allKeys_byte.length;
 					//ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-					Dialog.IO().println("---------------------addPatient teste 5.1 fullSize= "+fullSize);
-					Dialog.IO().println("---------------------addPatient teste 5.1 _keySize= "+_keySize);
+					Dialog.IO().debug("---------------------addPatient teste 5.1 fullSize= "+fullSize);
+					Dialog.IO().debug("---------------------addPatient teste 5.1 _keySize= "+_keySize);
 					for(int i = 0; i < fullSize; i+=_keySize){
 					  byte[] odKey = Arrays.copyOfRange(allKeys_byte, i, i+_keySize);
 					  PublicKey publicKey =
@@ -416,7 +416,7 @@ public class NotFenixClient {
 							  		generatePublic(
 							  			new X509EncodedKeySpec(
 							  					Base64.getDecoder().decode(odKey)));
-						Dialog.IO().println("---------------------addPatient teste 5.1 keygootf= "+ Base64.getEncoder().encodeToString(publicKey.getEncoded()));
+						Dialog.IO().debug("---------------------addPatient teste 5.1 keygootf= "+ Base64.getEncoder().encodeToString(publicKey.getEncoded()));
 
 						String odKey_enc = new String(Crypter.encrypt_RSA(sk2_string, publicKey));
 						//String odKey_enc = new String();
@@ -432,10 +432,10 @@ public class NotFenixClient {
 					}
 					//byte allKeysEnc[] = outputStream.toByteArray();
 					//allKeysEnc_string = new String(allKeysEnc);
-		      Dialog.IO().println("---------------------addPatient teste 5"); //TESTE
+		      Dialog.IO().debug("---------------------addPatient teste 5"); //TESTE
 				}
-				Dialog.IO().println("---------------------addPatient teste 6 1st symmkey      = "+ Base64.getEncoder().encodeToString(sk_string.getBytes())); //TESTE
-				Dialog.IO().println("---------------------addPatient teste 6 2nd symmkey      = "+ Base64.getEncoder().encodeToString(sk2_string.getBytes())); //TESTE
+				Dialog.IO().debug("---------------------addPatient teste 6 1st symmkey      = "+ Base64.getEncoder().encodeToString(sk_string.getBytes())); //TESTE
+				Dialog.IO().debug("---------------------addPatient teste 6 2nd symmkey      = "+ Base64.getEncoder().encodeToString(sk2_string.getBytes())); //TESTE
 				*/
 		/*	}catch (Exception e) {
 				e.printStackTrace();
@@ -443,8 +443,8 @@ public class NotFenixClient {
 			}
 			if(allKeysEnc_string == null || Objects.equals(allKeysEnc_string, ""))
 				allKeysEnc_string = NULL_STRING_TAG;
-			Dialog.IO().println("---------------------addPatient teste 6 allKeysEnc_string= "+ allKeysEnc_string); //TESTE
-			Dialog.IO().println("---------------------addPatient teste 6 KEYdOCTOR 1ST KEY= "+ keyDoctor); //TESTE
+			Dialog.IO().debug("---------------------addPatient teste 6 allKeysEnc_string= "+ allKeysEnc_string); //TESTE
+			Dialog.IO().debug("---------------------addPatient teste 6 KEYdOCTOR 1ST KEY= "+ keyDoctor); //TESTE
 
 			Dialog.IO().debug("CHAAAAAAAAAAAAAAVE", keyDoctor);
     	return _port.addPatient(
