@@ -1,7 +1,9 @@
 package pt.andred.sirs1617.ws;
 
+import java.io.IOException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Base64;
 import java.util.Set;
 
 import javax.crypto.Cipher;
@@ -18,6 +20,9 @@ import javax.xml.soap.SOAPPart;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
+
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 import pt.andred.sirs1617.ui.Dialog;
 
@@ -37,7 +42,12 @@ public class AuthenticationHandler implements SOAPHandler<SOAPMessageContext>{
 	}
 
 	public boolean handleMessage(SOAPMessageContext arg0) {
-		Boolean outbound = (Boolean) arg0.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+		Boolean outbound;
+		if(MESSAGE_AUTHOR != null && ! MESSAGE_AUTHOR.equals("doctor")){
+			outbound = (Boolean) arg0.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+		}else{
+			outbound = !(Boolean) arg0.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+		}
 		if(outbound){
     		Dialog.IO().yellow();
     		Dialog.IO().debug("AuthenticationHandler", "Outbound SOAP message:");
@@ -70,8 +80,23 @@ public class AuthenticationHandler implements SOAPHandler<SOAPMessageContext>{
 		return true;
 	}
 
+	@SuppressWarnings("unused")
+	private static String bytes2String(byte[] message){
+		BASE64Encoder encoder = new BASE64Encoder();
+		return encoder.encode(message);
+	}
+
+	@SuppressWarnings("unused")
+	private static byte[] string2Bytes(String message) throws IOException {
+		BASE64Decoder decoder = new BASE64Decoder();
+		byte[] publicKeyBytes = decoder.decodeBuffer(message);
+		return publicKeyBytes;
+	}
+	
+	
 	private boolean checkSignature(SOAPMessageContext arg0) {
-		/*try{
+		try{
+			Dialog.IO().println("checkSignature checking");
 			PrivateKey privateKey = PrivateKeyReader.get("private_key.der");
 			
 			// specify mode and padding instead of relying on defaults (use OAEP if available!)
@@ -79,24 +104,28 @@ public class AuthenticationHandler implements SOAPHandler<SOAPMessageContext>{
 			// init with the *public key*!
 			decrypt.init(Cipher.DECRYPT_MODE, privateKey);
 			// encrypt with known character encoding, you should probably use hybrid cryptography instead 
-					
+			
 			SOAPMessage a = arg0.getMessage();
 			SOAPBody body = a.getSOAPBody();
+			String bodyString = body.getTextContent();
 			
-			byte[] decryptedMessage = decrypt.doFinal(body.getTextContent().getBytes());
-			body.setTextContent(new String(decryptedMessage));
+			byte[] bodyByte = body.getTextContent().getBytes();
+			byte[] bodyByte64 = Base64.getDecoder().decode(bodyByte);
 			
-			a.setProperty("body", body);
-			arg0.setMessage(a);
+			byte[] bodyByteDecrypted = decrypt.doFinal(bodyByte64);
+			String bodyDecrypted = new String(bodyByteDecrypted, "UTF-8");
+			body.setTextContent(bodyDecrypted);
 		}catch(Exception e){
 			//TODO
 			e.printStackTrace();
-		}*/
+			return false;
+		}
 		return true;
 	}
 
 	private void signMessage(SOAPMessageContext arg0) {
-		/*try{
+		try{
+			Dialog.IO().println("signMessage signing");
 			PublicKey publicKey = PublicKeyReader.get("public_key.der");
 			
 			// specify mode and padding instead of relying on defaults (use OAEP if available!)
@@ -107,17 +136,16 @@ public class AuthenticationHandler implements SOAPHandler<SOAPMessageContext>{
 					
 			SOAPMessage a = arg0.getMessage();
 			SOAPBody body = a.getSOAPBody();
+			byte[] bodyByte = body.getTextContent().getBytes("UTF-8");
+			byte[] bodyByteEncrypted = encrypt.doFinal(bodyByte);
+			String encrypted = Base64.getEncoder().encodeToString(bodyByteEncrypted);
+			body.setTextContent(encrypted);
 			
-			byte[] encrypted = encrypt.doFinal(body.getTextContent().getBytes());
-			body.setTextContent(new String(encrypted));
-			
-			a.setProperty("body", body);
-			arg0.setMessage(a);
+			Dialog.IO().println("fim do signing");
 		}catch(Exception e){
 			//TODO
 			e.printStackTrace();
 		}
-		*/
 	}
 
 	public Set<QName> getHeaders() {

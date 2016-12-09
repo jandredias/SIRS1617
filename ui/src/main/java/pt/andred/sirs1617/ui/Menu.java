@@ -76,6 +76,7 @@ public class Menu {
 			} catch (NumberFormatException nbf) {
 				Dialog.IO().println(ErrorMessages.errorInvalidNumber(nbf));
 			} catch (Exception e){
+				e.printStackTrace();
 				Dialog.IO().println("An error occured"); //FIXME
 				Dialog.IO().println("Try again");
 			}
