@@ -136,6 +136,7 @@ public class NotFenixClient {
     public boolean addDoctor(
                 String dname,
                 String password){
+    	
 			KeyPair key = Crypter.generateRSAKey(dname);
 			if(key == null)
 				return false;
@@ -149,7 +150,11 @@ public class NotFenixClient {
 
 			try{
 				pKey = Base64.getEncoder().encodeToString(pk_byte);
-				_port.addDoctor(_token, dname, password, pKey, null);
+				Dialog.IO().println(_token);
+				Dialog.IO().println(dname);
+				Dialog.IO().println(password);
+				Dialog.IO().println(pKey);
+				_port.addDoctor(encrypt(_token), encrypt(dname), encrypt(password), encrypt(pKey), encrypt(new String()));
 				
 			} catch(Exception e){
 				return false;
@@ -163,14 +168,14 @@ public class NotFenixClient {
 			Dialog.IO().println("Your Private Key is not here. You can't access patient's files. Please speak to HR");
 			return false;
 		}
-		List<PatientInfo> patients = _port.getAllPatientPublicKey(_token);
+		List<PatientInfo> patients = _port.getAllPatientPublicKey(encrypt(_token));
 		for(PatientInfo p : patients){
 			String toEncrypt_String = Crypter.decrypt_RSA(
 					Base64.getDecoder().decode(p.getPublicKey()), private_key);
 			byte[] key_encrypted = Crypter.encrypt_RSA(toEncrypt_String, pk_new);
 			String key_string = Base64.getEncoder().encodeToString(key_encrypted);
 
-			_port.setInfoPatient2(_token, p.getName(), dname, P_PUBLIC_KEY, key_string);
+			_port.setInfoPatient2(encrypt(_token), encrypt(p.getName()), encrypt(dname), encrypt(P_PUBLIC_KEY), encrypt(key_string));
 		}
 		return true;
     }

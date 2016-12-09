@@ -374,29 +374,19 @@ public class NotFenixManager {
 
 	public boolean addDoctor(String token, String username, String password, String publicKey, String allKeysEnc) {
 		String name = checkToken(token);
-		Dialog.IO().debug("addDoctor teste 1"); //TESTE
-
-		Dialog.IO().debug("/name: <" + name + "> /HR: <"+ HR_MASTER +">"); //TESTE
-
-		if(!Objects.equals(name, HR_MASTER))
-			return false; //TODO: must return a problem
-			Dialog.IO().debug("addDoctor teste 2"); //TESTE
-		if(_doctors.containsKey(username))
+		if(name == null){
+			Dialog.IO().print("name is null");
 			return false;
-			Dialog.IO().debug("addDoctor teste 3"); //TESTE
-		/*if(Objects.equals(allKeysEnc,NULL_STRING_TAG)|| allKeysEnc == null){
-			if(!_patientsPrivate.isEmpty()){
-				Dialog.IO().println("addDoctor teste 3.1"); //TESTE
-				return false;
-			}
 		}
-		else if(putNewPublicKeysEnc_private_method(username, allKeysEnc)){
-			Dialog.IO().println("addDoctor teste 3.2"); //TESTE
+
+		if(!Objects.equals(name, HR_MASTER)){
 			return false;
-		}*/
+		}
+		if(_doctors.containsKey(username)){
+			return false;
+		}
 		_doctors.put(username, password);
 		_doctorKeys.put(username, publicKey);
-		Dialog.IO().debug("addDoctor teste 4"); //TESTE
 		return true;
 	}
 
