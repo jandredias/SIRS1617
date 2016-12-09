@@ -41,6 +41,7 @@ public class NotFenixClient {
 	private String P_PUBLIC_DETAILS = "P_PUBLIC_DETAILS";
 	private String P_PRIVATE_IV = "P_PRIVATE_IV";
 	private String P_PUBLIC_IV = "P_PUBLIC_IV";
+	private String NULL_STRING_TAG = "NADA";
 
   private static final String PRIVATE_KEY_FILE = "_private.key";
   private static final String PUBLIC_KEY_FILE = "_public.key";
@@ -105,7 +106,7 @@ public class NotFenixClient {
 
 			//Decrypt and encrypt all keys with the new public Key
 			byte allKeys_byte[] = null;
-			String allKeysEnc_string=null;
+			String allKeysEnc_string= NULL_STRING_TAG;
 			if(allKeys != null){
 				  Dialog.IO().println("client addDoctor teste 2.1"); //TESTE
 				try {
@@ -137,6 +138,12 @@ public class NotFenixClient {
 				}
 			}
       Dialog.IO().println("client addDoctor teste 4"); //TESTE
+      Dialog.IO().println("_token -> " +_token); //TESTE
+      Dialog.IO().println("dname -> " +dname); //TESTE
+      Dialog.IO().println("password -> " +password); //TESTE
+      Dialog.IO().println("pKey -> " +pKey); //TESTE
+      Dialog.IO().println("allKeysEnc_string -> " +allKeysEnc_string); //TESTE
+
 				if(!_port.addDoctor(_token, dname, password, pKey, allKeysEnc_string))
 					return false;
 
@@ -226,7 +233,7 @@ public class NotFenixClient {
 			String keyDoctor;
 			String detailsEnc;
 			String detailsPublicEnc;
-			String allKeysEnc_string;
+			String allKeysEnc_string = NULL_STRING_TAG;
 			String iv2_string;
 			String iv_string;
 			try{
@@ -283,20 +290,22 @@ public class NotFenixClient {
 
 				//Encrypt 2nd key with all keys;
 				String allKeys= getAllDoctorKeys();
-				byte allKeys_byte[] = allKeys.getBytes("UTF-8");
+				if(allKeys != null){
+					byte allKeys_byte[] = allKeys.getBytes("UTF-8");
 
-				int fullSize = allKeys_byte.length;
-				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-				for(int i = 0; i < fullSize; i+=_keySize){
-				  byte[] odKey = Arrays.copyOfRange(allKeys_byte, i, i+_keySize);
-				  PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(odKey));
-					String odKey_enc = new String(Crypter.encrypt_RSA(sk2_string, mKey),"UTF-8");
-				  outputStream.write(odKey_enc.getBytes("UTF-8"));
+					int fullSize = allKeys_byte.length;
+					ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+					for(int i = 0; i < fullSize; i+=_keySize){
+					  byte[] odKey = Arrays.copyOfRange(allKeys_byte, i, i+_keySize);
+					  PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(odKey));
+						String odKey_enc = new String(Crypter.encrypt_RSA(sk2_string, mKey),"UTF-8");
+					  outputStream.write(odKey_enc.getBytes("UTF-8"));
+					}
+					byte allKeysEnc[] = outputStream.toByteArray();
+					allKeysEnc_string = new String(allKeysEnc, "UTF-8");
+				}catch (Exception e) {
+					return false;
 				}
-				byte allKeysEnc[] = outputStream.toByteArray();
-				allKeysEnc_string = new String(allKeysEnc, "UTF-8");
-			}catch (Exception e) {
-				return false;
 			}
     	return _port.addPatient(_token, name, keyMaster, keyDoctor,
 			iv_string, detailsEnc, allKeysEnc_string, iv2_string,

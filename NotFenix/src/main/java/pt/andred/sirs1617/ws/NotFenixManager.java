@@ -35,6 +35,7 @@ public class NotFenixManager {
 	private String P_PRIVATE_IV = "P_PRIVATE_IV";
 	private String P_PUBLIC_IV = "P_PUBLIC_IV";
 	private String PUBLIC_KEY_FILE = "_public.key";
+	private String NULL_STRING_TAG = "NADA";
 
 	private String HR_MASTER = "HR";
 
@@ -51,7 +52,7 @@ public class NotFenixManager {
 		//_doctors.put("andre.dias", "andre");
 		//_doctors.put("jorge.veiga", "andre");
 		//_doctors.put("miguel.amaral", "andre");
-		_doctors.put(HR_MASTER, "MASTER");
+		_doctors.put(HR_MASTER, "M");
 
 		PublicKey HR_public = getPublicKey(HR_MASTER);
 		byte[] HR_public_byte = HR_public.getEncoded();
@@ -214,6 +215,8 @@ public class NotFenixManager {
 		if (name == null)
 			return false; //TODO: must return a problem
 
+		if(allKeysEnc.equals(NULL_STRING_TAG))
+			allKeysEnc = null;
 		PatientPrivateInfo patient;
 		try{
 			patient = new PatientPrivateInfo(pname, key_master,
@@ -338,7 +341,7 @@ public class NotFenixManager {
 			return false; //TODO: must return a problem
 		if(_doctors.containsKey(username))
 			return false;
-		if(allKeysEnc == null){
+		if(allKeysEnc.equals(NULL_STRING_TAG)){
 			if(!_patientsPrivate.isEmpty()){
 				return false;
 			}
