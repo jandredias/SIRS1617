@@ -490,4 +490,18 @@ public class NotFenixManager {
 		//TODO
 		return true;
 	}
+
+	public List<PatientInfo> getAllPatientPublicKey(String token) {
+		String name = checkToken(token);
+		if(name == null) return null;
+		if(!Objects.equals(name, HR_MASTER)) return null;
+		List<PatientInfo> list = new ArrayList<>();
+		for(Map.Entry<String, PatientPrivateInfo> entry : _patientsPrivate.entrySet()){
+			PatientInfo info = new PatientInfo();
+			info.setName(entry.getValue().getName());
+			info.setPublicKey(entry.getValue().getPublicKey(name));
+		}
+		// TODO Auto-generated method stub
+		return list;
+	}
 }

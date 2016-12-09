@@ -535,4 +535,20 @@ public class NotFenixPort implements NotFenixPortType {
         String dname){
     	return NotFenixManager.instance().setInfoPatient2(token, pName, infoName, infoValue, dname);
     }
+    
+    /**
+     * 
+     * @param token
+     * @return
+     *     returns java.util.List<pt.andred.sirs1617.ws.PatientInfo>
+     */
+    @WebMethod
+    @WebResult(name = "list", targetNamespace = "")
+    @RequestWrapper(localName = "getAllPatientPublicKey", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetAllPatientPublicKey")
+    @ResponseWrapper(localName = "getAllPatientPublicKeyResponse1", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetAllPatientPublicKeyResponse1")
+    public List<PatientInfo> getAllPatientPublicKey(
+        @WebParam(name = "token", targetNamespace = "")
+        String token){
+    	return NotFenixManager.instance().getAllPatientPublicKey(token);
+    }
 }

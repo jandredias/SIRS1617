@@ -410,6 +410,28 @@
             		</xsd:sequence>
             	</xsd:complexType>
             </xsd:element>
+            <xsd:element name="getAllPatientPublicKey">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element name="token" type="xsd:string"></xsd:element>
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getAllPatientPublicKeyResponse1">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element name="list" type="tns:PatientInfo" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+        
+            <xsd:complexType name="PatientInfo">
+            	<xsd:sequence>
+            		<xsd:element name="name" type="xsd:string"></xsd:element>
+            		<xsd:element name="publicKey" type="xsd:string"></xsd:element>
+            		<xsd:element name="privateKey" type="xsd:string"></xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
         </xsd:schema>
     </types>
     
@@ -537,6 +559,12 @@
     <message name="setInfoPatient2Response1">
     	<part name="parameters" element="tns:setInfoPatient2Response1"></part>
     </message>
+    <message name="getAllPatientPublicKeyRequest">
+    	<part name="parameters" element="tns:getAllPatientPublicKey"></part>
+    </message>
+    <message name="getAllPatientPublicKeyResponse1">
+    	<part name="parameters" element="tns:getAllPatientPublicKeyResponse1"></part>
+    </message>
     <portType name="NotFenixPortType">
     	
         <operation name="login">
@@ -618,6 +646,10 @@
         <operation name="setInfoPatient2">
         	<input message="tns:setInfoPatient2Request"></input>
         	<output message="tns:setInfoPatient2Response1"></output>
+        </operation>
+        <operation name="getAllPatientPublicKey">
+        	<input message="tns:getAllPatientPublicKeyRequest"></input>
+        	<output message="tns:getAllPatientPublicKeyResponse1"></output>
         </operation>
     </portType>
  
@@ -812,6 +844,18 @@
                 <soap:body use="literal" />
             </output>
         </operation>
+        
+        <operation name="getAllPatientPublicKey">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+            </operation>
+        
+
     </binding>
 
     <service name="NotFenixService">

@@ -401,7 +401,7 @@ public class NotFenixClient {
 				for(DoctorInfo df: allKeys){
 
 					PublicKey publicKey =KeyFactory.getInstance("RSA").generatePublic(
-										new X509EncodedKeySpec(Base64.getDecoder().decode(odKey)));
+										new X509EncodedKeySpec(Base64.getDecoder().decode(df.getPublicKey())));
 					String odKey_enc = Base64.getEncoder().
 							encodeToString(Crypter.encrypt_RSA(sk2_string,df.getPublicKey()));
 					_port.setInfoPatient2(_token, name, df.getName(), P_PUBLIC_KEY, odKey_enc);
