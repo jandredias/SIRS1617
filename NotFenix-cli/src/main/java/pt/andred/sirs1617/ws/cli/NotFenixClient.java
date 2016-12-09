@@ -69,13 +69,11 @@ public class NotFenixClient {
 		PublicKey publicKey;
 		try {
 			publicKey = PublicKeyReader.get("public_key.der");
-
 			// specify mode and padding instead of relying on defaults (use OAEP if available!)
 			Cipher encrypt = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 			// init with the *public key*!
 			encrypt.init(Cipher.ENCRYPT_MODE, publicKey);
-			// encrypt with known character encoding, you should probably use hybrid cryptography instead
-
+			// encrypt with known character encoding, you should probably use hybrid cryptography instead 
 			byte[] bodyByte = text.getBytes("UTF-8");
 			byte[] bodyByteEncrypted = encrypt.doFinal(bodyByte);
 			String encrypted = Base64.getEncoder().encodeToString(bodyByteEncrypted);
@@ -95,9 +93,9 @@ public class NotFenixClient {
 
 			Cipher decrypt=Cipher.getInstance("RSA/ECB/PKCS1Padding");
 			decrypt.init(Cipher.DECRYPT_MODE, privateKey);
-
+			
 			byte[] bodyByte64 = Base64.getDecoder().decode(encryptedText);
-
+			
 			byte[] bodyByteDecrypted = decrypt.doFinal(bodyByte64);
 			String bodyDecrypted;
 			bodyDecrypted = new String(bodyByteDecrypted, "UTF-8");
@@ -111,20 +109,16 @@ public class NotFenixClient {
 		}
 		return null;
 	}
-
-
     public boolean login(
         String username,
         String password){
     	Dialog.IO().debug("Login request");
-
     	_token = _port.login(encrypt(username), encrypt(password));
     	Dialog.IO().debug("Login response");
     	if(_token == null) return false;
     	Dialog.IO().debug("Login successful");
 		_username = username;
     	return true;
-
     }
 
     public boolean addDoctor(
@@ -143,7 +137,7 @@ public class NotFenixClient {
 
       Dialog.IO().println("client addDoctor teste 1"); //TESTE
 			try{
-				pKey = new String(pk_byte, "UTF-8");
+				pKey = Base64.getEncoder().encodeToString(pk_byte);
 
 			} catch(Exception e){
 				return false;
@@ -165,17 +159,11 @@ public class NotFenixClient {
 			byte allKeys_byte[] = null;
 			String allKeysEnc_string= NULL_STRING_TAG;
 			if(allKeys != null){
-				  Dialog.IO().println("client addDoctor teste 2.1"); //TESTE
-				try {
-
-					  Dialog.IO().println("client addDoctor teste 2.11"); //TESTE
-					allKeys_byte = allKeys.getBytes("UTF-8");
-					  Dialog.IO().println("client addDoctor teste 2.2"); //TESTE
-				} catch (UnsupportedEncodingException e1) {
-					e1.printStackTrace();
-					//this won't happen...
-					//we hope so :P
-				}
+				Dialog.IO().println("client addDoctor teste 2.1"); //TESTE
+				Dialog.IO().println("client addDoctor teste 2.11"); //TESTE
+				allKeys_byte = Base64.getDecoder().decode(allKeys);
+				Dialog.IO().println("client addDoctor teste 2.2"); //TESTE
+				
 	      Dialog.IO().println("client addDoctor teste 3"); //TESTE
 				int fullSize = allKeys_byte.length;
 
@@ -188,7 +176,7 @@ public class NotFenixClient {
 						outputStream.write(encrypted);
 					}
 					byte allKeysEnc[] = outputStream.toByteArray();
-					allKeysEnc_string = new String(allKeysEnc, "UTF-8");
+					allKeysEnc_string = Base64.getEncoder().encodeToString(allKeysEnc);
 
 				}catch (Exception e) {
 					return false;
@@ -260,7 +248,7 @@ public class NotFenixClient {
 				String allKeys = _port.revokeDoctorKey(encrypt(_token));
 
 				//Decrypt and encrypt all keys with the new public Key
-				byte allKeys_byte[] = allKeys.getBytes("UTF-8");
+				byte allKeys_byte[] = Base64.getDecoder().decode(allKeys);
 				int fullSize = allKeys_byte.length;
 				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 				for(int i = 0; i < fullSize; i+=_keySize){
@@ -270,7 +258,7 @@ public class NotFenixClient {
 				  outputStream.write(encrypted);
 				}
 				byte allKeysEnc[] = outputStream.toByteArray();
-				allKeysEnc_string = new String(allKeysEnc, "UTF-8");
+				allKeysEnc_string = Base64.getEncoder().encodeToString(allKeysEnc);
 			}catch (Exception e) {
 				return false;
 			}
@@ -282,9 +270,9 @@ public class NotFenixClient {
                 String password,
                 String oldPassword){
     	return _port.changePassword(
-    			encrypt(_token),
-    			encrypt(username),
-    			encrypt(password),
+    			encrypt(_token), 
+    			encrypt(username), 
+    			encrypt(password), 
     			encrypt(oldPassword));
     }
 
@@ -370,24 +358,24 @@ public class NotFenixClient {
 				}
 			}catch (Exception e) {
 				return false;
-				}
+			}
     	return _port.addPatient(
-    			encrypt(_token),
-    			encrypt(name),
-    			encrypt(keyMaster),
+    			encrypt(_token), 
+    			encrypt(name), 
+    			encrypt(keyMaster), 
     			encrypt(keyDoctor),
-    			encrypt(iv_string),
-    			encrypt(detailsEnc),
-    			encrypt(allKeysEnc_string),
+    			encrypt(iv_string), 
+    			encrypt(detailsEnc), 
+    			encrypt(allKeysEnc_string), 
     			encrypt(iv2_string),
     			encrypt(detailsPublicEnc));
     }
 
 		public boolean setInfoPatient(String name, String infoMode, String info){
 			return _port.setInfoPatient(
-					encrypt(_token),
-					encrypt(name),
-					encrypt(infoMode),
+					encrypt(_token), 
+					encrypt(name), 
+					encrypt(infoMode), 
 					encrypt(info));
 		}
 
@@ -407,7 +395,7 @@ public class NotFenixClient {
     public boolean deletePatient(
                 String name){
     	return _port.deletePatient(
-    			encrypt(_token),
+    			encrypt(_token), 
     			encrypt(name));
     }
 
@@ -415,8 +403,8 @@ public class NotFenixClient {
                 String name,
                 String infoName){
     	return _port.getInfoPatient(
-    			encrypt(_token),
-    			encrypt(name),
+    			encrypt(_token), 
+    			encrypt(name), 
     			encrypt(infoName));
     }
 
@@ -435,20 +423,17 @@ public class NotFenixClient {
 				//Private details
 				//Get Symmkey
 				byte[] private_symmkey_enc_byte = null;
-				try {
-					private_symmkey_enc_byte = Base64.getDecoder().decode(private_symmkey_enc_string);
-				} catch (Exception e1) {
-					// Hope this won't happen
-					e1.printStackTrace();
-				}
+				private_symmkey_enc_byte = Base64.getDecoder().decode(private_symmkey_enc_string);
+				
 				try{
 					String private_symmKey_string = Crypter.decrypt_RSA(private_symmkey_enc_byte, private_key);
 					SecretKeySpec private_symmKey = new SecretKeySpec(Base64.getDecoder().decode(private_symmKey_string), "AES");
 
 					//get IV
 					String private_iv_string = _port.getInfoPatient(
-							encrypt(_token),
-							encrypt(name),
+							encrypt(_token), 
+							encrypt(name), 
+
 							encrypt(P_PRIVATE_IV));
 
 					//get details
@@ -474,12 +459,8 @@ public class NotFenixClient {
 					encrypt(name),
 					encrypt(P_PUBLIC_KEY));
 			byte[] public_symmkey_enc_byte = null;
-			try {
-				public_symmkey_enc_byte = Base64.getDecoder().decode(public_symmkey_enc_string);
-			} catch (Exception e1) {
-				// Hope this won't happen
-				e1.printStackTrace();
-			}
+			public_symmkey_enc_byte = Base64.getDecoder().decode(public_symmkey_enc_string);
+			
 			try{
 				String public_symmKey_string = Crypter.decrypt_RSA(public_symmkey_enc_byte, private_key);
 				SecretKeySpec public_symmKey = new SecretKeySpec(Base64.getDecoder().decode(public_symmKey_string), "AES");
@@ -542,12 +523,7 @@ public class NotFenixClient {
 			if(symmkey_enc_string == null)
 				return false;
 			byte[] symmkey_enc_byte = null;
-			try {
-				symmkey_enc_byte = Base64.getDecoder().decode(symmkey_enc_string);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			symmkey_enc_byte = Base64.getDecoder().decode(symmkey_enc_string);
 
 			//Decrypt SymmKey
 			String symmkey_string = Crypter.decrypt_RSA(symmkey_enc_byte, private_key);
@@ -555,12 +531,8 @@ public class NotFenixClient {
 			//Encrypt SymmKey with	 new doctor's public key
 			byte[] symmkey_enc_new_byte = Crypter.encrypt_RSA(symmkey_string, publicKey);
 			String symmkey_enc_new_string = null;
-			try {
-				symmkey_enc_new_string = Base64.getEncoder().encodeToString(symmkey_enc_new_byte);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			symmkey_enc_new_string = Base64.getEncoder().encodeToString(symmkey_enc_new_byte);
+			
 
 			return _port.sharePatient(encrypt(_token), encrypt(pname), encrypt(dsname), encrypt(symmkey_enc_new_string));
 		}
