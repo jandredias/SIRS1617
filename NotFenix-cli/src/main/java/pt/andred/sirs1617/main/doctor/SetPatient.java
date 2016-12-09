@@ -34,9 +34,10 @@ public class SetPatient extends Command<NotFenixClient> {
 					return;
 				}
 			} catch(Exception e){}
-			Dialog.IO().println("What type info would you like to change?");
-			Dialog.IO().println("private_details / public_details");
-			String infoMode = Dialog.IO().readString();
+		//	Dialog.IO().println("What type info would you like to change?");
+			//Dialog.IO().println("private_details / public_details");
+			//String infoMode = Dialog.IO().readString();
+				String infoMode = PRIVATE_TAG;
 			if(infoMode.matches(PRIVATE_TAG)){
 				info = _receiver.getInfoPatient(pname, P_DETAILS_TAG);
 				if(info==null){

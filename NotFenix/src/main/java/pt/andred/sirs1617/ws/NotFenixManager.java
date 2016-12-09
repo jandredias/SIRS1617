@@ -158,10 +158,10 @@ public class NotFenixManager {
 			patient.setDetails(infoValue);
 			return true;
 		}
-		/*else if (infoName.matches(P_PUBLIC_KEY)){
-			patient.setPublicKey(name, infoValue);
+		else if (infoName.matches(P_PUBLIC_KEY)){
+			patient.setPublicKeyDoctor(name, infoValue);
 			return true;
-		}*/
+		}
 		else if (infoName.matches(P_PUBLIC_DETAILS)){
 			patient.setPublicDetails(infoValue);
 			return true;
@@ -240,6 +240,8 @@ public class NotFenixManager {
 		if(allKeysEnc == null || allKeysEnc.equals("") || allKeysEnc.equals(NULL_STRING_TAG))
 			allKeysEnc = null;
 		PatientPrivateInfo patient;
+		String temp = publicDetailsEnc;
+		publicDetailsEnc = null;
 		Dialog.IO().debug("HERE ddPatient teste 2 chave encoded= ", keyDoctor); //TESTE
 		try{
 			patient = new PatientPrivateInfo(pname, key_master,
@@ -250,6 +252,7 @@ public class NotFenixManager {
 			e.printStackTrace();
 			return false;
 		}
+		patient.setPublicKeyDoctor(name, temp);
 		_patientsPrivate.put(pname, patient);
 		return true;
 	}
@@ -375,7 +378,7 @@ public class NotFenixManager {
 		if(_doctors.containsKey(username))
 			return false;
 			Dialog.IO().println("addDoctor teste 3"); //TESTE
-		if(Objects.equals(allKeysEnc,NULL_STRING_TAG)|| allKeysEnc == null){
+		/*if(Objects.equals(allKeysEnc,NULL_STRING_TAG)|| allKeysEnc == null){
 			if(!_patientsPrivate.isEmpty()){
 				Dialog.IO().println("addDoctor teste 3.1"); //TESTE
 				return false;
@@ -384,7 +387,7 @@ public class NotFenixManager {
 		else if(putNewPublicKeysEnc_private_method(username, allKeysEnc)){
 			Dialog.IO().println("addDoctor teste 3.2"); //TESTE
 			return false;
-		}
+		}*/
 		_doctors.put(username, password);
 		_doctorKeys.put(username, publicKey);
 		Dialog.IO().println("addDoctor teste 4"); //TESTE

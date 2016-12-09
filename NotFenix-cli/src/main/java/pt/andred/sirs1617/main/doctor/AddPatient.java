@@ -17,7 +17,8 @@ public class AddPatient extends Command<NotFenixClient> {
 			Dialog.IO().println("");
 			String pname = Dialog.IO().readString("Name? ");
 			String private_details = Dialog.IO().readString("Private Details? ");
-			String public_details = Dialog.IO().readString("Public Details? ");
+		//	String public_details = Dialog.IO().readString("Sharable Details? ");
+			String public_details = "a";
 			Boolean exists = _receiver.getPatient(pname);
 			if(exists){
 				Dialog.IO().println("Patient already exists");

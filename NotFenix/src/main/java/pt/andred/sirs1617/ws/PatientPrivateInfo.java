@@ -40,23 +40,25 @@ class PatientPrivateInfo{
 
     Iterator itr= allDoctors.iterator();
     int i = 0;
-    byte[] keySet_bytes = keyPublicDoctors.getBytes();
-    System.out.println("PatientPrivateInfo keySet_bytes = "+keySet_bytes); //TESTE
-    System.out.println("PatientPrivateInfo keysize = "+keysize);//TESTE
+    if(keyPublicDoctors!=null){
+      byte[] keySet_bytes = keyPublicDoctors.getBytes();
+      System.out.println("PatientPrivateInfo keySet_bytes = "+keySet_bytes); //TESTE
+      System.out.println("PatientPrivateInfo keysize = "+keysize);//TESTE
 
-    int max = keySet_bytes.length;
-    while(itr.hasNext()) {
-      if(i>=max)
-        throw new Exception("Failed");
-      String doc = (String) itr.next();
-      byte[] bytes = Arrays.copyOfRange(keySet_bytes, i, i+_keySize);
-      System.out.println("PatientPrivateInfo bytes = "+bytes);//TESTE
-      String key = new String(bytes);
-      System.out.println("PatientPrivateInfo doc = "+doc);//TESTE
-      System.out.println("PatientPrivateInfo key = "+key);//TESTE
-      System.out.println("PatientPrivateInfo LENGHT = "+bytes.length);//TESTE
-      _publicKeys.put(doc, key);
-      i+=_keySize;
+      int max = keySet_bytes.length;
+      while(itr.hasNext()) {
+        if(i>=max)
+          throw new Exception("Failed");
+        String doc = (String) itr.next();
+        byte[] bytes = Arrays.copyOfRange(keySet_bytes, i, i+_keySize);
+        System.out.println("PatientPrivateInfo bytes = "+bytes);//TESTE
+        String key = new String(bytes);
+        System.out.println("PatientPrivateInfo doc = "+doc);//TESTE
+        System.out.println("PatientPrivateInfo key = "+key);//TESTE
+        System.out.println("PatientPrivateInfo LENGHT = "+bytes.length);//TESTE
+        _publicKeys.put(doc, key);
+        i+=_keySize;
+      }
 
     }
 
