@@ -606,7 +606,7 @@ public class NotFenixClient {
 				return false;
 			PublicKey publicKey = null;
 			try {
-				publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(d_key.getBytes()));
+				publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(d_key)));
 			} catch (InvalidKeySpecException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
