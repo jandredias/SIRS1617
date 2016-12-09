@@ -159,12 +159,12 @@ public class NotFenixManager {
 			patient.setDetails(infoValue);
 			return true;
 		}
-		else if (infoName.matches(P_PUBLIC_KEY)){
-			patient.setPublicKeyDoctor(name, infoValue);
-			return true;
-		}
 		else if (infoName.matches(P_PUBLIC_DETAILS)){
 			patient.setPublicDetails(infoValue);
+			return true;
+		}
+		else if(infoName.matches(P_PUBLIC_KEY)){
+			patient.setPublicKeyDoctor(name, infoValue);
 			return true;
 		}
 		else
@@ -475,7 +475,7 @@ public class NotFenixManager {
 
 	public List<String> getDoctorsKeysNewFunction(String token) {
 		// TODO Auto-generated method stub
-				
+
 		return null;
 	}
 

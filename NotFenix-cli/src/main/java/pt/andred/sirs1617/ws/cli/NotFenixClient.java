@@ -381,6 +381,40 @@ public class NotFenixClient {
 				Dialog.IO().println("---------------------addPatient teste 3.1"); //TESTE
 
 				//Encrypt 2nd key with all keys;
+
+
+				List<DoctorInfo> allKeys= _port.getDoctorsKeysNewFunction(_token);
+				if(!_port.addPatient(
+						encrypt(_token),
+						encrypt(name),
+						encrypt(keyMaster),
+						encrypt(keyDoctor),
+						encrypt(iv_string),
+						encrypt(detailsEnc),
+					/*	allKeysEnc_string,*/ encrypt(keyDoctor2),
+						encrypt(iv2_string),
+						encrypt(detailsPublicEnc)))
+						return false;
+
+				for(DoctorInfo df: allKeys){
+
+					PublicKey publicKey =KeyFactory.getInstance("RSA").generatePublic(
+										new X509EncodedKeySpec(Base64.getDecoder().decode(odKey)));
+					String odKey_enc = Base64.getEncoder().
+							encodeToString(Crypter.encrypt_RSA(sk2_string,df.getPublicKey()));
+					_port.setInfoPatient(_token, name, df.getName(), P_PUBLIC_KEY, odKey_enc);
+
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+
+
+	}
+
+
 			/*	String allKeys= getAllDoctorKeys();
 
 	      Dialog.IO().println("---------------------addPatient teste 5 allKeysdd= "+allKeys);
@@ -423,7 +457,7 @@ public class NotFenixClient {
 				Dialog.IO().println("---------------------addPatient teste 6 1st symmkey      = "+ Base64.getEncoder().encodeToString(sk_string.getBytes())); //TESTE
 				Dialog.IO().println("---------------------addPatient teste 6 2nd symmkey      = "+ Base64.getEncoder().encodeToString(sk2_string.getBytes())); //TESTE
 				*/
-			}catch (Exception e) {
+		/*	}catch (Exception e) {
 				e.printStackTrace();
 				return false;
 			}
@@ -440,10 +474,10 @@ public class NotFenixClient {
     			encrypt(keyDoctor),
     			encrypt(iv_string),
     			encrypt(detailsEnc),
-    		/*	allKeysEnc_string,*/ encrypt(keyDoctor2),
-    			encrypt(iv2_string),
-    			encrypt(detailsPublicEnc));
-    }
+    		/*	allKeysEnc_string,*//* encrypt(keyDoctor2),
+    		/*	encrypt(iv2_string),
+    			encrypt(detailsPublicEnc));*/
+
 
 		public boolean setInfoPatient(String name, String infoMode, String info){
 			return _port.setInfoPatient(
