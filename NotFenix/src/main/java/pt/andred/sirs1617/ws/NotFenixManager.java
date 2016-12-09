@@ -6,9 +6,15 @@ import java.util.UUID;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.Arrays;
-
+import java.util.Base64;
+import java.security.PrivateKey;
 import java.security.PublicKey;
+
+import javax.crypto.Cipher;
+import javax.xml.soap.SOAPBody;
+import javax.xml.soap.SOAPMessage;
 import javax.xml.ws.Endpoint;
+import javax.xml.ws.handler.soap.SOAPMessageContext;
 
 import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
@@ -89,11 +95,13 @@ public class NotFenixManager {
 		return _instance;
 	}
 
+	
 	public String login(String username, String password){
 		Dialog.IO().debug("Login try:" + username + " " + password);
 		if(_doctors.containsKey(username) && _doctors.get(username).equals(password))
 			return generateNewToken(username);
 		return null;
+		
 	}
 	private String generateNewToken(String username) {
 		UUID token = UUID.randomUUID();

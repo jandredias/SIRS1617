@@ -5,8 +5,5 @@
 		<handler>
 			<handler-class>pt.andred.sirs1617.ws.LoggingHandler</handler-class>
 		</handler>
-		<handler>
-			<handler-class>pt.andred.sirs1617.ws.AuthenticationHandler</handler-class>
-		</handler>
 	</handler-chain>
 </handler-chains>

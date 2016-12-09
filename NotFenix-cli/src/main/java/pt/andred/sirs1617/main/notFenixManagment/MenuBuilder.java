@@ -13,7 +13,8 @@ public abstract class MenuBuilder {
 		Menu menu = new Menu("NotFenix Managment Area", new Command<?>[] {
 			new AddDoctor(client),
 			new DeleteDoctor(client),
-			new DeletePatient(client)
+			new DeletePatient(client),
+			new OpenDoctorsMenu(client)
 				 });
 		menu.open();
 	}
