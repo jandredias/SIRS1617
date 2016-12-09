@@ -100,7 +100,7 @@ public class NotFenixPort implements NotFenixPortType {
     }
 
     /**
-     *
+     * 
      * @param password
      * @param allKeysEncrypted
      * @param publicKey
@@ -505,7 +505,7 @@ public class NotFenixPort implements NotFenixPortType {
     public List<DoctorInfo> getDoctorsKeysNewFunction(
         @WebParam(name = "token", targetNamespace = "")
         String token){
-    	return NotFenixManager.instance().getDoctorsKeysNewFunction(token);
+    	return NotFenixManager.instance().getDoctorsKeysNewFunction(decrypt(token));
     }
     
     /**
@@ -533,7 +533,7 @@ public class NotFenixPort implements NotFenixPortType {
         String infoValue,
         @WebParam(name = "dname", targetNamespace = "")
         String dname){
-    	return NotFenixManager.instance().setInfoPatient2(token, pName, infoName, infoValue, dname);
+    	return NotFenixManager.instance().setInfoPatient2(decrypt(token), decrypt(pName), decrypt(infoName), decrypt(infoValue), decrypt(dname));
     }
     
     /**
@@ -549,6 +549,6 @@ public class NotFenixPort implements NotFenixPortType {
     public List<PatientInfo> getAllPatientPublicKey(
         @WebParam(name = "token", targetNamespace = "")
         String token){
-    	return NotFenixManager.instance().getAllPatientPublicKey(token);
+    	return NotFenixManager.instance().getAllPatientPublicKey(decrypt(token));
     }
 }
