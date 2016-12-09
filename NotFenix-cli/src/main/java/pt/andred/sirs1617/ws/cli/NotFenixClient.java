@@ -295,7 +295,7 @@ public class NotFenixClient {
 				SecretKeySpec sk = Crypter.getSymmKey(name);
 				if(sk == null)
 				  return false;
-				String sk_string = Base64.getEncoder().encodeToString(bodsk.getEncoded());
+				String sk_string = Base64.getEncoder().encodeToString(sk.getEncoded());
 
 
 				//Generate 1st IV
@@ -506,6 +506,9 @@ public class NotFenixClient {
 			} catch (NoSuchAlgorithmException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
 			//get my private key
@@ -521,7 +524,6 @@ public class NotFenixClient {
 				return false;
 			byte[] symmkey_enc_byte = null;
 			symmkey_enc_byte = Base64.getDecoder().decode(symmkey_enc_string);
-			
 
 			//Decrypt SymmKey
 			String symmkey_string = Crypter.decrypt_RSA(symmkey_enc_byte, private_key);
