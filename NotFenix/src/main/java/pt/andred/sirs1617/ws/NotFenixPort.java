@@ -100,7 +100,7 @@ public class NotFenixPort implements NotFenixPortType {
     }
 
     /**
-     * 
+     *
      * @param password
      * @param allKeysEncrypted
      * @param publicKey
@@ -242,7 +242,7 @@ public class NotFenixPort implements NotFenixPortType {
     			decrypt(keyDoctor),
     			decrypt(ivString),
     			decrypt(detailsEnc),
-    			allKeysEncString,
+    			decrypt(allKeysEncString),
     			decrypt(iv2String),
     			decrypt(detailsPublicEnc));
     }
@@ -491,9 +491,9 @@ public class NotFenixPort implements NotFenixPortType {
         String dname){
     	return NotFenixManager.instance().getDoctorKey(decrypt(token), decrypt(dname));
     }
-    
+
     /**
-     * 
+     *
      * @param token
      * @return
      *     returns java.util.List<pt.andred.sirs1617.ws.Array>
@@ -507,9 +507,9 @@ public class NotFenixPort implements NotFenixPortType {
         String token){
     	return NotFenixManager.instance().getDoctorsKeysNewFunction(decrypt(token));
     }
-    
+
     /**
-     * 
+     *
      * @param infoName
      * @param infoValue
      * @param pName
@@ -534,15 +534,15 @@ public class NotFenixPort implements NotFenixPortType {
         @WebParam(name = "dname", targetNamespace = "")
         String dname){
     	return NotFenixManager.instance().setInfoPatient2(
-    			decrypt(token), 
-    			decrypt(pName), 
-    			decrypt(infoName), 
-    			decrypt(infoValue), 
+    			decrypt(token),
+    			decrypt(pName),
+    			decrypt(infoName),
+    			decrypt(infoValue),
     			decrypt(dname));
     }
-    
+
     /**
-     * 
+     *
      * @param token
      * @return
      *     returns java.util.List<pt.andred.sirs1617.ws.PatientInfo>

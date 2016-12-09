@@ -212,8 +212,12 @@ public class NotFenixManager {
 			return patient.getDetails();
 		else if(infoName.matches(P_PUBLIC_KEY))
 			return patient.getPublicKey(name);
-		else if(infoName.matches(P_PUBLIC_DETAILS))
-			return patient.getPublicDetails();
+		else if(infoName.matches(P_PUBLIC_DETAILS)){
+
+		String p = patient.getPublicDetails();
+Dialog.IO().println("-------------P_PUBLIC_DETAILS= " + p);
+			return p;
+		}
 		else if(infoName.matches(P_PRIVATE_IV))
 			return patient.getIV();
 		else if(infoName.matches(P_PUBLIC_IV))
@@ -246,9 +250,9 @@ public class NotFenixManager {
 			allKeysEnc = null;
 		}
 		PatientPrivateInfo patient;
-		String temp = publicDetailsEnc;
-		publicDetailsEnc = null;
-		Dialog.IO().debug("HERE ddPatient teste 2 chave encoded= ", keyDoctor); //TESTE
+		//String temp = publicDetailsEnc;
+		//publicDetailsEnc = null;
+		Dialog.IO().debug("*******************publicDetailsEnced= ", publicDetailsEnc); //TESTE
 		try{
 			patient = new PatientPrivateInfo(pname, key_master,
 			name, keyDoctor, privateIV, detailsEnc, _doctorKeys.keySet(),
@@ -258,7 +262,7 @@ public class NotFenixManager {
 			e.printStackTrace();
 			return false;
 		}
-		patient.setPublicKeyDoctor(name, temp);
+		//patient.setPublicKeyDoctor(name, temp);
 		_patientsPrivate.put(pname, patient);
 		return true;
 	}

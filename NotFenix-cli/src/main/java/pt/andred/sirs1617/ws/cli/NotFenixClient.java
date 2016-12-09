@@ -288,7 +288,7 @@ public class NotFenixClient {
 				SecretKeySpec sk = Crypter.getSymmKey(name, "first");
 				if(sk == null)
 				  return false;
-					tEncoded().length +"---------------------***************"); //TESTE
+
 				String sk_string = Base64.getEncoder().encodeToString(sk.getEncoded());
 
 
@@ -355,6 +355,7 @@ public class NotFenixClient {
 				//detailsPublicEnc = Base64.getEncoder().encodeToString(Crypter.encrypt_AES(public_details, sk2, ivParams2));
 	      		//XXX
 				detailsPublicEnc = Base64.getEncoder().encodeToString(Crypter.encrypt_AES(public_details, sk2, "1111111111111111"));
+				Dialog.IO().println("----------------------detailsPublicEnc = "+detailsPublicEnc);
 				//Encrypt 2nd key with Doctor
 				Dialog.IO().debug("---------------------addPatient teste 3.0.1"); //TESTE
 				 keyDoctor2 = Base64.getEncoder().encodeToString(Crypter.encrypt_RSA(sk2_string, dKey));
@@ -386,10 +387,10 @@ public class NotFenixClient {
 								sk2_string,
 								publicKey));
 					_port.setInfoPatient2(
-							encrypt(_token), 
-							encrypt(name), 
-							encrypt(df.getName()), 
-							encrypt(P_PUBLIC_KEY), 
+							encrypt(_token),
+							encrypt(name),
+							encrypt(df.getName()),
+							encrypt(P_PUBLIC_KEY),
 							encrypt(odKey_enc));
 
 				}
@@ -433,12 +434,14 @@ public class NotFenixClient {
     public String getInfoPatient(
                 String name,
                 String infoName){
-		if(!Objects.equals(infoName, P_DETAILS_TAG))
+		//if(!Objects.equals(infoName, P_DETAILS_TAG))
     	return _port.getInfoPatient(
     			encrypt(_token),
     			encrypt(name),
     			encrypt(infoName));
-			return seePatient(name);
+
+
+		//	return seePatient(name);
 
     }
 
