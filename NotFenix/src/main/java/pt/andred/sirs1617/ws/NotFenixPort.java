@@ -502,7 +502,7 @@ public class NotFenixPort implements NotFenixPortType {
     @WebResult(name = "array", targetNamespace = "")
     @RequestWrapper(localName = "getDoctorsKeysNewFunction", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetDoctorsKeysNewFunction")
     @ResponseWrapper(localName = "getDoctorsKeysNewFunctionResponse1", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetDoctorsKeysNewFunctionResponse1")
-    public List<Array> getDoctorsKeysNewFunction(
+    public List<String> getDoctorsKeysNewFunction(
         @WebParam(name = "token", targetNamespace = "")
         String token){
     	return NotFenixManager.instance().getDoctorsKeysNewFunction(token);

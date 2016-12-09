@@ -473,8 +473,9 @@ public class NotFenixManager {
 		return null;
 	}
 
-	public List<Array> getDoctorsKeysNewFunction(String token) {
+	public List<String> getDoctorsKeysNewFunction(String token) {
 		// TODO Auto-generated method stub
+				
 		return null;
 	}
 

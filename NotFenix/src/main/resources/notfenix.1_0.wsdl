@@ -372,7 +372,7 @@
         	<xsd:element name="getDoctorsKeysNewFunctionResponse1">
         		<xsd:complexType>
         			<xsd:sequence>
-        				<xsd:element name="array" type="tns:Array" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+        				<xsd:element name="array" type="xsd:string" maxOccurs="unbounded" minOccurs="0"></xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
         	</xsd:element>
