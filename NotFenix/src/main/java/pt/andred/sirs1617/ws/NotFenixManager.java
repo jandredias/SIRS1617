@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Objects;
@@ -137,6 +138,8 @@ public class NotFenixManager {
 
 	}
 
+	
+	
 	public boolean setInfoPatient(String token, String pname, String infoName, String infoValue) {
 		String name = checkToken(token);
 		if (name == null)
@@ -473,14 +476,19 @@ public class NotFenixManager {
 		return null;
 	}
 
-	public List<String> getDoctorsKeysNewFunction(String token) {
-		// TODO Auto-generated method stub
-				
-		return null;
+	public List<DoctorInfo> getDoctorsKeysNewFunction(String token) {
+		List<DoctorInfo> list = new ArrayList<>();
+		for(Map.Entry<String, String> entry : _doctorKeys.entrySet()){
+			DoctorInfo info = new DoctorInfo();
+			info.setName(entry.getKey());
+			info.setPublicKey(entry.getValue());
+			list.add(info);
+		}
+		return list;
 	}
-
-
-
-
-
+	
+	public boolean setInfoPatient2(String token, String pname, String infoName, String infoValue, String dname){
+		//TODO
+		return true;
+	}
 }
