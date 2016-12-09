@@ -307,7 +307,7 @@ public class NotFenixClient {
 				SecretKeySpec sk = Crypter.getSymmKey(name);
 				if(sk == null)
 				  return false;
-				String sk_string = Base64.getEncoder().encodeToString(bodsk.getEncoded());
+				String sk_string = Base64.getEncoder().encodeToString(sk.getEncoded());
 
 
 				//Generate 1st IV
@@ -437,7 +437,7 @@ public class NotFenixClient {
 				byte[] private_symmkey_enc_byte = null;
 				try {
 					private_symmkey_enc_byte = Base64.getDecoder().decode(private_symmkey_enc_string);
-				} catch (UnsupportedEncodingException e1) {
+				} catch (Exception e1) {
 					// Hope this won't happen
 					e1.printStackTrace();
 				}
@@ -476,7 +476,7 @@ public class NotFenixClient {
 			byte[] public_symmkey_enc_byte = null;
 			try {
 				public_symmkey_enc_byte = Base64.getDecoder().decode(public_symmkey_enc_string);
-			} catch (UnsupportedEncodingException e1) {
+			} catch (Exception e1) {
 				// Hope this won't happen
 				e1.printStackTrace();
 			}
@@ -525,7 +525,7 @@ public class NotFenixClient {
 			} catch (NoSuchAlgorithmException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (UnsupportedEncodingException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -544,7 +544,7 @@ public class NotFenixClient {
 			byte[] symmkey_enc_byte = null;
 			try {
 				symmkey_enc_byte = Base64.getDecoder().decode(symmkey_enc_string);
-			} catch (UnsupportedEncodingException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -557,7 +557,7 @@ public class NotFenixClient {
 			String symmkey_enc_new_string = null;
 			try {
 				symmkey_enc_new_string = Base64.getEncoder().encodeToString(symmkey_enc_new_byte);
-			} catch (UnsupportedEncodingException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
