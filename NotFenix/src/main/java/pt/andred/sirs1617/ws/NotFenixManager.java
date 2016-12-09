@@ -138,8 +138,8 @@ public class NotFenixManager {
 
 	}
 
-	
-	
+
+
 	public boolean setInfoPatient(String token, String pname, String infoName, String infoValue) {
 		String name = checkToken(token);
 		if (name == null)
@@ -477,8 +477,9 @@ public class NotFenixManager {
 		}
 		return list;
 	}
-	
-	public boolean setInfoPatient2(String token, String pname, String infoName, String infoValue, String dname){
+
+	public boolean setInfoPatient2(String token, String pname, String dname,
+	String infoName, String infoValue){
 		String name = checkToken(token);
 		if (name == null)
 			return false; //TODO: must return a problem
@@ -487,7 +488,7 @@ public class NotFenixManager {
 			return false;
 
 		if(infoName.matches(P_PUBLIC_KEY)){
-			patient.setPublicKeyDoctor(name, infoValue);
+			patient.setPublicKeyDoctor(dname, infoValue);
 			return true;
 		}
 		else
