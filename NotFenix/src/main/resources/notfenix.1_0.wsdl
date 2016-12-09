@@ -361,7 +361,23 @@
         				<xsd:element name="key" type="xsd:string"></xsd:element>
         			</xsd:sequence>
         		</xsd:complexType>
-        	</xsd:element></xsd:schema>
+        	</xsd:element>
+        	<xsd:element name="getDoctorsKeysNewFunction">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="token" type="xsd:string"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+        	<xsd:element name="getDoctorsKeysNewFunctionResponse1">
+        		<xsd:complexType>
+        			<xsd:sequence>
+        				<xsd:element name="array" type="tns:Array" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+        			</xsd:sequence>
+        		</xsd:complexType>
+        	</xsd:element>
+            <xsd:complexType name="Array"></xsd:complexType>
+        </xsd:schema>
     </types>
     
        
@@ -476,6 +492,12 @@
     <message name="getDoctorKeyResponse">
     	<part name="parameters" element="tns:getDoctorKeyResponse"></part>
     </message>
+    <message name="getDoctorsKeysNewFunctionRequest">
+    	<part name="parameters" element="tns:getDoctorsKeysNewFunction"></part>
+    </message>
+    <message name="getDoctorsKeysNewFunctionResponse1">
+    	<part name="parameters" element="tns:getDoctorsKeysNewFunctionResponse1"></part>
+    </message>
     <portType name="NotFenixPortType">
     	
         <operation name="login">
@@ -549,6 +571,10 @@
         <operation name="getDoctorKey">
         	<input message="tns:getDoctorKeyRequest"></input>
         	<output message="tns:getDoctorKeyResponse"></output>
+        </operation>
+        <operation name="getDoctorsKeysNewFunction">
+        	<input message="tns:getDoctorsKeysNewFunctionRequest"></input>
+        	<output message="tns:getDoctorsKeysNewFunctionResponse1"></output>
         </operation>
     </portType>
  
@@ -716,6 +742,16 @@
             </output>
         </operation>
         <operation name="getDoctorKey">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        
+        <operation name="getDoctorsKeysNewFunction">
             <soap:operation soapAction="" />
             <input>
                 <soap:body use="literal" />

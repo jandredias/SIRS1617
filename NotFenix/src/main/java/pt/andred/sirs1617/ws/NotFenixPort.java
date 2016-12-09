@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Base64;
+import java.util.List;
 
 import javax.crypto.Cipher;
 import javax.jws.HandlerChain;
@@ -489,5 +490,21 @@ public class NotFenixPort implements NotFenixPortType {
         @WebParam(name = "dname", targetNamespace = "")
         String dname){
     	return NotFenixManager.instance().getDoctorKey(decrypt(token), decrypt(dname));
+    }
+    
+    /**
+     * 
+     * @param token
+     * @return
+     *     returns java.util.List<pt.andred.sirs1617.ws.Array>
+     */
+    @WebMethod
+    @WebResult(name = "array", targetNamespace = "")
+    @RequestWrapper(localName = "getDoctorsKeysNewFunction", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetDoctorsKeysNewFunction")
+    @ResponseWrapper(localName = "getDoctorsKeysNewFunctionResponse1", targetNamespace = "http://ws.sirs1617.andred.pt/", className = "pt.andred.sirs1617.ws.GetDoctorsKeysNewFunctionResponse1")
+    public List<Array> getDoctorsKeysNewFunction(
+        @WebParam(name = "token", targetNamespace = "")
+        String token){
+    	return NotFenixManager.instance().getDoctorsKeysNewFunction(token);
     }
 }

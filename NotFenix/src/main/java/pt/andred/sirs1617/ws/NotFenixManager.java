@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.Set;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Objects;
@@ -468,6 +469,11 @@ public class NotFenixManager {
 	}
 
 	public String getMyKey(String token) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Array> getDoctorsKeysNewFunction(String token) {
 		// TODO Auto-generated method stub
 		return null;
 	}
