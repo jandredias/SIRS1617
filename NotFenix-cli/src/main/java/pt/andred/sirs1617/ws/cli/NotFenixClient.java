@@ -80,7 +80,7 @@ public class NotFenixClient {
 			byte[] bodyByteEncrypted = encrypt.doFinal(bodyByte);
 			String encrypted = Base64.getEncoder().encodeToString(bodyByteEncrypted);
 
-			Dialog.IO().println("fim do signing");
+			Dialog.IO().println("fim do encrypt");
 			return encrypted;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
