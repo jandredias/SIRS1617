@@ -191,35 +191,59 @@ public class NotFenixManager {
 
 	public String getInfoPatient(String token, String pname, String infoName) {
 		String name = checkToken(token);
-		if (name == null)
+		if (name == null){
+			Dialog.IO().debug("getInfoPatient","1");
 			return null; //TODO: must return a problem
+		}
 		PatientPrivateInfo patient = _patientsPrivate.get(pname);
-		if (patient == null)
+		if (patient == null){
+			Dialog.IO().debug("getInfoPatient","2");
 			return null;
+		}
 			Dialog.IO().println("getInfoPatient"); //TESTE
 			Dialog.IO().println("pname= " + pname); //TESTE
 			Dialog.IO().println("infoName= "+infoName); //TESTE
-		if(infoName.matches(P_NAME_TAG))
+		if(infoName.matches(P_NAME_TAG)){
+			Dialog.IO().debug("getInfoPatient","3");
 			return patient.getName();
-		else if(infoName.matches(P_KEY_MASTER_TAG))
+		}
+		else if(infoName.matches(P_KEY_MASTER_TAG)){
+			Dialog.IO().debug("getInfoPatient","4");
 			return patient.getKeyMaster();
+		}
 		else if(infoName.matches(P_KEY_DOCTOR_TAG)){
+			Dialog.IO().debug("getInfoPatient","5");
 			String a = patient.getKeyDoctor(name);
 			Dialog.IO().debug("PATIENTKEY with doctor", a);
 			return a;
 		}
-		else if(infoName.matches(P_DETAILS_TAG))
+		else if(infoName.matches(P_DETAILS_TAG)){
+			Dialog.IO().debug("getInfoPatient","6");
 			return patient.getDetails();
-		else if(infoName.matches(P_PUBLIC_KEY))
+		}
+		else if(infoName.matches(P_PUBLIC_KEY)){
+			Dialog.IO().debug("getInfoPatient","7");
 			return patient.getPublicKey(name);
-		else if(infoName.matches(P_PUBLIC_DETAILS))
+		}
+		else if(infoName.matches(P_PUBLIC_DETAILS)){
+			Dialog.IO().debug("getInfoPatient","8");
+			if(patient.getPublicDetails() == null){
+				Dialog.IO().debug("getInfoPatient", "PUBLIC IS NULL");
+			}
 			return patient.getPublicDetails();
-		else if(infoName.matches(P_PRIVATE_IV))
+		}
+		else if(infoName.matches(P_PRIVATE_IV)){
+			Dialog.IO().debug("getInfoPatient","9");
 			return patient.getIV();
-		else if(infoName.matches(P_PUBLIC_IV))
+		}
+		else if(infoName.matches(P_PUBLIC_IV)){
+			Dialog.IO().debug("getInfoPatient","10");
 			return patient.getPublicIV();
-		else
+		}
+		else{
+			Dialog.IO().debug("getInfoPatient","11");
 			return null;
+		}
 	}
 
 	public boolean deletePatient(String token, String pname) {
