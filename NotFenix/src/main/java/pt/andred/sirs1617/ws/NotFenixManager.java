@@ -109,8 +109,10 @@ public class NotFenixManager {
 	}
 	private String generateNewToken(String username) {
 		UUID token = UUID.randomUUID();
-		_logins.put(token.toString(), username);
-		return token.toString();
+		String t = token.toString().substring(0, 10);
+		Dialog.IO().debug("TOKEN: ", t);
+		_logins.put(t, username);
+		return t;
 	}
 
 	public void start(String address){
@@ -197,8 +199,11 @@ public class NotFenixManager {
 			return patient.getName();
 		else if(infoName.matches(P_KEY_MASTER_TAG))
 			return patient.getKeyMaster();
-		else if(infoName.matches(P_KEY_DOCTOR_TAG))
-			return patient.getKeyDoctor(name);
+		else if(infoName.matches(P_KEY_DOCTOR_TAG)){
+			String a = patient.getKeyDoctor(name);
+			Dialog.IO().debug("PATIENTKEY with doctor", a);
+			return a;
+		}
 		else if(infoName.matches(P_DETAILS_TAG))
 			return patient.getDetails();
 		else if(infoName.matches(P_PUBLIC_KEY))
@@ -235,7 +240,7 @@ public class NotFenixManager {
 		if(allKeysEnc == null || allKeysEnc.equals("") || allKeysEnc.equals(NULL_STRING_TAG))
 			allKeysEnc = null;
 		PatientPrivateInfo patient;
-		Dialog.IO().println("addPatient teste 2 allKeysEnc= "+ allKeysEnc); //TESTE
+		Dialog.IO().debug("HERE ddPatient teste 2 chave encoded= ", keyDoctor); //TESTE
 		try{
 			patient = new PatientPrivateInfo(pname, key_master,
 			name, keyDoctor, privateIV, detailsEnc, _doctorKeys.keySet(),
