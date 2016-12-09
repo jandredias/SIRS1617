@@ -237,12 +237,14 @@ public class NotFenixManager {
 	String publicIV, String publicDetailsEnc){
 
 		String name = checkToken(token);
-		if (name == null)
+		if (name == null){
+			Dialog.IO().debug("addPatient name is null; Token is invalid");
 			return false; //TODO: must return a problem
-			Dialog.IO().println("addPatient teste 1"); //TESTE
-
-		if(allKeysEnc == null || allKeysEnc.equals("") || allKeysEnc.equals(NULL_STRING_TAG))
+		}
+		if(allKeysEnc == null || allKeysEnc.equals("") || allKeysEnc.equals(NULL_STRING_TAG)){
+			Dialog.IO().debug("1", "is null");
 			allKeysEnc = null;
+		}
 		PatientPrivateInfo patient;
 		String temp = publicDetailsEnc;
 		publicDetailsEnc = null;
@@ -372,16 +374,16 @@ public class NotFenixManager {
 
 	public boolean addDoctor(String token, String username, String password, String publicKey, String allKeysEnc) {
 		String name = checkToken(token);
-		Dialog.IO().println("addDoctor teste 1"); //TESTE
+		Dialog.IO().debug("addDoctor teste 1"); //TESTE
 
-		Dialog.IO().println("/name: <" + name + "> /HR: <"+ HR_MASTER +">"); //TESTE
+		Dialog.IO().debug("/name: <" + name + "> /HR: <"+ HR_MASTER +">"); //TESTE
 
 		if(!Objects.equals(name, HR_MASTER))
 			return false; //TODO: must return a problem
-			Dialog.IO().println("addDoctor teste 2"); //TESTE
+			Dialog.IO().debug("addDoctor teste 2"); //TESTE
 		if(_doctors.containsKey(username))
 			return false;
-			Dialog.IO().println("addDoctor teste 3"); //TESTE
+			Dialog.IO().debug("addDoctor teste 3"); //TESTE
 		/*if(Objects.equals(allKeysEnc,NULL_STRING_TAG)|| allKeysEnc == null){
 			if(!_patientsPrivate.isEmpty()){
 				Dialog.IO().println("addDoctor teste 3.1"); //TESTE
@@ -394,7 +396,7 @@ public class NotFenixManager {
 		}*/
 		_doctors.put(username, password);
 		_doctorKeys.put(username, publicKey);
-		Dialog.IO().println("addDoctor teste 4"); //TESTE
+		Dialog.IO().debug("addDoctor teste 4"); //TESTE
 		return true;
 	}
 
@@ -487,8 +489,19 @@ public class NotFenixManager {
 	}
 	
 	public boolean setInfoPatient2(String token, String pname, String infoName, String infoValue, String dname){
-		//TODO
-		return true;
+		String name = checkToken(token);
+		if (name == null)
+			return false; //TODO: must return a problem
+		PatientPrivateInfo patient = _patientsPrivate.get(pname);
+		if (patient == null)
+			return false;
+
+		if(infoName.matches(P_PUBLIC_KEY)){
+			patient.setPublicKeyDoctor(name, infoValue);
+			return true;
+		}
+		else
+			return false;
 	}
 
 	public List<PatientInfo> getAllPatientPublicKey(String token) {

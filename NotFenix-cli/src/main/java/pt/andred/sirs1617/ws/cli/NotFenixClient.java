@@ -149,7 +149,8 @@ public class NotFenixClient {
 
 			try{
 				pKey = Base64.getEncoder().encodeToString(pk_byte);
-
+				_port.addDoctor(_token, dname, password, pKey, null);
+				
 			} catch(Exception e){
 				return false;
 			}
@@ -162,7 +163,6 @@ public class NotFenixClient {
 			Dialog.IO().println("Your Private Key is not here. You can't access patient's files. Please speak to HR");
 			return false;
 		}
-
 		List<PatientInfo> patients = _port.getAllPatientPublicKey(_token);
 		for(PatientInfo p : patients){
 			String toEncrypt_String = Crypter.decrypt_RSA(
@@ -330,22 +330,27 @@ public class NotFenixClient {
 				keyDoctor = Base64.getEncoder().encodeToString(Crypter.encrypt_RSA(sk_string, dKey));
 				Dialog.IO().debug("---------------------addPatient teste 3.1"); //TESTE
 
-
 				//Generate 2nd Key
-				if(!Crypter.generateAESKey(name, "second"))
-				  return false;
+				if(!Crypter.generateAESKey(name, "second")){
+					return false;
+				}
+
 				SecretKeySpec sk2 = Crypter.getSymmKey(name, "second");
-				if(sk2 == null)
-				  return false;
+
+				if(sk2 == null){
+					return false;
+				}
+
 				String sk2_string = Base64.getEncoder().encodeToString(sk2.getEncoded());
-	      Dialog.IO().debug("---------------------addPatient teste 3.2 = "+ sk2.getEncoded().length +"---------------------***************"); //TESTE
+
+				Dialog.IO().debug("---------------------addPatient teste 3.2 = "+ sk2.getEncoded().length +"---------------------***************"); //TESTE
 
 				//Generate 2nd IV
 				byte[] iv2 = new byte[16];
 				SecureRandom.getInstance("SHA1PRNG").nextBytes(iv2);
 				IvParameterSpec ivParams2 = new IvParameterSpec(iv2);
 				iv2_string = Base64.getEncoder().encodeToString(ivParams2.getIV());
-	      Dialog.IO().debug("---------------------addPatient teste 4"); //TESTE
+				Dialog.IO().debug("---------------------addPatient teste 4"); //TESTE
 
 
 				//Encrypt public details with 2nd IV and 2nd key
@@ -389,7 +394,7 @@ public class NotFenixClient {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			return false;
+			return true;
 
 
 	}
@@ -571,7 +576,8 @@ public class NotFenixClient {
 			try{
 				byte[] public_symmkey_encrypted_byte = Base64.getDecoder().decode(public_symmkey_encoded_string);
 				Dialog.IO().println("public_symmkey_encrypted_byte= " +public_symmkey_encrypted_byte); //TESTE
-
+				Dialog.IO().debug("ENCRYPTED KEY", public_symmkey_encoded_string);
+				Dialog.IO().debug("ENCRYPTED KEY", public_symmkey_encrypted_byte.toString());
 				String public_symmKey_string  =	Crypter.decrypt_RSA(public_symmkey_encrypted_byte, private_key);
 				Dialog.IO().println("public_symmKey_string= " +public_symmKey_string); //TESTE
 				Dialog.IO().println("public_symmKey_BYTES= " +public_symmKey_string.getBytes()); //TESTE
