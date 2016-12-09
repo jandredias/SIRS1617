@@ -46,24 +46,24 @@ public class Crypter{
       final KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
       keyGen.initialize(1024);
       key = keyGen.generateKeyPair();
-      Dialog.IO().println("Crypter generateRSAKey teste 1"); //TESTE
+      Dialog.IO().debug("Crypter generateRSAKey teste 1"); //TESTE
 
       File privateKeyFile = new File(KEY_PREFIX + username+PRIVATE_KEY_FILE);
       File publicKeyFile = new File(KEY_PREFIX +username+PUBLIC_KEY_FILE);
-      Dialog.IO().println("Crypter generateRSAKey teste 2"); //TESTE
+      Dialog.IO().debug("Crypter generateRSAKey teste 2"); //TESTE
 
       // Create files to store public and private key
 
       privateKeyFile.createNewFile();
       publicKeyFile.createNewFile();
-      Dialog.IO().println("Crypter generateRSAKey teste 3"); //TESTE
+      Dialog.IO().debug("Crypter generateRSAKey teste 3"); //TESTE
 
       // Saving the Public key in a file
       ObjectOutputStream publicKeyOS = new ObjectOutputStream(
           new FileOutputStream(publicKeyFile));
       publicKeyOS.writeObject(key.getPublic());
       publicKeyOS.close();
-      Dialog.IO().println("Crypter generateRSAKey teste 4"); //TESTE
+      Dialog.IO().debug("Crypter generateRSAKey teste 4"); //TESTE
 
       // Saving the Private key in a file
       ObjectOutputStream privateKeyOS = new ObjectOutputStream(
@@ -111,14 +111,14 @@ public class Crypter{
     return false;
   }
   public static boolean isPublicKeyPresent(String username) {
-    Dialog.IO().println("Crypter isPublicKeyPresent teste 1"); //TESTE
+    Dialog.IO().debug("Crypter isPublicKeyPresent teste 1"); //TESTE
 
     File publicKey = new File(KEY_PREFIX + username+PUBLIC_KEY_FILE);
-      Dialog.IO().println("Crypter isPublicKeyPresent teste 2"); //TESTE
+      Dialog.IO().debug("Crypter isPublicKeyPresent teste 2"); //TESTE
 
 
     if (publicKey.exists()) {
-        Dialog.IO().println("Crypter isPublicKeyPresent teste 2"); //TESTE
+        Dialog.IO().debug("Crypter isPublicKeyPresent teste 2"); //TESTE
       return true;
     }
     return false;
@@ -207,7 +207,7 @@ public class Crypter{
   public static PublicKey getPublicKey(String username){
     if(isPublicKeyPresent(username) == false)
       return null;
-    Dialog.IO().println("Crypter getPublicKey teste 1"); //TESTE
+    Dialog.IO().debug("Crypter getPublicKey teste 1"); //TESTE
       ObjectInputStream inputStream;
     try{
       inputStream = new ObjectInputStream(new FileInputStream(KEY_PREFIX + username + PUBLIC_KEY_FILE));
@@ -252,27 +252,13 @@ public class Crypter{
       return null;
     }
   }
-/*  public static String size16 (String input){
-    Dialog.IO().println("---------------------size16 teste 0"); //TESTE
-    int size = input.length();
-    Dialog.IO().println("---------------------size16 teste 1"); //TESTE
-    if(size % 16 == 0){
-      Dialog.IO().println("---------------------size16 teste 2"); //TESTE
-      return input;
-    }
-    int i;
-    for(i = 0; i< size; i+=16);
-    for(;size<=i; size ++)
-      input += " ";
-        Dialog.IO().println("---------------------size16 teste 3"); //TESTE
-    return input;
-  }*/
+
   public static byte[] size16 (byte[] input){
-    Dialog.IO().println("---------------------size16 teste 0"); //TESTE
+    Dialog.IO().debug("---------------------size16 teste 0"); //TESTE
     int size = input.length;
-    Dialog.IO().println("---------------------size16 teste 1"); //TESTE
+    Dialog.IO().debug("---------------------size16 teste 1"); //TESTE
     if(size % 16 == 0){
-      Dialog.IO().println("---------------------size16 teste 2"); //TESTE
+      Dialog.IO().debug("---------------------size16 teste 2"); //TESTE
       return input;
     }
     int i;
@@ -285,9 +271,9 @@ public class Crypter{
       for(;size<i; size ++){
         outputStream.write(" ".getBytes()[0]);
       }
-          Dialog.IO().println("---------------------size16 teste 3 size:" + input.length); //TESTE
+          Dialog.IO().debug("---------------------size16 teste 3 size:" + input.length); //TESTE
       toReturn = outputStream.toByteArray();
-      Dialog.IO().println("---------------------size16 teste 3 toreturnsize:" + toReturn.length); //TESTE
+      Dialog.IO().debug("---------------------size16 teste 3 toreturnsize:" + toReturn.length); //TESTE
     }catch (Exception e) {
       return null;
     }
@@ -295,17 +281,17 @@ public class Crypter{
   }
   public static byte[] encrypt_AES(String text, SecretKeySpec key, IvParameterSpec iv){
     try{
-      Dialog.IO().println("---------------------encrypt_AES teste 0"); //TESTE
+      Dialog.IO().debug("---------------------encrypt_AES teste 0"); //TESTE
       Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding", "SunJCE");
-      Dialog.IO().println("---------------------encrypt_AES teste 1"); //TESTE
+      Dialog.IO().debug("---------------------encrypt_AES teste 1"); //TESTE
       cipher.init(Cipher.ENCRYPT_MODE, key, iv);
       //text = size16(text);
       byte[] text2 = size16(text.getBytes());
-      Dialog.IO().println("---------------------encrypt_AES teste 2 input: <"+ text2+">"); //TESTE
+      Dialog.IO().debug("---------------------encrypt_AES teste 2 input: <"+ text2+">"); //TESTE
     //  byte[] a = text.getBytes();
-      Dialog.IO().println("---------------------encrypt_AES teste 2.1"); //TESTE
+      Dialog.IO().debug("---------------------encrypt_AES teste 2.1"); //TESTE
       byte[] t = cipher.doFinal(text2);
-      Dialog.IO().println("---------------------encrypt_AES teste 3"); //TESTE
+      Dialog.IO().debug("---------------------encrypt_AES teste 3"); //TESTE
       return t;
     } catch(Exception e){
       e.printStackTrace();
@@ -316,8 +302,8 @@ public class Crypter{
     try{
        Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding", "SunJCE");
        IvParameterSpec ivparam = new IvParameterSpec(iv.getBytes());
-       Dialog.IO().println("decrypt_AES iv= "+iv); //TESTE
-       Dialog.IO().println("decrypt_AES key= "+key.getEncoded()); //TESTE
+       Dialog.IO().debug("decrypt_AES iv= "+iv); //TESTE
+       Dialog.IO().debug("decrypt_AES key= "+key.getEncoded()); //TESTE
        cipher.init(Cipher.DECRYPT_MODE, key, ivparam);
        return new String(cipher.doFinal(cipherText),"UTF-8");
     } catch(Exception e){

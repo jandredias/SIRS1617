@@ -3,6 +3,7 @@ package pt.andred.sirs1617.ws.cli;
 import java.util.Map;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 import java.util.Objects;
 
 import java.io.ByteArrayOutputStream;
@@ -17,8 +18,10 @@ import javax.xml.ws.BindingProvider;
 
 import pt.andred.sirs1617.ui.Dialog;
 import pt.andred.sirs1617.ws.AuthenticationHandler;
+import pt.andred.sirs1617.ws.DoctorInfo;
 import pt.andred.sirs1617.ws.NotFenixPortType;
 import pt.andred.sirs1617.ws.NotFenixService;
+import pt.andred.sirs1617.ws.PatientInfo;
 import pt.andred.sirs1617.ws.PrivateKeyReader;
 import pt.andred.sirs1617.ws.PublicKeyReader;
 import pt.andred.sirs1617.main.Crypter;
@@ -160,58 +163,15 @@ public class NotFenixClient {
 			return false;
 		}
 
-		List<> patients = (_token);
-		for( p : patients){
+		List<PatientInfo> patients = _port.getAllPatientPublicKey(_token);
+		for(PatientInfo p : patients){
 			String toEncrypt_String = Crypter.decrypt_RSA(
-					Base64.getDecoder().decode(p.getPublicKey), private_key);
+					Base64.getDecoder().decode(p.getPublicKey()), private_key);
 			byte[] key_encrypted = Crypter.encrypt_RSA(toEncrypt_String, pk_new);
 			String key_string = Base64.getEncoder().encodeToString(key_encrypted);
 
-			_port.setInfoPatient2(_token, p.getName(), dname, P_PUBLIC_KEY, )
+			_port.setInfoPatient2(_token, p.getName(), dname, P_PUBLIC_KEY, key_string);
 		}
-		return true;
-
-	/*		String allKeys = _port.getAllPublicKeys(encrypt(_token));
-      Dialog.IO().println("allKeys_String = <"+ allKeys + ">"); //TESTE
-			PrivateKey private_key = Crypter.getPrivateKey(_username);
-			if(private_key == null){
-				Dialog.IO().println("Your Private Key is not here. You can't access patient's files. Please speak to HR");
-				return false;
-			}
-
-			//Decrypt and encrypt all keys with the new public Key
-			byte allKeys_byte[] = null;
-			String allKeysEnc_string= NULL_STRING_TAG;
-			if(!Objects.equals(allKeys, "")){
-				allKeys_byte = allKeys.getBytes();
-				int fullSize = allKeys_byte.length;
-
-				try{
-					ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-					for(int i = 0; i < fullSize; i+=_keySize){
-						byte[] toDecrypt_byte = Arrays.copyOfRange(allKeys_byte, i, i+_keySize);
-						String toEncrypt_String = Crypter.decrypt_RSA(Base64.getDecoder().decode(toDecrypt_byte), private_key);
-						byte[] encrypted = Crypter.encrypt_RSA(toEncrypt_String, pk_new);
-						outputStream.write(encrypted);
-					}
-					byte allKeysEnc[] = outputStream.toByteArray();
-					allKeysEnc_string = new String(allKeysEnc);
-					if(allKeysEnc == null || allKeysEnc.equals(""))
-						allKeysEnc_string = NULL_STRING_TAG;
-
-				}catch (Exception e) {
-					return false;
-				}
-			}*/
-			String allKeysEnc_string = NULL_STRING_TAG;
-
-				if(!_port.addDoctor(encrypt(_token),
-						encrypt(dname),
-						encrypt(password),
-						encrypt(pKey),
-						encrypt(allKeysEnc_string)))
-					return false;
-
 		return true;
     }
 
@@ -418,15 +378,15 @@ public class NotFenixClient {
 					PublicKey publicKey =KeyFactory.getInstance("RSA").generatePublic(
 										new X509EncodedKeySpec(Base64.getDecoder().decode(df.getPublicKey())));
 					String odKey_enc = Base64.getEncoder().
-							encodeToString(Crypter.encrypt_RSA(sk2_string,publicKey));
-					_port.setInfoPatient(_token, name, df.getName(), P_PUBLIC_KEY, odKey_enc);
+							encodeToString(Crypter.encrypt_RSA(sk2_string,df.getPublicKey()));
+					_port.setInfoPatient2(_token, name, df.getName(), P_PUBLIC_KEY, odKey_enc);
 
 				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				return null;
 			}
+			return false;
 
 
 	}
