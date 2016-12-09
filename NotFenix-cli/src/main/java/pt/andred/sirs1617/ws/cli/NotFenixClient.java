@@ -370,7 +370,7 @@ public class NotFenixClient {
 				//Encrypt 2nd key with all keys;
 
 
-				List<DoctorInfo> allKeys= _port.getDoctorsKeysNewFunction(_token);
+				List<DoctorInfo> allKeys= _port.getDoctorsKeysNewFunction(encrypt(_token));
 				if(!_port.addPatient(
 						encrypt(_token),
 						encrypt(name),
@@ -392,7 +392,12 @@ public class NotFenixClient {
 								Crypter.encrypt_RSA(
 								sk2_string,
 								publicKey));
-					_port.setInfoPatient2(_token, name, df.getName(), P_PUBLIC_KEY, odKey_enc);
+					_port.setInfoPatient2(
+							encrypt(_token), 
+							encrypt(name), 
+							encrypt(df.getName()), 
+							encrypt(P_PUBLIC_KEY), 
+							encrypt(odKey_enc));
 
 				}
 
@@ -403,71 +408,6 @@ public class NotFenixClient {
 
 
 	}
-
-
-			/*	String allKeys= getAllDoctorKeys();
-
-	      Dialog.IO().debug("---------------------addPatient teste 5 allKeysdd= "+allKeys);
-				Dialog.IO().debug("---------------------addPatient teste 5 mKey_enco= "+mKey_encoded);
-				Dialog.IO().debug("---------------------addPatient teste 5 keyDoctor= "+keyDoctor);
-
-				if(!Objects.equals(allKeys, "")){
-					byte allKeys_byte[] = allKeys.getBytes();
-
-					int fullSize = allKeys_byte.length;
-					//ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-					Dialog.IO().debug("---------------------addPatient teste 5.1 fullSize= "+fullSize);
-					Dialog.IO().debug("---------------------addPatient teste 5.1 _keySize= "+_keySize);
-					for(int i = 0; i < fullSize; i+=_keySize){
-					  byte[] odKey = Arrays.copyOfRange(allKeys_byte, i, i+_keySize);
-					  PublicKey publicKey =
-							  KeyFactory.
-							  	getInstance("RSA").
-							  		generatePublic(
-							  			new X509EncodedKeySpec(
-							  					Base64.getDecoder().decode(odKey)));
-						Dialog.IO().debug("---------------------addPatient teste 5.1 keygootf= "+ Base64.getEncoder().encodeToString(publicKey.getEncoded()));
-
-						String odKey_enc = new String(Crypter.encrypt_RSA(sk2_string, publicKey));
-						//String odKey_enc = new String();
-						//for(int iuk = 0; iuk < sk2_string.length(); iuk += 	16){
-						//	odKey_enc += new String(Crypter.encrypt_RSA(sk2_string.substring(i, i + 16), publicKey));
-						//	//JUST A TEST
-							//XXX
-						//}
-
-
-					  //outputStream.write(Base64.getEncoder().encodeToString(odKey_enc.getBytes()).getBytes());
-						allKeysEnc_string += Base64.getEncoder().encodeToString(odKey_enc.getBytes());
-					}
-					//byte allKeysEnc[] = outputStream.toByteArray();
-					//allKeysEnc_string = new String(allKeysEnc);
-		      Dialog.IO().debug("---------------------addPatient teste 5"); //TESTE
-				}
-				Dialog.IO().debug("---------------------addPatient teste 6 1st symmkey      = "+ Base64.getEncoder().encodeToString(sk_string.getBytes())); //TESTE
-				Dialog.IO().debug("---------------------addPatient teste 6 2nd symmkey      = "+ Base64.getEncoder().encodeToString(sk2_string.getBytes())); //TESTE
-				*/
-		/*	}catch (Exception e) {
-				e.printStackTrace();
-				return false;
-			}
-			if(allKeysEnc_string == null || Objects.equals(allKeysEnc_string, ""))
-				allKeysEnc_string = NULL_STRING_TAG;
-			Dialog.IO().debug("---------------------addPatient teste 6 allKeysEnc_string= "+ allKeysEnc_string); //TESTE
-			Dialog.IO().debug("---------------------addPatient teste 6 KEYdOCTOR 1ST KEY= "+ keyDoctor); //TESTE
-
-			Dialog.IO().debug("CHAAAAAAAAAAAAAAVE", keyDoctor);
-    	return _port.addPatient(
-    			encrypt(_token),
-    			encrypt(name),
-    			encrypt(keyMaster),
-    			encrypt(keyDoctor),
-    			encrypt(iv_string),
-    			encrypt(detailsEnc),
-    		/*	allKeysEnc_string,*//* encrypt(keyDoctor2),
-    		/*	encrypt(iv2_string),
-    			encrypt(detailsPublicEnc));*/
-
 
 		public boolean setInfoPatient(String name, String infoMode, String info){
 			return _port.setInfoPatient(
