@@ -32,6 +32,8 @@ public class Crypter{
   private static final String SYMM_KEY_FILE = "_symmetric.key";
   private static final String KEY_PREFIX = "";
 
+  private static final String ALG_TAG = "RSA";
+
   /**
    * Generate key which contains a pair of private and public key using 1024
    * bytes. Store the set of keys in Prvate.key and Public.key files.
@@ -161,7 +163,7 @@ public class Crypter{
     byte[] cipherText = null;
     try {
       // get an RSA cipher object and print the provider
-      final Cipher cipher = Cipher.getInstance("RSA");
+      final Cipher cipher = Cipher.getInstance(ALG_TAG);
       // encrypt the plain text using the public key
       cipher.init(Cipher.ENCRYPT_MODE, key);
       cipherText = cipher.doFinal(text.getBytes());
@@ -191,7 +193,7 @@ public class Crypter{
     byte[] dectyptedText = null;
     try {
       // get an RSA cipher object and print the provider
-      final Cipher cipher = Cipher.getInstance("RSA");
+      final Cipher cipher = Cipher.getInstance(ALG_TAG);
 
       // decrypt the text using the private key
       cipher.init(Cipher.DECRYPT_MODE, key);

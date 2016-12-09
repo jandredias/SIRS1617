@@ -136,7 +136,7 @@ public class NotFenixClient {
     public boolean addDoctor(
                 String dname,
                 String password){
-    	
+
 			KeyPair key = Crypter.generateRSAKey(dname);
 			if(key == null)
 				return false;
@@ -155,7 +155,7 @@ public class NotFenixClient {
 				Dialog.IO().println(password);
 				Dialog.IO().println(pKey);
 				_port.addDoctor(encrypt(_token), encrypt(dname), encrypt(password), encrypt(pKey), encrypt(new String()));
-				
+
 			} catch(Exception e){
 				return false;
 			}
@@ -286,14 +286,10 @@ public class NotFenixClient {
 				if(!Crypter.generateAESKey(name, "first"))
 				  return false;
 				SecretKeySpec sk = Crypter.getSymmKey(name, "first");
-				Dialog.IO().debug("CHAVE SIMETRICA INFORMACAO PRIVADA", Base64.getEncoder().encodeToString(sk.getEncoded()));
-				Dialog.IO().debug("---------------------addPatient teste 1.1"); //TESTE
 				if(sk == null)
 				  return false;
-
-				Dialog.IO().debug("---------------------addPatient teste 1.1.1= "+ sk.getEncoded().length +"---------------------***************"); //TESTE
+					tEncoded().length +"---------------------***************"); //TESTE
 				String sk_string = Base64.getEncoder().encodeToString(sk.getEncoded());
-				Dialog.IO().debug("---------------------addPatient teste 2"); //TESTE
 
 
 				//Generate 1st IV
@@ -339,13 +335,10 @@ public class NotFenixClient {
 				if(!Crypter.generateAESKey(name, "second")){
 					return false;
 				}
-
 				SecretKeySpec sk2 = Crypter.getSymmKey(name, "second");
-
 				if(sk2 == null){
 					return false;
 				}
-
 				String sk2_string = Base64.getEncoder().encodeToString(sk2.getEncoded());
 
 				Dialog.IO().debug("---------------------addPatient teste 3.2 = "+ sk2.getEncoded().length +"---------------------***************"); //TESTE
