@@ -378,7 +378,10 @@ public class NotFenixClient {
 					PublicKey publicKey =KeyFactory.getInstance("RSA").generatePublic(
 										new X509EncodedKeySpec(Base64.getDecoder().decode(df.getPublicKey())));
 					String odKey_enc = Base64.getEncoder().
-							encodeToString(Crypter.encrypt_RSA(sk2_string,df.getPublicKey()));
+							encodeToString(
+								Crypter.encrypt_RSA(
+								sk2_string,
+								publicKey));
 					_port.setInfoPatient2(_token, name, df.getName(), P_PUBLIC_KEY, odKey_enc);
 
 				}
@@ -535,8 +538,6 @@ public class NotFenixClient {
 						String private_iv_string = new String(private_iv_byte);
 						private_iv_string = "1111111111111111";
 
-							Dialog.IO().println("--------seePatient iv= "+private_iv_encoded_string +"xxxxxxxxxxxxx"); //TESTE
-							Dialog.IO().println("--------seePatient iv length= "+private_iv_encoded_string.getBytes().length +"xxxxxxxxxxxxx"); //TESTE
 
 					//get details
 					String private_details_encoded_string = _port.getInfoPatient(
@@ -556,7 +557,8 @@ public class NotFenixClient {
 					e.printStackTrace();
 					Dialog.IO().println("An error with the private details happened. Please try again");
 				}
-				return private_details;
+				Dialog.IO().println("Private patient's details:");
+				 Dialog.IO().println(private_details);
 			}
 
 			//Public Details
@@ -567,7 +569,7 @@ public class NotFenixClient {
 					encrypt(P_PUBLIC_KEY));
 					Dialog.IO().println("public_symmkey_encoded_string= " +public_symmkey_encoded_string); //TESTE
 			try{
-				byte[] public_symmkey_encrypted_byte = Base64.getDecoder().decode(public_symmkey_encoded_string.getBytes());
+				byte[] public_symmkey_encrypted_byte = Base64.getDecoder().decode(public_symmkey_encoded_string);
 				Dialog.IO().println("public_symmkey_encrypted_byte= " +public_symmkey_encrypted_byte); //TESTE
 
 				String public_symmKey_string  =	Crypter.decrypt_RSA(public_symmkey_encrypted_byte, private_key);
